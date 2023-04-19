@@ -1,0 +1,47 @@
+# change the followings to match your Github username and repo name
+baseurl: "/" # the name of your github repo
+url: "https://hisyam99.github.io" # the url of your github pages
+
+# site information used in page title, meta data etc.
+title: "hisyam99"
+description: "hisyam99's Pages"
+
+# color theme for links
+theme-color: indigo # indigo|yellow|pink|green|stone|
+
+# homepage information
+author: Muhammad Hisyam Kamil
+author-bio: iseng - iseng buat aja  # change to false to hide
+author-image: 279.jpg  # file must be in the /assets/img/ folder
+
+# navigation menu
+show-nav-menu: true
+
+nav-menu:
+- text: About
+  permalink: about
+- text: Free RAM Download
+  permalink: ram
+- text: Blog
+  permalink: blog
+
+# use false to turn off any social media links
+reddit: https://reddit.com/u/hisyam99
+facebook: https://facebook.com/muh.h.kamil
+instagram: https://instagram.com/hisyam_kamil99
+github: https://github.com/hisyam99
+linkedin: https://linkedin.com/
+medium: false
+google-scholar: false
+email: false
+
+# footer information
+footer-msg: "Powered by Github"
+footer-msg-link: https://github.com/hisyam99/hisyam99.github.io
+
+# google analytics
+google-analytics: G-WCRC1TC2V5
+
+# jekyll plugins - no need to change
+plugins:
+    - jekyll-seo-tag
