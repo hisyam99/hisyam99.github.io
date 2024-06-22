@@ -61,7 +61,7 @@ const ThemeSelector = component$(() => {
   });
 
   return (
-    <div class="dropdown-bottom dropdown">
+    <div class="dropdown-end dropdown-bottom dropdown">
       <div tabIndex={0} role="button" class="btn btn-ghost">
         <div class="flex items-center space-x-2">
           <p>Theme</p>

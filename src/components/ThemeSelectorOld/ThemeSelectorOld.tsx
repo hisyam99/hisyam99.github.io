@@ -36,7 +36,7 @@ const themeOptions: string[] = [
   "sunset",
 ];
 
-const ThemeSelector = component$(() => {
+const ThemeSelectorOld = component$(() => {
   const theme = useSignal<string>("");
 
   useVisibleTask$(() => {
@@ -64,4 +64,4 @@ const ThemeSelector = component$(() => {
   );
 });
 
-export default ThemeSelector;
+export default ThemeSelectorOld;

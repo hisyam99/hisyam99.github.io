@@ -20,7 +20,7 @@ export default component$(() => {
 
   return (
     <header
-      class={`fixed left-1/2 top-4 z-10  -translate-x-1/2  items-center justify-center rounded-lg transition-shadow duration-100 ${isScrolled.value ? "bg-base-300 bg-opacity-75 shadow-lg backdrop-blur" : "bg-base-100 shadow-none"}`}
+      class={`fixed left-1/2 top-4 z-10 -translate-x-1/2 items-center justify-center rounded-lg transition-shadow duration-100 ${isScrolled.value ? "bg-base-300 bg-opacity-75 shadow-lg backdrop-blur" : "bg-base-100 shadow-none"}`}
     >
       <div class="navbar items-center justify-center rounded-lg bg-transparent">
         <div class="lg:hidden">
@@ -34,7 +34,7 @@ export default component$(() => {
         <div class="hidden flex-none lg:flex">
           <ul class="menu menu-horizontal items-center space-x-4 px-1">
             <li>
-              <Link href="/tests">Blog</Link>
+              <Link href="/blog">Blog</Link>
             </li>
             <li>
               <details>

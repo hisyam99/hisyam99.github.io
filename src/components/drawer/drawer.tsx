@@ -15,7 +15,7 @@ export const Drawer = component$<DrawerProps>(() => {
         <ul class="rounded-r-badge menu bg-base-200 text-base-content min-h-full w-80 space-y-2 p-4">
           {/* Sidebar content here */}
           <li>
-            <Link>Blog</Link>
+            <Link href="/blog">Blog</Link>
           </li>
           <li>
             <details>
