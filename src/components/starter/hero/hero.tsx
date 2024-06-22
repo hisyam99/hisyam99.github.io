@@ -12,7 +12,7 @@ export default component$(() => {
 
   return (
     <>
-      <section class="hero rounded-bl-[64px] bg-base-300 pb-24 pt-48">
+      <section class="hero rounded-bl-[64px] bg-base-300 pb-24 pt-24 lg:pt-48">
         <div class="hero-content flex-col items-center lg:flex-row-reverse">
           <ImgHisyam class="max-w-sm transform rounded-lg shadow-2xl transition-transform duration-300 hover:scale-110" />
           <div class="text-center lg:mr-10 lg:text-left">

@@ -1,6 +1,5 @@
 import { component$ } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
-import ThemeSelector from "../ThemeSelector/ThemeSelector";
 
 export interface DrawerProps {}
 
@@ -32,7 +31,6 @@ export const Drawer = component$<DrawerProps>(() => {
             </details>
           </li>
           <div class="ml-2 py-2">
-            <ThemeSelector />
           </div>
         </ul>
       </div>
