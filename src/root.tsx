@@ -22,6 +22,19 @@ export default component$(() => {
         <meta charset="utf-8" />
         <link rel="manifest" href="/manifest.json" />
         <RouterHead />
+        <script
+          dangerouslySetInnerHTML={`
+    (function() {
+      function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+      }
+      var theme = localStorage.getItem('theme');
+      setTheme(theme);
+    })();
+  `}
+        ></script>
+
         <ServiceWorkerRegister />
       </head>
       <body lang="en">
