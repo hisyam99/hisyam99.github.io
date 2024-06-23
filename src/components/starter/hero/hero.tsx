@@ -81,6 +81,7 @@ export default component$(() => {
                   width="auto"
                   height="auto"
                   viewBox="0 0 80 70"
+                  class="w-16"
                 >
                   <title>Bun</title>
                   <path
@@ -177,7 +178,7 @@ export default component$(() => {
                   width="auto"
                   height="auto"
                   viewBox="0 0 287 107"
-                  class="fill-current"
+                  class="w-24 fill-current"
                   fill="currentColor"
                 >
                   <g clip-path="url(#a)">
@@ -193,7 +194,10 @@ export default component$(() => {
             </div>
 
             <div class="col-span-1 flex min-w-full items-center justify-center md:col-span-2 lg:col-span-1">
-              <Link href="https://qwik.dev/">
+              <Link
+                href="https://qwik.dev/"
+                class="flex min-w-full flex-row items-center justify-center"
+              >
                 <svg
                   width="auto"
                   height="auto"
@@ -201,8 +205,8 @@ export default component$(() => {
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                   role="img"
-                  aria-label="Qwik Logo"
-                  class="qwik-logo"
+                  aria-label="Qwik"
+                  class="w-36"
                 >
                   <path
                     d="M81.9545 46.5859H75.5513V35.4045C73.4363 36.8579 71.0496 37.5749 68.4884 37.5749C65.0151 37.5749 62.4344 36.6253 60.8239 34.6487C59.2134 32.6915 58.3984 29.2034 58.3984 24.2231C58.3984 19.1266 59.3492 15.5997 61.2702 13.5456C63.23 11.4721 66.3734 10.4644 70.7004 10.4644C74.7946 10.4644 78.5201 11.0264 81.9545 12.131V46.5859ZM75.5513 16.278C74.096 15.8323 72.4661 15.6191 70.7004 15.6191C68.5272 15.6191 66.9749 16.1811 66.1017 17.3244C65.2479 18.4871 64.7823 20.6962 64.7823 23.9712C64.7823 27.0524 65.1897 29.1065 66.0435 30.2304C66.8973 31.335 68.3719 31.897 70.5452 31.897C73.3781 31.897 75.5513 30.7343 75.5513 29.2809V16.278Z"
@@ -236,13 +240,17 @@ export default component$(() => {
               </Link>
             </div>
             <div class="col-span-1 flex min-w-full items-center justify-center md:col-span-2 lg:col-span-1">
-              <Link href="https://daisyui.com">
+              <Link
+                href="https://daisyui.com"
+                class="flex min-w-full flex-row items-center justify-center"
+              >
                 <svg
                   viewBox="0 0 3600 1024"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                   width="auto"
                   height="auto"
+                  class="w-56"
                 >
                   <rect
                     x="256"
@@ -295,10 +303,13 @@ export default component$(() => {
             </div>
 
             <div class="col-span-1 flex items-center justify-center md:col-span-2 lg:col-span-1">
-              <Link href="https://tailwindcss.com/">
+              <Link
+                href="https://tailwindcss.com/"
+                class="flex min-w-full flex-row items-center justify-center"
+              >
                 <svg
                   viewBox="0 0 248 31"
-                  class="h-10 fill-current"
+                  class="w-64 fill-current"
                   width="auto"
                   height="auto"
                 >
