@@ -72,6 +72,8 @@ export default component$(() => {
           <div class="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-4">
             <Link
               href="https://bun.sh/"
+              rel="noopener noreferrer"
+              target="_blank"
               class="flex items-center justify-center"
             >
               <svg
@@ -193,6 +195,8 @@ export default component$(() => {
 
             <Link
               href="https://qwik.dev/"
+              rel="noopener noreferrer"
+              target="_blank"
               class="flex items-center justify-center"
             >
               <svg
@@ -238,6 +242,8 @@ export default component$(() => {
 
             <Link
               href="https://daisyui.com"
+              rel="noopener noreferrer"
+              target="_blank"
               class="flex items-center justify-center"
             >
               <svg
@@ -299,6 +305,8 @@ export default component$(() => {
 
             <Link
               href="https://tailwindcss.com/"
+              rel="noopener noreferrer"
+              target="_blank"
               class="flex items-center justify-center"
             >
               <svg
