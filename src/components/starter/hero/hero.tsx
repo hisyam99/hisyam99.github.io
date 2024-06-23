@@ -37,10 +37,10 @@ export default component$(() => {
           <div class="container mx-auto flex flex-col space-y-6 px-6 py-4 lg:h-[32rem] lg:flex-row lg:items-center lg:py-16">
             <div class="flex w-full flex-col items-center lg:w-1/2 lg:flex-row">
               <div class="order-2 mt-6 flex justify-center lg:mt-0 lg:flex-col lg:space-y-3">
-                <button class="mx-2 h-3 w-3 rounded-full bg-blue-500 focus:outline-none lg:mx-0"></button>
-                <button class="mx-2 h-3 w-3 rounded-full bg-gray-300 hover:bg-blue-500 focus:outline-none lg:mx-0"></button>
-                <button class="mx-2 h-3 w-3 rounded-full bg-gray-300 hover:bg-blue-500 focus:outline-none lg:mx-0"></button>
-                <button class="mx-2 h-3 w-3 rounded-full bg-gray-300 hover:bg-blue-500 focus:outline-none lg:mx-0"></button>
+                <button class="mx-2 h-3 w-3 rounded-full bg-primary focus:outline-none lg:mx-0"></button>
+                <button class="mx-2 h-3 w-3 rounded-full bg-neutral-content hover:bg-primary focus:outline-none lg:mx-0"></button>
+                <button class="mx-2 h-3 w-3 rounded-full bg-neutral-content hover:bg-primary focus:outline-none lg:mx-0"></button>
+                <button class="mx-2 h-3 w-3 rounded-full bg-neutral-content hover:bg-primary focus:outline-none lg:mx-0"></button>
               </div>
 
               <div class="max-w-lg lg:order-2 lg:mx-12">
