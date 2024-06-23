@@ -24,13 +24,13 @@ export const RouterHead = component$(() => {
         <link key={l.key} {...l} />
       ))}
 
-      {head.meta.map((m) => (
+      {/* {head.meta.map((m) => (
         <meta key={m.key} {...m} />
       ))}
 
       {head.links.map((l) => (
         <link key={l.key} {...l} />
-      ))}
+      ))} */}
 
       {head.styles.map((s) => (
         <style
