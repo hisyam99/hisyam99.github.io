@@ -1,1 +1,0 @@
-import{_ as o}from"./q-uemlvruI.js";import{z as t,q as r}from"./q-DOfOxinU.js";const _=t(r(()=>o(()=>import("./q-DR4oNU7p.js"),[]),"s_Ipfp442DRLg")),a={title:"Hisyam99 | Blogs"};export{_ as default,a as head};
