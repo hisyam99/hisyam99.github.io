@@ -145,7 +145,7 @@ const s_nZGrLeXTa6g = () => {
       class: "menu menu-horizontal items-center space-x-4 px-1"
     }, [
       /* @__PURE__ */ _jsxQ("li", null, null, /* @__PURE__ */ _jsxC(Link, {
-        href: "/blog",
+        href: "blog",
         children: "Blog",
         [_IMMUTABLE]: {
           href: _IMMUTABLE
@@ -164,7 +164,7 @@ const s_nZGrLeXTa6g = () => {
             }
           }, 3, "0G_3"), 1, null),
           /* @__PURE__ */ _jsxQ("li", null, null, /* @__PURE__ */ _jsxC(Link, {
-            href: "404",
+            href: "/404",
             children: "coming soon . . .",
             [_IMMUTABLE]: {
               href: _IMMUTABLE
@@ -333,7 +333,7 @@ const s_1dXFoSbSWis = () => {
       }
     }, 3, "vl_0"),
     /* @__PURE__ */ _jsxC(Link, {
-      href: "/blog",
+      href: "blog",
       children: /* @__PURE__ */ _jsxQ("button", null, {
         class: "btn btn-circle btn-ghost tooltip mx-auto flex items-center justify-center",
         "data-tip": "Blogs"
@@ -356,7 +356,7 @@ const s_1dXFoSbSWis = () => {
       }
     }, 3, "vl_1"),
     /* @__PURE__ */ _jsxC(Link, {
-      href: "404",
+      href: "/404",
       children: /* @__PURE__ */ _jsxQ("div", null, {
         class: "flex items-center justify-center"
       }, /* @__PURE__ */ _jsxQ("button", null, {
@@ -385,7 +385,7 @@ const s_1dXFoSbSWis = () => {
       }
     }, 3, "vl_2"),
     /* @__PURE__ */ _jsxC(Link, {
-      href: "404",
+      href: "/404",
       children: /* @__PURE__ */ _jsxQ("button", null, {
         class: "btn btn-circle btn-ghost tooltip mx-auto flex items-center justify-center",
         "data-tip": "Settings"
@@ -412,7 +412,7 @@ const s_1dXFoSbSWis = () => {
       }
     }, 3, "vl_3"),
     /* @__PURE__ */ _jsxC(Link, {
-      href: "404",
+      href: "/404",
       children: /* @__PURE__ */ _jsxQ("button", null, {
         class: "btn btn-circle btn-ghost tooltip mx-auto flex items-center justify-center",
         "data-tip": "Profile"
@@ -461,7 +461,7 @@ const s_snwU0Di7E7A = () => {
         class: "rounded-r-badge menu bg-base-200 text-base-content min-h-full w-80 space-y-2 p-4"
       }, [
         /* @__PURE__ */ _jsxQ("li", null, null, /* @__PURE__ */ _jsxC(Link, {
-          href: "/blog",
+          href: "blog",
           children: "Blog",
           [_IMMUTABLE]: {
             href: _IMMUTABLE
@@ -478,7 +478,7 @@ const s_snwU0Di7E7A = () => {
               }
             }, 3, "Zp_1"), 1, null),
             /* @__PURE__ */ _jsxQ("li", null, null, /* @__PURE__ */ _jsxC(Link, {
-              href: "404",
+              href: "/404",
               children: "coming soon . . .",
               [_IMMUTABLE]: {
                 href: _IMMUTABLE
@@ -1202,9 +1202,9 @@ const BlogRoute = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
 const serverPlugins = [];
 const Layout = () => Layout_;
 const routes = [
-  ["/", [Layout, () => IndexRoute], "/", ["q-B1fmmJht.js", "q-ClzZP9Wl.js"]],
-  ["404.html", [Layout, () => Q404Route], "/404.html", ["q-B1fmmJht.js", "q-DuCJUo8d.js"]],
-  ["blog/", [Layout, () => BlogRoute], "/blog/", ["q-B1fmmJht.js", "q-Cwt_Ccpd.js"]]
+  ["/", [Layout, () => IndexRoute], "/", ["q-D6cBV_wf.js", "q-D8TebJPg.js"]],
+  ["404.html", [Layout, () => Q404Route], "/404.html", ["q-D6cBV_wf.js", "q-DuCJUo8d.js"]],
+  ["blog/", [Layout, () => BlogRoute], "/blog/", ["q-D6cBV_wf.js", "q-MNErTmVU.js"]]
 ];
 const menus = [];
 const trailingSlash = true;

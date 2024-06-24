@@ -34,7 +34,7 @@ export default component$(() => {
         <div class="hidden flex-none lg:flex">
           <ul class="menu menu-horizontal items-center space-x-4 px-1">
             <li>
-              <Link href="/blog">Blog</Link>
+              <Link href="blog">Blog</Link>
             </li>
             <li>
               <details>
@@ -44,7 +44,7 @@ export default component$(() => {
                     <Link href="https://reparin.xyz">Reparin</Link>
                   </li>
                   <li>
-                    <Link href="404">coming soon . . .</Link>
+                    <Link href="/404">coming soon . . .</Link>
                   </li>
                 </ul>
               </details>
