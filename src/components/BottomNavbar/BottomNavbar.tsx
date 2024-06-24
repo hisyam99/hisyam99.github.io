@@ -42,7 +42,7 @@ export const BottomNavbar = component$<BottomNavbarProps>(() => {
               <span class="sr-only">Blogs</span>
             </button>
           </Link>
-          <Link href="404.html">
+          <Link href="404">
             <div class="flex items-center justify-center">
               <button
                 class="btn btn-circle btn-primary tooltip flex items-center justify-center"
@@ -67,7 +67,7 @@ export const BottomNavbar = component$<BottomNavbarProps>(() => {
               </button>
             </div>
           </Link>
-          <Link href="404.html">
+          <Link href="404">
             <button
               class="btn btn-circle btn-ghost tooltip mx-auto flex items-center justify-center"
               data-tip="Settings"
@@ -90,7 +90,7 @@ export const BottomNavbar = component$<BottomNavbarProps>(() => {
               <span class="sr-only">Settings</span>
             </button>
           </Link>
-          <Link href="404.html">
+          <Link href="404">
             <button
               class="btn btn-circle btn-ghost tooltip mx-auto flex items-center justify-center"
               data-tip="Profile"
