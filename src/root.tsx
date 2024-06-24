@@ -22,7 +22,7 @@ export default component$(() => {
         <meta charset="utf-8" />
         <link rel="manifest" href="/manifest.json" />
         <RouterHead />
-        {/* <script
+        <script
           dangerouslySetInnerHTML={`
     (function() {
       function setTheme(theme) {
@@ -33,7 +33,7 @@ export default component$(() => {
       setTheme(theme);
     })();
   `}
-        ></script> */}
+        ></script>
 
         <ServiceWorkerRegister />
       </head>

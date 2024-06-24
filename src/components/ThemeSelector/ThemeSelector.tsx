@@ -1,38 +1,39 @@
 import { component$, useSignal, useVisibleTask$, $ } from "@builder.io/qwik";
 
-const themeOptions: string[] = [
-  "light",
-  "dark",
-  "cupcake",
-  "bumblebee",
-  "emerald",
-  "corporate",
-  "synthwave",
-  "retro",
-  "cyberpunk",
-  "valentine",
-  "halloween",
-  "garden",
-  "forest",
-  "aqua",
-  "lofi",
-  "pastel",
-  "fantasy",
-  "wireframe",
-  "black",
-  "luxury",
-  "dracula",
-  "cmyk",
-  "autumn",
-  "business",
-  "acid",
-  "lemonade",
-  "night",
-  "coffee",
-  "winter",
-  "dim",
-  "nord",
-  "sunset",
+const themeOptions: { label: string; value: string }[] = [
+  { label: "System Theme", value: "auto" },
+  { label: "Light", value: "light" },
+  { label: "Dark", value: "dark" },
+  { label: "Cupcake", value: "cupcake" },
+  { label: "Bumblebee", value: "bumblebee" },
+  { label: "Emerald", value: "emerald" },
+  { label: "Corporate", value: "corporate" },
+  { label: "Synthwave", value: "synthwave" },
+  { label: "Retro", value: "retro" },
+  { label: "Cyberpunk", value: "cyberpunk" },
+  { label: "Valentine", value: "valentine" },
+  { label: "Halloween", value: "halloween" },
+  { label: "Garden", value: "garden" },
+  { label: "Forest", value: "forest" },
+  { label: "Aqua", value: "aqua" },
+  { label: "Lofi", value: "lofi" },
+  { label: "Pastel", value: "pastel" },
+  { label: "Fantasy", value: "fantasy" },
+  { label: "Wireframe", value: "wireframe" },
+  { label: "Black", value: "black" },
+  { label: "Luxury", value: "luxury" },
+  { label: "Dracula", value: "dracula" },
+  { label: "CMYK", value: "cmyk" },
+  { label: "Autumn", value: "autumn" },
+  { label: "Business", value: "business" },
+  { label: "Acid", value: "acid" },
+  { label: "Lemonade", value: "lemonade" },
+  { label: "Night", value: "night" },
+  { label: "Coffee", value: "coffee" },
+  { label: "Winter", value: "winter" },
+  { label: "Dim", value: "dim" },
+  { label: "Nord", value: "nord" },
+  { label: "Sunset", value: "sunset" },
 ];
 
 const ThemeSelector = component$(() => {
@@ -42,7 +43,10 @@ const ThemeSelector = component$(() => {
   // Initialize theme from localStorage on component mount
   useVisibleTask$(() => {
     const storedTheme = localStorage.getItem("theme");
-    if (storedTheme && themeOptions.includes(storedTheme)) {
+    if (
+      storedTheme &&
+      themeOptions.map((option) => option.value).includes(storedTheme)
+    ) {
       theme.value = storedTheme;
       document.documentElement.setAttribute("data-theme", storedTheme);
     }
@@ -80,25 +84,16 @@ const ThemeSelector = component$(() => {
         tabIndex={0}
         class="dropdown-content z-[1] max-h-60 w-52 overflow-y-auto rounded-box bg-base-300 p-2 shadow-2xl"
       >
-        <li>
-          <input
-            type="radio"
-            name="theme-dropdown"
-            class="theme-controller btn btn-ghost btn-sm btn-block justify-start"
-            aria-label="Default System"
-            onChange$={() => handleThemeChange("auto")}
-          />
-        </li>
         {themeOptions.map((themeOption) => (
-          <li key={themeOption}>
+          <li key={themeOption.value}>
             <input
               type="radio"
               name="theme-dropdown"
               class="theme-controller btn btn-ghost btn-sm btn-block justify-start"
-              aria-label={themeOption}
-              value={themeOption}
-              onChange$={() => handleThemeChange(themeOption)}
-              checked={theme.value === themeOption}
+              aria-label={themeOption.label}
+              value={themeOption.value}
+              onChange$={() => handleThemeChange(themeOption.value)}
+              checked={theme.value === themeOption.value}
             />
           </li>
         ))}
