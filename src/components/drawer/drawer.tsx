@@ -25,7 +25,7 @@ export const Drawer = component$<DrawerProps>(() => {
                   <Link href="https://reparin.xyz">Reparin</Link>
                 </li>
                 <li>
-                  <Link>coming soon . . .</Link>
+                  <Link href="404">coming soon . . .</Link>
                 </li>
               </ul>
             </details>

@@ -1,0 +1,1 @@
+import{_ as o,a as n,b as l,S as s}from"./q-DOfOxinU.js";const t="_infobox_oa4r7_1",_={infobox:t},x=()=>o("div",null,{class:_.infobox},[o("h3",null,null,n(s,{name:"title",[l]:{name:l}},3,"cD_0"),1,null),n(s,null,3,"cD_1")],1,"cD_2");export{x as s_4Dx3te0wVYM};

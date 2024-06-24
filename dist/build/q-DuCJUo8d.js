@@ -1,0 +1,1 @@
+import{_ as t}from"./q-uemlvruI.js";import{z as o,q as a}from"./q-DOfOxinU.js";const e=o(a(()=>t(()=>import("./q-CFW9j4YO.js"),[]),"s_tNYG1Iu571w")),i={title:"Tidak ada cuy"};export{e as default,i as head};

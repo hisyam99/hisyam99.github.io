@@ -44,7 +44,7 @@ export default component$(() => {
                     <Link href="https://reparin.xyz">Reparin</Link>
                   </li>
                   <li>
-                    <Link href="/demo/todolist">coming soon . . .</Link>
+                    <Link href="404">coming soon . . .</Link>
                   </li>
                 </ul>
               </details>
