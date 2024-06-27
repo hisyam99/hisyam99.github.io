@@ -6,7 +6,7 @@ export default component$(() => {
     <>
       <footer class="footer footer-center rounded-t-[64px] bg-base-300 p-10">
         <aside>
-          <Link href="https://lotusdreams.my.id">
+          <Link href="#">
             <svg
               version="1.1"
               id="Layer_1"
