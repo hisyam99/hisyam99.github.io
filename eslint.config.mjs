@@ -5,6 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import js from "@eslint/js";
 import { FlatCompat } from "@eslint/eslintrc";
+import qwikEslintPlugin from "eslint-plugin-qwik";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,7 +18,7 @@ const compat = new FlatCompat({
 export default [
   {
     ignores: [
-      "**/tailwind.config.js",
+      "**/tailwind.config.ts",
       "**/*.log",
       "**/.DS_Store",
       "**/*.",
@@ -66,6 +67,7 @@ export default [
   {
     plugins: {
       "@typescript-eslint": typescriptEslint,
+      "qwik": qwikEslintPlugin,
     },
 
     languageOptions: {
@@ -75,13 +77,12 @@ export default [
       },
 
       parser: tsParser,
-      ecmaVersion: 2021,
+      ecmaVersion: 2022,
       sourceType: "module",
 
       parserOptions: {
         tsconfigRootDir: path.resolve(__dirname),
         project: ["./tsconfig.json"],
-
         ecmaFeatures: {
           jsx: true,
         },
@@ -102,9 +103,16 @@ export default [
       "prefer-spread": "off",
       "no-case-declarations": "off",
       "no-console": "off",
-      "@typescript-eslint/no-unused-vars": ["error"],
+      "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
       "@typescript-eslint/consistent-type-imports": "warn",
       "@typescript-eslint/no-unnecessary-condition": "warn",
+      "qwik/jsx-no-script-url": "off",
+    },
+
+    settings: {
+      qwik: {
+        componentImportSource: "@builder.io/qwik",
+      },
     },
   },
 ];
