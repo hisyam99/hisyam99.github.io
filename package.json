@@ -32,7 +32,6 @@
   "devDependencies": {
     "@builder.io/qwik": "^1.7.1",
     "@builder.io/qwik-city": "^1.7.1",
-    "@qwikdev/pwa": "^0.0.4",
     "@types/bun": "^1.1.6",
     "@types/eslint": "^8.56.10",
     "@types/node": "^20.14.11",
