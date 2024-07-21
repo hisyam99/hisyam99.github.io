@@ -13,6 +13,8 @@ jobs:
     permissions:
       id-token: write # Needed for auth with Deno Deploy
       contents: read # Needed to clone the repository
+      pages: write # Needed for GitHub Pages deployment
+      deployments: write # Needed for GitHub Pages deployment
 
     steps:
       - name: Clone repository
@@ -38,3 +40,15 @@ jobs:
           project: "hisyam99"
           entrypoint: "https://deno.land/std@0.217.0/http/file_server.ts"
           root: "dist"
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: "dist"
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
