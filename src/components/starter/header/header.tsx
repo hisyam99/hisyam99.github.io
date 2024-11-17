@@ -34,6 +34,9 @@ export default component$(() => {
         <div class="hidden flex-none lg:flex">
           <ul class="menu menu-horizontal items-center space-x-4 px-1">
             <li>
+              <Link href="https://zap.hisyam99.my.id">Short Link</Link>
+            </li>
+            <li>
               <Link href="blog">Blog</Link>
             </li>
             <li>

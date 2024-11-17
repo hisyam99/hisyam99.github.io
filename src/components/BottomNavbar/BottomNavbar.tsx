@@ -42,7 +42,7 @@ export const BottomNavbar = component$<BottomNavbarProps>(() => {
               <span class="sr-only">Blogs</span>
             </button>
           </Link>
-          <Link href="404">
+          <Link href="https://zap.hisyam99.my.id">
             <div class="flex items-center justify-center">
               <button
                 class="btn btn-circle btn-primary tooltip flex items-center justify-center"
@@ -63,7 +63,7 @@ export const BottomNavbar = component$<BottomNavbarProps>(() => {
                     d="M9 1v16M1 9h16"
                   />
                 </svg>
-                <span class="sr-only">New item</span>
+                <span class="sr-only">New Short Link</span>
               </button>
             </div>
           </Link>
