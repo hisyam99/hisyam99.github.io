@@ -82,7 +82,7 @@ const ThemeSelector = component$(() => {
       </div>
       <ul
         tabIndex={0}
-        class="dropdown-content z-[1] max-h-60 w-52 overflow-y-auto rounded-box bg-base-300 p-2 shadow-2xl"
+        class="dropdown-content rounded-box bg-base-300 z-[1] max-h-60 w-52 overflow-y-auto p-2 shadow-2xl"
       >
         {themeOptions.map((themeOption) => (
           <li key={themeOption.value}>
