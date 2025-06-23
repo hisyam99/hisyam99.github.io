@@ -4,7 +4,6 @@ import type { RequestHandler } from "@builder.io/qwik-city";
 import Header from "../components/starter/header/header";
 import Footer from "../components/starter/footer/footer";
 import { BottomNavbar } from "~/components/BottomNavbar/BottomNavbar";
-import { Drawer } from "~/components/drawer/drawer";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
   // Control caching for this request for best performance and to reduce hosting costs:
@@ -19,16 +18,15 @@ export const onGet: RequestHandler = async ({ cacheControl }) => {
 
 export default component$(() => {
   return (
-    <>
+    <div class="flex min-h-screen flex-col">
       <Header />
-      <Drawer />
-      <main>
+      <main class="flex-grow pt-16">
         <Slot />
       </main>
       <Footer />
-      <div class="sticky bottom-0">
+      <div class="sticky bottom-0 z-40">
         <BottomNavbar />
       </div>
-    </>
+    </div>
   );
 });
