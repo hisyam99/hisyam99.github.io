@@ -105,13 +105,14 @@ export default component$(() => {
                 </h3>
                 <p>
                   Aplikasi pemendek URL yang cepat dan efisien dengan analytics
-                  dashboard untuk tracking link performance.
+                  dashboard untuk tracking link performance. Built with modern
+                  Deno runtime dan Fresh framework.
                 </p>
                 <div class="mt-4 flex flex-wrap gap-2">
-                  <div class="badge badge-outline">Node.js</div>
-                  <div class="badge badge-outline">Express</div>
-                  <div class="badge badge-outline">MongoDB</div>
-                  <div class="badge badge-outline">React</div>
+                  <div class="badge badge-outline">Deno</div>
+                  <div class="badge badge-outline">Fresh</div>
+                  <div class="badge badge-outline">TypeScript</div>
+                  <div class="badge badge-outline">Deno KV</div>
                 </div>
                 <div class="card-actions mt-4 justify-end">
                   <Link

@@ -1,7 +1,27 @@
 import { component$, useSignal, $ } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 import ImgHisyam from "~/media/hisyam.jpg?jsx";
-import { QStackIcon } from "~/integrations/react/tech-icons";
+import {
+  QReactIcon,
+  QVueIcon,
+  QTypeScriptIcon,
+  QNodeIcon,
+  QTailwindIcon,
+  QGitIcon,
+  QQwikIcon,
+  QLinuxIcon,
+  QDenoIcon,
+  QGoIcon,
+  QPythonIcon,
+  QMongoDBIcon,
+  QPostgreSQLIcon,
+  QDockerIcon,
+  QRedisIcon,
+  QExpressIcon,
+  QPrismaIcon,
+  QBunIcon,
+  QMariaDBIcon,
+} from "~/integrations/react/tech-icons";
 import {
   useScrollAnimation,
   useStaggerAnimation,
@@ -95,8 +115,18 @@ export default component$(() => {
                     class="btn btn-ghost btn-circle hover:text-primary hover-scale animate-fadeInUp"
                     style="animation-delay: 0.6s"
                   >
-                    {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QStackIcon name="github" className="h-6 w-6" />
+                    <svg
+                      class="h-6 w-6"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
                   </Link>
 
                   <Link
@@ -184,25 +214,25 @@ export default component$(() => {
                   <div class="absolute -top-8 left-1/2 -translate-x-1/2 transform">
                     <div class="bg-base-100 border-primary/20 flex h-10 w-10 items-center justify-center rounded-full border shadow-lg">
                       {/* eslint-disable-next-line qwik/no-react-props */}
-                      <QStackIcon name="qwik" className="h-6 w-6" />
+                      <QQwikIcon className="h-6 w-6" />
                     </div>
                   </div>
                   <div class="absolute top-1/2 -right-8 -translate-y-1/2 transform">
                     <div class="bg-base-100 border-secondary/20 flex h-10 w-10 items-center justify-center rounded-full border shadow-lg">
                       {/* eslint-disable-next-line qwik/no-react-props */}
-                      <QStackIcon name="typescript" className="h-6 w-6" />
+                      <QTypeScriptIcon className="h-6 w-6" />
                     </div>
                   </div>
                   <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 transform">
                     <div class="bg-base-100 border-accent/20 flex h-10 w-10 items-center justify-center rounded-full border shadow-lg">
                       {/* eslint-disable-next-line qwik/no-react-props */}
-                      <QStackIcon name="linux" className="h-6 w-6" />
+                      <QLinuxIcon className="h-6 w-6" />
                     </div>
                   </div>
                   <div class="absolute top-1/2 -left-8 -translate-y-1/2 transform">
                     <div class="bg-base-100 border-info/20 flex h-10 w-10 items-center justify-center rounded-full border shadow-lg">
                       {/* eslint-disable-next-line qwik/no-react-props */}
-                      <QStackIcon name="deno" className="h-6 w-6" />
+                      <QDenoIcon className="h-6 w-6" />
                     </div>
                   </div>
                 </div>
@@ -376,27 +406,27 @@ export default component$(() => {
                 <div class="space-y-3">
                   <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
                     {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QStackIcon name="react" className="h-6 w-6" />
+                    <QReactIcon className="h-6 w-6" />
                     <span class="font-medium">React/Next.js</span>
                   </div>
                   <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
                     {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QStackIcon name="vuejs" className="h-6 w-6" />
+                    <QVueIcon className="h-6 w-6" />
                     <span class="font-medium">Vue.js</span>
                   </div>
                   <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
                     {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QStackIcon name="qwik" className="h-6 w-6" />
+                    <QQwikIcon className="h-6 w-6" />
                     <span class="font-medium">Qwik</span>
                   </div>
                   <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
                     {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QStackIcon name="typescript" className="h-6 w-6" />
+                    <QTypeScriptIcon className="h-6 w-6" />
                     <span class="font-medium">TypeScript</span>
                   </div>
                   <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
                     {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QStackIcon name="tailwindcss" className="h-6 w-6" />
+                    <QTailwindIcon className="h-6 w-6" />
                     <span class="font-medium">Tailwind CSS</span>
                   </div>
                 </div>
@@ -425,27 +455,27 @@ export default component$(() => {
                 <div class="space-y-3">
                   <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
                     {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QStackIcon name="nodejs" className="h-6 w-6" />
+                    <QNodeIcon className="h-6 w-6" />
                     <span class="font-medium">Node.js</span>
                   </div>
                   <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
                     {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QStackIcon name="go" className="h-6 w-6" />
+                    <QGoIcon className="h-6 w-6" />
                     <span class="font-medium">Golang</span>
                   </div>
                   <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
                     {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QStackIcon name="python" className="h-6 w-6" />
+                    <QPythonIcon className="h-6 w-6" />
                     <span class="font-medium">Python</span>
                   </div>
                   <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
                     {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QStackIcon name="deno" className="h-6 w-6" />
+                    <QDenoIcon className="h-6 w-6" />
                     <span class="font-medium">Deno</span>
                   </div>
                   <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
                     {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QStackIcon name="expressjs" className="h-6 w-6" />
+                    <QExpressIcon className="h-6 w-6" />
                     <span class="font-medium">Express.js</span>
                   </div>
                 </div>
@@ -474,27 +504,27 @@ export default component$(() => {
                 <div class="space-y-3">
                   <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
                     {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QStackIcon name="postgresql" className="h-6 w-6" />
+                    <QPostgreSQLIcon className="h-6 w-6" />
                     <span class="font-medium">PostgreSQL</span>
                   </div>
                   <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
                     {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QStackIcon name="mongodb" className="h-6 w-6" />
+                    <QMongoDBIcon className="h-6 w-6" />
                     <span class="font-medium">MongoDB</span>
                   </div>
                   <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
                     {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QStackIcon name="redis" className="h-6 w-6" />
+                    <QRedisIcon className="h-6 w-6" />
                     <span class="font-medium">Redis</span>
                   </div>
                   <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
                     {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QStackIcon name="mysql" className="h-6 w-6" />
+                    <QMariaDBIcon className="h-6 w-6" />
                     <span class="font-medium">MySQL</span>
                   </div>
                   <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
                     {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QStackIcon name="prisma" className="h-6 w-6" />
+                    <QPrismaIcon className="h-6 w-6" />
                     <span class="font-medium">Prisma</span>
                   </div>
                 </div>
@@ -529,12 +559,12 @@ export default component$(() => {
                 <div class="space-y-3">
                   <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
                     {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QStackIcon name="git" className="h-6 w-6" />
+                    <QGitIcon className="h-6 w-6" />
                     <span class="font-medium">Git/GitHub</span>
                   </div>
                   <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
                     {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QStackIcon name="docker" className="h-6 w-6" />
+                    <QDockerIcon className="h-6 w-6" />
                     <span class="font-medium">Docker</span>
                   </div>
                   <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
@@ -555,12 +585,12 @@ export default component$(() => {
                   </div>
                   <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
                     {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QStackIcon name="linux" className="h-6 w-6" />
+                    <QLinuxIcon className="h-6 w-6" />
                     <span class="font-medium">Linux</span>
                   </div>
                   <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
                     {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QStackIcon name="bunjs" className="h-6 w-6" />
+                    <QBunIcon className="h-6 w-6" />
                     <span class="font-medium">Bun</span>
                   </div>
                 </div>

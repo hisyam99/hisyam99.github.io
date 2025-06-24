@@ -50,6 +50,7 @@
   },
   "dependencies": {
     "daisyui": "^5.0.43",
+    "developer-icons": "^6.0.0",
     "framer-motion": "^12.19.1",
     "tech-stack-icons": "^3.3.1"
   },

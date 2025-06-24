@@ -12,7 +12,7 @@ export default component$(() => {
   const blogStaggerRef = useStaggerAnimation(150);
 
   return (
-    <section ref={blogRef} class="min-h-screen py-16 sm:py-20">
+    <section ref={blogRef} class="min-h-screen py-20 pt-32">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div class="mb-8 text-center sm:mb-12">
