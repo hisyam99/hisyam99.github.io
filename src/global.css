@@ -250,6 +250,15 @@ html {
   }
 }
 
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Animation classes */
 .animate-fadeInUp {
   animation: fadeInUp 0.8s ease-out forwards;
@@ -289,6 +298,10 @@ html {
 
 .animate-heartbeat {
   animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
 }
 
 /* Hover animations */

@@ -154,12 +154,80 @@ export default component$(() => {
               class="animate-fadeInRight flex flex-1 justify-center lg:justify-end"
               style="animation-delay: 0.4s"
             >
-              <div class="relative">
-                <div class="from-primary to-secondary absolute inset-0 animate-pulse rounded-full bg-gradient-to-r opacity-50 blur-2xl"></div>
-                <ImgHisyam
-                  class="animate-float hover-scale relative h-72 w-72 rounded-full object-cover shadow-2xl lg:h-96 lg:w-96"
-                  alt="Muhammad Hisyam Kamil"
-                />
+              <div class="group relative">
+                {/* Animated geometric background */}
+                <div class="animate-spin-slow absolute inset-0">
+                  <div class="border-primary/30 absolute inset-0 rounded-full border-2 border-dashed"></div>
+                  <div class="border-secondary/40 absolute inset-4 animate-pulse rounded-full border border-dotted"></div>
+                </div>
+
+                {/* Holographic glass frame */}
+                <div class="relative p-2">
+                  <div class="from-primary/20 via-secondary/20 to-accent/20 absolute inset-0 animate-pulse rounded-full bg-gradient-to-r blur-xl"></div>
+                  <div class="glass relative rounded-full p-3 transition-all duration-500 hover:scale-105">
+                    {/* Floating tech elements */}
+                    <div class="bg-primary absolute -top-2 -right-2 h-4 w-4 animate-ping rounded-full"></div>
+                    <div class="bg-secondary absolute -bottom-3 -left-3 h-3 w-3 animate-pulse rounded-full"></div>
+                    <div class="bg-accent absolute top-1/4 -right-4 h-2 w-2 animate-bounce rounded-full"></div>
+                    <div class="bg-info absolute bottom-1/4 -left-4 h-2 w-2 animate-pulse rounded-full"></div>
+
+                    {/* Main photo with hexagonal clip */}
+                    <div class="relative">
+                      <div class="from-primary to-secondary animate-gradient absolute inset-0 rounded-full bg-gradient-to-br opacity-50"></div>
+                      <ImgHisyam
+                        class="border-base-content/10 group-hover:shadow-primary/30 relative h-72 w-72 rounded-full border-4 object-cover shadow-2xl filter transition-all duration-700 group-hover:scale-105 group-hover:brightness-110 lg:h-96 lg:w-96"
+                        alt="Muhammad Hisyam Kamil"
+                      />
+
+                      {/* Overlay effects */}
+                      <div class="from-primary/20 to-secondary/20 absolute inset-0 rounded-full bg-gradient-to-t via-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+                    </div>
+
+                    {/* Status indicator */}
+                    <div class="bg-base-100/90 border-base-content/10 absolute right-4 bottom-4 flex items-center gap-2 rounded-full border px-3 py-1 backdrop-blur-sm">
+                      <div class="bg-success h-2 w-2 animate-pulse rounded-full"></div>
+                      <span class="text-xs font-medium">Available</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Orbiting tech icons */}
+                <div class="animate-spin-slow absolute inset-0">
+                  <div class="absolute -top-8 left-1/2 -translate-x-1/2 transform">
+                    <div class="bg-base-100 border-primary/20 flex h-10 w-10 items-center justify-center rounded-full border shadow-lg">
+                      <ReactIcon />
+                    </div>
+                  </div>
+                  <div class="absolute top-1/2 -right-8 -translate-y-1/2 transform">
+                    <div class="bg-base-100 border-secondary/20 flex h-10 w-10 items-center justify-center rounded-full border shadow-lg">
+                      <TypeScriptIcon />
+                    </div>
+                  </div>
+                  <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 transform">
+                    <div class="bg-base-100 border-accent/20 flex h-10 w-10 items-center justify-center rounded-full border shadow-lg">
+                      <NodeIcon />
+                    </div>
+                  </div>
+                  <div class="absolute top-1/2 -left-8 -translate-y-1/2 transform">
+                    <div class="bg-base-100 border-info/20 flex h-10 w-10 items-center justify-center rounded-full border shadow-lg">
+                      <TailwindIcon />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Particle effects */}
+                <div class="pointer-events-none absolute inset-0">
+                  <div class="bg-primary absolute top-12 right-12 h-1 w-1 animate-ping rounded-full"></div>
+                  <div class="bg-secondary absolute bottom-16 left-16 h-1 w-1 animate-pulse rounded-full"></div>
+                  <div
+                    class="bg-accent absolute top-20 left-12 h-0.5 w-0.5 animate-ping rounded-full"
+                    style="animation-delay: 1s"
+                  ></div>
+                  <div
+                    class="bg-info absolute right-20 bottom-12 h-0.5 w-0.5 animate-pulse rounded-full"
+                    style="animation-delay: 2s"
+                  ></div>
+                </div>
               </div>
             </div>
           </div>
