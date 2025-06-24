@@ -20,7 +20,7 @@ const StackIconWithSuspense = (props: StackIconProps) => (
   <Suspense
     fallback={
       <div
-        className={`inline-block animate-pulse rounded bg-gray-300 ${props.className || ""}`}
+        className={`inline-block animate-pulse rounded bg-gray-300 ${props.className ?? ""}`}
         style={{ width: "24px", height: "24px" }}
         aria-label={`Loading ${props.name} icon`}
       />
