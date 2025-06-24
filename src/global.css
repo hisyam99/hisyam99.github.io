@@ -502,3 +502,501 @@ html {
   opacity: 0.65;
   transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
 }
+
+/* ================================= */
+/* MICROSOFT FLUENT + APPLE LIQUID GLASS HEADER */
+/* ================================= */
+
+/* Fluent Glass Cards for each section */
+.fluent-glass-card-left,
+.fluent-glass-card-center,
+.fluent-glass-card-right {
+  position: relative;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(20px);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  overflow: visible;
+}
+
+.fluent-glass-card-left {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  box-shadow:
+    0 8px 32px rgba(31, 38, 135, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.fluent-glass-card-center {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.03) 100%
+  );
+  box-shadow:
+    0 12px 40px rgba(31, 38, 135, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  border-radius: 32px;
+}
+
+.fluent-glass-card-right {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  box-shadow:
+    0 10px 35px rgba(31, 38, 135, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  overflow: visible !important;
+  z-index: 10;
+}
+
+.fluent-glass-card-right .dropdown {
+  position: static;
+}
+
+.fluent-glass-card-right .dropdown-content {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 8px;
+  z-index: 100;
+}
+
+/* Hover effects for glass cards */
+.fluent-glass-card-left:hover,
+.fluent-glass-card-center:hover,
+.fluent-glass-card-right:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 16px 48px rgba(31, 38, 135, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+/* Modern Text Gradient */
+.text-gradient-modern {
+  color: hsl(var(--p)); /* Fallback color */
+  background: linear-gradient(
+    135deg,
+    hsl(var(--p)) 0%,
+    hsl(var(--s)) 40%,
+    hsl(var(--a)) 100%
+  );
+  background-size: 200% 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 4s ease-in-out infinite;
+}
+
+/* Fallback for browsers that don't support background-clip: text */
+@supports not (background-clip: text) {
+  .text-gradient-modern {
+    color: hsl(var(--p));
+    -webkit-text-fill-color: unset;
+  }
+}
+
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Navigation Links Modern Style */
+.nav-link-modern {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 16px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.nav-link-modern::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--p), 0.1) 0%,
+    rgba(var(--s), 0.05) 100%
+  );
+  border-radius: 16px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.nav-link-modern:hover::before {
+  opacity: 1;
+}
+
+/* Active state for navigation links */
+.nav-link-modern.active {
+  background: linear-gradient(
+    135deg,
+    rgba(var(--p), 0.15) 0%,
+    rgba(var(--s), 0.08) 100%
+  );
+  border: 1px solid rgba(var(--p), 0.2);
+  box-shadow:
+    0 4px 20px rgba(var(--p), 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px) scale(1.05);
+}
+
+.nav-link-modern.active::before {
+  opacity: 1;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--p), 0.2) 0%,
+    rgba(var(--s), 0.1) 100%
+  );
+}
+
+.nav-link-modern.active .nav-indicator {
+  width: 60% !important;
+  background: linear-gradient(90deg, hsl(var(--p)), hsl(var(--s))) !important;
+  box-shadow: 0 0 8px rgba(var(--p), 0.5);
+}
+
+/* Enhanced hover effects for active items */
+.nav-link-modern.active:hover {
+  transform: translateY(-2px) scale(1.08);
+  box-shadow:
+    0 8px 25px rgba(var(--p), 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.nav-icon {
+  font-size: 1.2rem;
+  margin-bottom: 4px;
+  transition: all 0.3s ease;
+}
+
+.nav-text {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.nav-indicator {
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, hsl(var(--p)), hsl(var(--s)));
+  border-radius: 1px;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link-modern:hover .nav-indicator {
+  width: 60%;
+}
+
+.nav-link-modern:hover .nav-text {
+  color: hsl(var(--p));
+}
+
+/* Mobile Menu Button */
+.mobile-menu-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-btn:hover {
+  background: rgba(var(--p), 0.1);
+  transform: scale(1.1);
+}
+
+.hamburger-line {
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.mobile-menu-btn:hover .hamburger-line:nth-child(1) {
+  transform: translateY(1px);
+}
+
+.mobile-menu-btn:hover .hamburger-line:nth-child(3) {
+  transform: translateY(-1px);
+}
+
+/* Action Buttons */
+.action-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 16px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  overflow: hidden;
+}
+
+.action-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--p), 0.2) 0%,
+    rgba(var(--s), 0.1) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.action-btn:hover::before {
+  opacity: 1;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow:
+    0 12px 24px rgba(var(--p), 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.action-btn-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(var(--p), 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.8);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.action-btn:hover .action-btn-glow {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+/* Theme Selector Wrapper */
+.theme-selector-wrapper {
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.theme-selector-wrapper:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: scale(1.02);
+}
+
+/* Liquid Glass Morphism Effects */
+@keyframes liquidFloat {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+    border-radius: 24px 32px 28px 20px;
+  }
+  33% {
+    transform: translateY(-5px) rotate(1deg);
+    border-radius: 32px 20px 24px 28px;
+  }
+  66% {
+    transform: translateY(3px) rotate(-1deg);
+    border-radius: 20px 28px 32px 24px;
+  }
+}
+
+.fluent-glass-card-center {
+  animation: liquidFloat 8s ease-in-out infinite;
+}
+
+/* Backdrop Blur Enhancement */
+@supports (backdrop-filter: blur(20px)) {
+  .fluent-glass-card-left,
+  .fluent-glass-card-center,
+  .fluent-glass-card-right {
+    backdrop-filter: blur(20px) saturate(180%);
+  }
+}
+
+/* Modern Microinteractions */
+.nav-link-modern,
+.action-btn {
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-link-modern,
+  .action-btn,
+  .fluent-glass-card-left,
+  .fluent-glass-card-center,
+  .fluent-glass-card-right {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .fluent-glass-card-left,
+[data-theme="dark"] .fluent-glass-card-center,
+[data-theme="dark"] .fluent-glass-card-right {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .action-btn {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.03) 100%
+  );
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .fluent-glass-card-left,
+  .fluent-glass-card-center,
+  .fluent-glass-card-right {
+    border-radius: 16px;
+  }
+
+  .fluent-glass-card-left,
+  .fluent-glass-card-right {
+    width: auto;
+    display: inline-block;
+    min-width: fit-content;
+  }
+
+  .nav-link-modern {
+    padding: 8px 12px;
+    border-radius: 12px;
+  }
+
+  .action-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+
+  .theme-btn {
+    min-width: 44px;
+    padding: 0 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .fluent-glass-card-left,
+  .fluent-glass-card-right {
+    width: auto;
+    display: inline-block;
+    max-width: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .fluent-glass-card-left,
+  .fluent-glass-card-center,
+  .fluent-glass-card-right {
+    border: 2px solid currentColor;
+    background: var(--fallback-b1, oklch(var(--b1)));
+  }
+
+  .action-btn {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Theme Button Specific */
+.theme-btn {
+  width: auto !important;
+  min-width: 80px;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 16px;
+}
+
+.theme-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow:
+    0 12px 24px rgba(var(--p), 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 1024px) {
+  .theme-btn {
+    min-width: 44px;
+    padding: 0 12px;
+  }
+}
+
+/* Theme Dropdown Fix */
+.fluent-glass-card-right {
+  overflow: visible !important;
+  z-index: 10;
+}
+
+.fluent-glass-card-right .dropdown {
+  position: static;
+}
+
+.fluent-glass-card-right .dropdown-content {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 8px;
+  z-index: 100;
+}
+
+/* Ensure dropdown appears above everything */
+.dropdown-content {
+  z-index: 1000 !important;
+}

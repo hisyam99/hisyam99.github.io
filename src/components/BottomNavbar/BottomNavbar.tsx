@@ -1,4 +1,4 @@
-import { component$, useSignal, $ } from "@builder.io/qwik";
+import { component$, useSignal, $, useOnWindow } from "@builder.io/qwik";
 import { Link, useLocation } from "@builder.io/qwik-city";
 
 export interface BottomNavbarProps {}
@@ -7,14 +7,90 @@ export const BottomNavbar = component$<BottomNavbarProps>(() => {
   const location = useLocation();
   const activeTab = useSignal(0);
   const isExpanded = useSignal(false);
+  const currentHash = useSignal(location.url.hash);
+
+  const findClosestSection = $((sections: string[], scrollPosition: number) => {
+    let closestSection = "";
+    let closestDistance = Infinity;
+
+    for (const section of sections) {
+      const element = document.getElementById(section);
+      if (!element) continue;
+
+      const rect = element.getBoundingClientRect();
+      const elementTop = rect.top + window.scrollY;
+      const elementCenter = elementTop + rect.height / 2;
+      const viewportCenter = scrollPosition + window.innerHeight / 2;
+
+      // Jika element dalam viewport atau dekat dengan center
+      if (rect.top <= 200 && rect.bottom >= 100) {
+        const distance = Math.abs(elementCenter - viewportCenter);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestSection = section;
+        }
+      }
+    }
+
+    return closestSection;
+  });
+
+  const updateHash = $((activeSection: string) => {
+    const newHash = activeSection ? `#${activeSection}` : "";
+    if (newHash === currentHash.value) return;
+
+    currentHash.value = newHash;
+  });
+
+  const updateActiveSection = $(async () => {
+    const sections = ["about", "skills", "projects", "contact"];
+    const scrollPosition = window.scrollY + 120; // Offset for header height
+
+    // Check jika di top of page (sebelum section pertama)
+    if (scrollPosition < 400) {
+      await updateHash("");
+      return;
+    }
+
+    const activeSection = await findClosestSection(sections, scrollPosition);
+    await updateHash(activeSection);
+  });
+
+  // Optimized scroll handler dengan throttling
+  useOnWindow(
+    "scroll",
+    $(() => {
+      // Use requestAnimationFrame untuk optimal performance
+      requestAnimationFrame(() => {
+        updateActiveSection();
+      });
+    }),
+  );
+
+  // Hash change listener
+  useOnWindow(
+    "hashchange",
+    $(() => {
+      currentHash.value = window.location.hash;
+      // Delay untuk memastikan scroll selesai
+      setTimeout(() => {
+        updateActiveSection();
+      }, 100);
+    }),
+  );
 
   const isActive = (href: string) => {
     if (href === "/") {
-      return location.url.pathname === "/" || location.url.pathname === "/home";
+      // Home active jika di root dan tidak ada hash atau hash kosong
+      return (
+        (location.url.pathname === "/" || location.url.pathname === "/home") &&
+        (!currentHash.value || currentHash.value === "")
+      );
     }
     if (href.startsWith("/#")) {
       const hash = href.replace("/#", "");
-      return location.url.hash === `#${hash}`;
+      // Check current hash dari signal, bukan dari location
+      return currentHash.value === `#${hash}`;
     }
     return location.url.pathname.startsWith(href);
   };
@@ -273,7 +349,7 @@ export const BottomNavbar = component$<BottomNavbarProps>(() => {
 
       {/* Expanded Drawer Menu - Better positioning below navbar */}
       <div
-        class={`bg-base-100/95 border-base-content/10 fixed top-16 right-0 bottom-0 left-0 overflow-y-auto border-t backdrop-blur-xl transition-all duration-500 ease-out ${isExpanded.value ? "translate-y-0" : "translate-y-full"} `}
+        class={`bg-base-100/95 border-base-content/10 fixed top-24 right-0 bottom-0 left-0 overflow-y-auto border-t backdrop-blur-xl transition-all duration-500 ease-out ${isExpanded.value ? "translate-y-0" : "translate-y-full"} `}
       >
         <div class="p-6 pb-32">
           {/* Header */}
@@ -304,34 +380,67 @@ export const BottomNavbar = component$<BottomNavbarProps>(() => {
 
           {/* Menu Grid */}
           <div class="grid grid-cols-2 gap-4">
-            {drawerMenuItems.map((item, index) => (
-              <Link
-                key={`drawer-${item.label.toLowerCase()}-${index}`}
-                href={item.href}
-                target={item.isExternal ? "_blank" : undefined}
-                class="group bg-base-200/50 hover:bg-primary/10 relative rounded-2xl p-4 transition-all duration-300 hover:scale-105 active:scale-95"
-                onClick$={() => handleTabClick(index)}
-              >
-                <div class="flex flex-col items-center space-y-2 text-center">
-                  <div class="bg-primary/10 group-hover:bg-primary/20 rounded-xl p-3 transition-colors">
-                    <div class="text-primary transition-transform group-hover:scale-110">
-                      {item.icon}
+            {drawerMenuItems.map((item, index) => {
+              const isCurrentlyActive = isActive(item.href);
+
+              return (
+                <Link
+                  key={`drawer-${item.label.toLowerCase()}-${index}`}
+                  href={item.href}
+                  target={item.isExternal ? "_blank" : undefined}
+                  class={`group relative rounded-2xl p-4 transition-all duration-300 hover:scale-105 active:scale-95 ${
+                    isCurrentlyActive
+                      ? "bg-primary/20 border-primary/30 scale-105 border"
+                      : "bg-base-200/50 hover:bg-primary/10"
+                  }`}
+                  onClick$={() => handleTabClick(index)}
+                >
+                  {/* Active indicator */}
+                  {isCurrentlyActive && (
+                    <div class="absolute top-2 right-2">
+                      <div class="bg-primary h-2 w-2 animate-ping rounded-full"></div>
+                    </div>
+                  )}
+
+                  <div class="flex flex-col items-center space-y-2 text-center">
+                    <div
+                      class={`rounded-xl p-3 transition-colors ${
+                        isCurrentlyActive
+                          ? "bg-primary/30 scale-110"
+                          : "bg-primary/10 group-hover:bg-primary/20"
+                      }`}
+                    >
+                      <div
+                        class={`transition-transform group-hover:scale-110 ${
+                          isCurrentlyActive
+                            ? "text-primary scale-110"
+                            : "text-primary"
+                        }`}
+                      >
+                        {item.icon}
+                      </div>
+                    </div>
+                    <div>
+                      <h4
+                        class={`text-sm font-semibold ${
+                          isCurrentlyActive ? "text-primary" : ""
+                        }`}
+                      >
+                        {item.label}
+                      </h4>
+                      <p class="text-base-content/60 text-xs">
+                        {item.description}
+                      </p>
                     </div>
                   </div>
-                  <div>
-                    <h4 class="text-sm font-semibold">{item.label}</h4>
-                    <p class="text-base-content/60 text-xs">
-                      {item.description}
-                    </p>
-                  </div>
-                </div>
 
-                {/* Ripple effect */}
-                <div class="absolute inset-0 overflow-hidden rounded-2xl opacity-0 group-active:opacity-100">
-                  <div class="bg-primary/20 absolute inset-0 scale-0 transform rounded-2xl transition-all duration-300 group-active:scale-100"></div>
-                </div>
-              </Link>
-            ))}
+                  {/* Ripple effect */}
+                  <div class="absolute inset-0 overflow-hidden rounded-2xl opacity-0 group-active:opacity-100">
+                    <div class="bg-primary/20 absolute inset-0 scale-0 transform rounded-2xl transition-all duration-300 group-active:scale-100"></div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
 
           {/* Footer info */}

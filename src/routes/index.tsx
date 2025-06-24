@@ -17,7 +17,7 @@ export default component$(() => {
       <Hero />
 
       {/* Projects Section */}
-      <section id="projects" class="bg-base-200 py-20">
+      <section id="projects" class="bg-base-200 py-20 pt-32">
         <div class="container mx-auto px-4">
           <div class="animate-fadeInDown mb-12 text-center">
             <h2 class="animate-textReveal mb-4 text-4xl font-bold">
@@ -271,7 +271,7 @@ export default component$(() => {
       </section>
 
       {/* Contact Section */}
-      <section ref={contactRef} id="contact" class="py-20">
+      <section ref={contactRef} id="contact" class="py-20 pt-32">
         <div class="container mx-auto px-4">
           <div class="animate-fadeInDown mb-12 text-center">
             <h2 class="animate-textReveal mb-4 text-4xl font-bold">

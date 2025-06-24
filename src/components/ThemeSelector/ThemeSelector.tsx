@@ -65,31 +65,43 @@ const ThemeSelector = component$(() => {
   });
 
   return (
-    <div class="dropdown-end dropdown-bottom dropdown">
-      <div tabIndex={0} role="button" class="btn btn-ghost">
-        <div class="flex items-center space-x-2">
-          <p>Theme</p>
+    <div class="dropdown-end dropdown-bottom dropdown relative z-[100]">
+      <button
+        tabIndex={0}
+        type="button"
+        class="action-btn theme-btn group"
+        aria-label="Select theme"
+      >
+        <div class="flex items-center gap-2">
           <svg
-            width="12px"
-            height="12px"
-            class="inline-block fill-current"
+            width="16px"
+            height="16px"
+            class="fill-current transition-transform duration-300 group-hover:rotate-180"
             xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 2048 2048"
+            viewBox="0 0 24 24"
           >
-            <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
+            <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />
+          </svg>
+          <span class="hidden text-sm font-medium lg:block">Theme</span>
+          <svg
+            width="10px"
+            height="10px"
+            class="fill-current transition-transform duration-300 group-hover:rotate-180"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <path d="M7 10l5 5 5-5z" />
           </svg>
         </div>
-      </div>
-      <ul
-        tabIndex={0}
-        class="dropdown-content rounded-box bg-base-300 z-[1] max-h-60 w-52 overflow-y-auto p-2 shadow-2xl"
-      >
+        <div class="action-btn-glow"></div>
+      </button>
+      <ul class="dropdown-content rounded-box bg-base-200/95 border-base-content/10 z-[100] max-h-60 w-52 overflow-y-auto border p-2 shadow-2xl backdrop-blur-xl">
         {themeOptions.map((themeOption) => (
           <li key={themeOption.value}>
             <input
               type="radio"
               name="theme-dropdown"
-              class="theme-controller btn btn-ghost btn-sm btn-block justify-start"
+              class="theme-controller btn btn-ghost btn-sm btn-block hover:bg-primary/10 justify-start transition-colors duration-200"
               aria-label={themeOption.label}
               value={themeOption.value}
               onChange$={() => handleThemeChange(themeOption.value)}
