@@ -149,13 +149,17 @@ export default component$(() => {
                       class="focus:border-primary/50 text-base-content placeholder-base-content/50 w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm backdrop-blur-sm transition-all duration-300 outline-none focus:bg-white/15 sm:rounded-l-xl sm:rounded-r-none sm:text-base"
                     />
                   </div>
-                  <button class="bg-primary/20 border-primary/30 hover:bg-primary/30 text-primary group rounded-xl border px-6 py-3 font-semibold backdrop-blur-sm transition-all duration-300 sm:rounded-l-none sm:rounded-r-xl">
+                  <button
+                    class="bg-primary/20 border-primary/30 hover:bg-primary/30 text-primary group rounded-xl border px-6 py-3 font-semibold backdrop-blur-sm transition-all duration-300 sm:rounded-l-none sm:rounded-r-xl"
+                    aria-label="Search"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       class="h-5 w-5 transition-transform duration-300 group-hover:scale-110 sm:h-6 sm:w-6"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
+                      aria-hidden="true"
                     >
                       <path
                         stroke-linecap="round"

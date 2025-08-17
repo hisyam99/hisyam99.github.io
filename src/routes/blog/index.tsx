@@ -52,13 +52,17 @@ export default component$(() => {
                 placeholder="Search articles..."
                 class="input input-bordered join-item focus:input-primary w-full flex-1"
               />
-              <button class="btn btn-primary join-item hover-scale">
+              <button
+                class="btn btn-primary join-item hover-scale"
+                aria-label="Search articles"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="h-5 w-5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
+                  aria-hidden="true"
                 >
                   <path
                     stroke-linecap="round"
