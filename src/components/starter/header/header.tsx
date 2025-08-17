@@ -1,6 +1,6 @@
 import { component$, useSignal, $, useOnWindow } from "@builder.io/qwik";
 import { Link, useLocation } from "@builder.io/qwik-city";
-import ThemeSelector from "~/components/ThemeSelector/ThemeSelector";
+import { ThemeToggle } from "~/components/ThemeToggle/ThemeToggle";
 
 export default component$(() => {
   const location = useLocation();
@@ -329,7 +329,7 @@ export default component$(() => {
                 </Link>
 
                 <div class="relative">
-                  <ThemeSelector />
+                  <ThemeToggle />
                 </div>
               </div>
             </div>

@@ -1,9 +1,7 @@
 import { component$, useSignal, $, useOnWindow } from "@builder.io/qwik";
 import { Link, useLocation } from "@builder.io/qwik-city";
 
-export interface BottomNavbarProps {}
-
-export const BottomNavbar = component$<BottomNavbarProps>(() => {
+export const BottomNavbar = component$(() => {
   const location = useLocation();
   const activeTab = useSignal(0);
   const isExpanded = useSignal(false);
