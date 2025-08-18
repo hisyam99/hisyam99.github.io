@@ -414,7 +414,7 @@ export const BottomNavbar = component$(() => {
                         class={`transition-transform group-hover:scale-110 ${
                           isCurrentlyActive
                             ? "text-primary scale-110"
-                            : "text-primary"
+                            : "text-content-secondary"
                         }`}
                       >
                         {item.icon}
@@ -423,7 +423,9 @@ export const BottomNavbar = component$(() => {
                     <div>
                       <h4
                         class={`text-sm font-semibold ${
-                          isCurrentlyActive ? "text-primary" : ""
+                          isCurrentlyActive
+                            ? "text-primary"
+                            : "text-content-secondary"
                         }`}
                       >
                         {item.label}

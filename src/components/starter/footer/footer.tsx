@@ -217,7 +217,7 @@ export default component$(() => {
                 <Link
                   href="https://qwik.dev"
                   target="_blank"
-                  class="text-primary hover:underline"
+                  class="text-base-content hover:text-primary hover:underline"
                 >
                   Qwik
                 </Link>
@@ -225,7 +225,7 @@ export default component$(() => {
                 <Link
                   href="https://daisyui.com"
                   target="_blank"
-                  class="text-primary hover:underline"
+                  class="text-base-content hover:text-primary hover:underline"
                 >
                   DaisyUI
                 </Link>

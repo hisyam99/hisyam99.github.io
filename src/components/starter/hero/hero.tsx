@@ -392,7 +392,7 @@ export default component$(() => {
             {/* Frontend */}
             <div class="card bg-base-200 shadow-xl transition-all duration-300 hover:shadow-2xl">
               <div class="card-body">
-                <h3 class="card-title text-primary mb-4">
+                <h3 class="card-title card-title-contrast mb-4">
                   <svg
                     class="h-6 w-6"
                     fill="none"
@@ -441,7 +441,7 @@ export default component$(() => {
             {/* Backend */}
             <div class="card bg-base-200 shadow-xl transition-all duration-300 hover:shadow-2xl">
               <div class="card-body">
-                <h3 class="card-title text-primary mb-4">
+                <h3 class="card-title card-title-contrast mb-4">
                   <svg
                     class="h-6 w-6"
                     fill="none"
@@ -490,7 +490,7 @@ export default component$(() => {
             {/* Database */}
             <div class="card bg-base-200 shadow-xl transition-all duration-300 hover:shadow-2xl">
               <div class="card-body">
-                <h3 class="card-title text-primary mb-4">
+                <h3 class="card-title card-title-contrast mb-4">
                   <svg
                     class="h-6 w-6"
                     fill="none"
@@ -539,7 +539,7 @@ export default component$(() => {
             {/* Tools */}
             <div class="card bg-base-200 shadow-xl transition-all duration-300 hover:shadow-2xl">
               <div class="card-body">
-                <h3 class="card-title text-primary mb-4">
+                <h3 class="card-title card-title-contrast mb-4">
                   <svg
                     class="h-6 w-6"
                     fill="none"

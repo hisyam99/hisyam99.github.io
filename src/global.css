@@ -960,6 +960,11 @@ html {
   color: oklch(from oklch(var(--bc)) calc(l * 0.75) c h);
 }
 
+/* Card header with improved contrast on bg-base-200 */
+.card-title-contrast {
+  color: oklch(from oklch(var(--p)) calc(l * 0.7) calc(c * 1.2) h);
+}
+
 /* Fallback for browsers that don't support oklch from */
 @supports not (color: oklch(from white l c h)) {
   .text-content-secondary {
@@ -976,6 +981,10 @@ html {
 
   .placeholder-content-tertiary::placeholder {
     color: hsl(from hsl(var(--bc)) h s calc(l * 0.75));
+  }
+
+  .card-title-contrast {
+    color: hsl(from hsl(var(--p)) h calc(s * 1.2) calc(l * 0.7));
   }
 }
 
@@ -999,6 +1008,10 @@ html {
   .placeholder-content-tertiary::placeholder {
     @apply text-base-content;
     opacity: 0.75;
+  }
+
+  .card-title-contrast {
+    @apply text-base-content;
   }
 }
 
@@ -1025,6 +1038,10 @@ html {
   .placeholder-content-tertiary::placeholder {
     @apply text-base-content;
     opacity: 0.9;
+  }
+
+  .card-title-contrast {
+    @apply text-base-content;
   }
 }
 
