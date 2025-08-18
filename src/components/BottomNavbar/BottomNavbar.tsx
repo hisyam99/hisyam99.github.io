@@ -413,7 +413,7 @@ export const BottomNavbar = component$(() => {
                       <div
                         class={`transition-transform group-hover:scale-110 ${
                           isCurrentlyActive
-                            ? "text-primary scale-110"
+                            ? "text-base-content scale-110"
                             : "text-content-secondary"
                         }`}
                       >
@@ -424,7 +424,7 @@ export const BottomNavbar = component$(() => {
                       <h4
                         class={`text-sm font-semibold ${
                           isCurrentlyActive
-                            ? "text-primary"
+                            ? "text-base-content"
                             : "text-content-secondary"
                         }`}
                       >
@@ -474,7 +474,7 @@ export const BottomNavbar = component$(() => {
                 href={item.href}
                 class={`group relative flex min-w-[60px] flex-col items-center justify-center rounded-2xl p-2 transition-all duration-300 ease-out hover:scale-110 active:scale-95 ${
                   isCurrentlyActive
-                    ? "text-primary scale-105 transform"
+                    ? "text-base-content scale-105 transform"
                     : "text-content-secondary hover:text-primary"
                 } `}
                 onClick$={() => handleTabClick(index)}
@@ -500,7 +500,7 @@ export const BottomNavbar = component$(() => {
                 <span
                   class={`relative z-10 text-xs font-medium transition-all duration-300 ${
                     isCurrentlyActive
-                      ? "text-primary scale-105 font-semibold"
+                      ? "text-base-content scale-105 font-semibold"
                       : "text-content-tertiary group-hover:text-primary"
                   } `}
                 >
@@ -525,7 +525,7 @@ export const BottomNavbar = component$(() => {
             onClick$={toggleExpanded}
             class={`group relative flex min-w-[60px] flex-col items-center justify-center rounded-2xl p-2 transition-all duration-500 ease-out hover:scale-110 active:scale-95 ${
               isExpanded.value
-                ? "text-primary bg-primary/10 scale-110 transform"
+                ? "text-base-content bg-primary/10 scale-110 transform"
                 : "text-content-secondary hover:text-primary"
             } `}
           >
@@ -566,7 +566,7 @@ export const BottomNavbar = component$(() => {
             <span
               class={`relative z-10 text-xs font-medium transition-all duration-300 ${
                 isExpanded.value
-                  ? "text-primary scale-105 font-semibold"
+                  ? "text-base-content scale-105 font-semibold"
                   : "text-content-tertiary group-hover:text-primary"
               } `}
             >
@@ -589,7 +589,7 @@ export const BottomNavbar = component$(() => {
                 href={item.href}
                 class={`group relative flex min-w-[60px] flex-col items-center justify-center rounded-2xl p-2 transition-all duration-300 ease-out hover:scale-110 active:scale-95 ${
                   isCurrentlyActive
-                    ? "text-primary scale-105 transform"
+                    ? "text-base-content scale-105 transform"
                     : "text-content-secondary hover:text-primary"
                 } `}
                 onClick$={() => handleTabClick(actualIndex)}
@@ -615,7 +615,7 @@ export const BottomNavbar = component$(() => {
                 <span
                   class={`relative z-10 text-xs font-medium transition-all duration-300 ${
                     isCurrentlyActive
-                      ? "text-primary scale-105 font-semibold"
+                      ? "text-base-content scale-105 font-semibold"
                       : "text-content-tertiary group-hover:text-primary"
                   } `}
                 >
