@@ -20,7 +20,7 @@ export default component$(() => {
             Blog
           </h1>
           <div class="bg-primary animate-scaleInCenter mx-auto mb-6 h-1 w-16 sm:mb-8 sm:w-20"></div>
-          <p class="text-base-content/70 mx-auto max-w-2xl px-4 text-base sm:px-0 sm:text-lg">
+          <p class="text-content-secondary mx-auto max-w-2xl px-4 text-base sm:px-0 sm:text-lg">
             Thoughts, tutorials, and insights about web development, technology,
             and my journey as a developer.
           </p>
@@ -91,7 +91,7 @@ export default component$(() => {
               </h2>
 
               {/* Meta Information */}
-              <div class="text-base-content/70 mb-4 flex flex-col gap-2 text-xs sm:flex-row sm:items-center sm:gap-4 sm:text-sm">
+              <div class="text-content-secondary mb-4 flex flex-col gap-2 text-xs sm:flex-row sm:items-center sm:gap-4 sm:text-sm">
                 <span class="flex items-center gap-1">
                   <svg
                     class="h-3 w-3 sm:h-4 sm:w-4"
@@ -203,12 +203,12 @@ export default component$(() => {
               <h2 class="card-title mb-2 text-base leading-tight sm:text-lg">
                 Arch Linux: Paket xz telah di-backdoor
               </h2>
-              <p class="text-base-content/70 mb-4 text-sm leading-relaxed">
+              <p class="text-content-secondary mb-4 text-sm leading-relaxed">
                 Critical security alert: The upstream release tarballs for xz
                 versions 5.6.0 and 5.6.1 contain malicious code that introduces
                 a backdoor.
               </p>
-              <div class="text-base-content/60 mb-4 flex items-center justify-between text-xs sm:text-sm">
+              <div class="text-content-tertiary mb-4 flex items-center justify-between text-xs sm:text-sm">
                 <span class="truncate">David Runge</span>
                 <span class="whitespace-nowrap">March 29, 2024</span>
               </div>
@@ -252,12 +252,12 @@ export default component$(() => {
               <h2 class="card-title mb-2 text-base leading-tight sm:text-lg">
                 Building Modern Web Apps with Qwik
               </h2>
-              <p class="text-base-content/70 mb-4 text-sm leading-relaxed">
+              <p class="text-content-secondary mb-4 text-sm leading-relaxed">
                 Learn how to build blazing fast web applications with Qwik
                 framework. Explore the benefits of resumability and lazy
                 loading.
               </p>
-              <div class="text-base-content/60 mb-4 flex items-center justify-between text-xs sm:text-sm">
+              <div class="text-content-tertiary mb-4 flex items-center justify-between text-xs sm:text-sm">
                 <span class="truncate">hisyam99</span>
                 <span class="whitespace-nowrap">Coming Soon</span>
               </div>

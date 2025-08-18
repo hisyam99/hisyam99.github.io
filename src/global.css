@@ -941,6 +941,67 @@ html {
   }
 }
 
+/* Accessible text color utilities */
+/* These replace the low-contrast text-base-content/XX classes for better accessibility */
+.text-content-secondary {
+  color: oklch(from oklch(var(--bc)) calc(l * 0.85) c h);
+}
+
+.text-content-tertiary {
+  color: oklch(from oklch(var(--bc)) calc(l * 0.75) c h);
+}
+
+.text-content-quaternary {
+  color: oklch(from oklch(var(--bc)) calc(l * 0.65) c h);
+}
+
+/* Accessible placeholder utilities */
+.placeholder-content-tertiary::placeholder {
+  color: oklch(from oklch(var(--bc)) calc(l * 0.75) c h);
+}
+
+/* Fallback for browsers that don't support oklch from */
+@supports not (color: oklch(from white l c h)) {
+  .text-content-secondary {
+    color: hsl(from hsl(var(--bc)) h s calc(l * 0.85));
+  }
+
+  .text-content-tertiary {
+    color: hsl(from hsl(var(--bc)) h s calc(l * 0.75));
+  }
+
+  .text-content-quaternary {
+    color: hsl(from hsl(var(--bc)) h s calc(l * 0.65));
+  }
+
+  .placeholder-content-tertiary::placeholder {
+    color: hsl(from hsl(var(--bc)) h s calc(l * 0.75));
+  }
+}
+
+/* Additional fallback for older browsers */
+@supports not (color: hsl(from white h s l)) {
+  .text-content-secondary {
+    @apply text-base-content;
+    opacity: 0.85;
+  }
+
+  .text-content-tertiary {
+    @apply text-base-content;
+    opacity: 0.75;
+  }
+
+  .text-content-quaternary {
+    @apply text-base-content;
+    opacity: 0.65;
+  }
+
+  .placeholder-content-tertiary::placeholder {
+    @apply text-base-content;
+    opacity: 0.75;
+  }
+}
+
 /* High contrast mode support */
 @media (prefers-contrast: high) {
   .fluent-glass-card-left,
@@ -952,6 +1013,18 @@ html {
 
   .action-btn {
     border: 2px solid currentColor;
+  }
+
+  /* Enhanced contrast for text utilities */
+  .text-content-secondary,
+  .text-content-tertiary,
+  .text-content-quaternary {
+    @apply text-base-content;
+  }
+
+  .placeholder-content-tertiary::placeholder {
+    @apply text-base-content;
+    opacity: 0.9;
   }
 }
 

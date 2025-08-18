@@ -39,7 +39,7 @@ export default component$(() => {
                   Oops! Page Not Found
                 </h2>
 
-                <p class="text-base-content/70 mx-auto max-w-md text-sm leading-relaxed sm:max-w-lg sm:text-base md:text-lg">
+                <p class="text-content-secondary mx-auto max-w-md text-sm leading-relaxed sm:max-w-lg sm:text-base md:text-lg">
                   Sepertinya halaman yang kamu cari belum ada atau sudah
                   dipindahkan. Tapi jangan khawatir, masih banyak hal menarik
                   yang bisa kamu explore!
@@ -138,7 +138,7 @@ export default component$(() => {
 
               {/* Search Suggestion with enhanced glass */}
               <div class="mt-8 rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-md sm:mt-12 sm:rounded-3xl sm:p-6 md:p-8">
-                <p class="text-base-content/70 mb-4 text-sm sm:mb-6 sm:text-base">
+                <p class="text-content-secondary mb-4 text-sm sm:mb-6 sm:text-base">
                   Or try searching for what you need:
                 </p>
                 <div class="flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-0">
@@ -146,7 +146,7 @@ export default component$(() => {
                     <input
                       type="text"
                       placeholder="Search..."
-                      class="focus:border-primary/50 text-base-content placeholder-base-content/50 w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm backdrop-blur-sm transition-all duration-300 outline-none focus:bg-white/15 sm:rounded-l-xl sm:rounded-r-none sm:text-base"
+                      class="focus:border-primary/50 text-base-content placeholder-content-tertiary w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm backdrop-blur-sm transition-all duration-300 outline-none focus:bg-white/15 sm:rounded-l-xl sm:rounded-r-none sm:text-base"
                     />
                   </div>
                   <button

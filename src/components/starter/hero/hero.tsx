@@ -68,11 +68,11 @@ export default component$(() => {
                   Hi, I'm <span class="text-gradient">Muhammad Hisyam</span>
                 </h1>
 
-                <h2 class="text-base-content/80 text-2xl lg:text-3xl">
+                <h2 class="text-content-secondary text-2xl lg:text-3xl">
                   Full Stack Developer & Tech Enthusiast
                 </h2>
 
-                <p class="text-base-content/70 mx-auto max-w-2xl text-lg lg:mx-0">
+                <p class="text-content-secondary mx-auto max-w-2xl text-lg lg:mx-0">
                   Suka mencoba teknologi baru dan membangun solusi digital yang
                   inovatif. Passionate about creating seamless user experiences
                   and scalable applications.
@@ -266,7 +266,7 @@ export default component$(() => {
           style="animation-delay: 1s"
         >
           <svg
-            class="text-base-content/50 h-6 w-6"
+            class="text-content-quaternary h-6 w-6"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

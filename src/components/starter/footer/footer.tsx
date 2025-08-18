@@ -15,7 +15,7 @@ export default component$(() => {
             <Link href="/" class="text-gradient text-2xl font-bold">
               hisyam99
             </Link>
-            <p class="text-base-content/70 mt-4 max-w-md">
+            <p class="text-content-secondary mt-4 max-w-md">
               Full Stack Developer passionate about creating innovative digital
               solutions. Building modern web applications with cutting-edge
               technologies.
@@ -76,7 +76,7 @@ export default component$(() => {
               <li>
                 <Link
                   href="/#about"
-                  class="link link-hover text-base-content/70 hover:text-primary"
+                  class="link link-hover text-content-secondary hover:text-primary"
                 >
                   About
                 </Link>
@@ -84,7 +84,7 @@ export default component$(() => {
               <li>
                 <Link
                   href="/#skills"
-                  class="link link-hover text-base-content/70 hover:text-primary"
+                  class="link link-hover text-content-secondary hover:text-primary"
                 >
                   Skills
                 </Link>
@@ -92,7 +92,7 @@ export default component$(() => {
               <li>
                 <Link
                   href="/#projects"
-                  class="link link-hover text-base-content/70 hover:text-primary"
+                  class="link link-hover text-content-secondary hover:text-primary"
                 >
                   Projects
                 </Link>
@@ -100,7 +100,7 @@ export default component$(() => {
               <li>
                 <Link
                   href="/blog"
-                  class="link link-hover text-base-content/70 hover:text-primary"
+                  class="link link-hover text-content-secondary hover:text-primary"
                 >
                   Blog
                 </Link>
@@ -116,7 +116,7 @@ export default component$(() => {
                 <Link
                   href="https://mil.kamil.my.id"
                   target="_blank"
-                  class="link link-hover text-base-content/70 hover:text-primary flex items-center gap-2"
+                  class="link link-hover text-content-secondary hover:text-primary flex items-center gap-2"
                 >
                   URL Shortener
                   <svg
@@ -138,7 +138,7 @@ export default component$(() => {
                 <Link
                   href="https://reparin.my.id"
                   target="_blank"
-                  class="link link-hover text-base-content/70 hover:text-primary flex items-center gap-2"
+                  class="link link-hover text-content-secondary hover:text-primary flex items-center gap-2"
                 >
                   Reparin
                   <svg
@@ -160,7 +160,7 @@ export default component$(() => {
                 <Link
                   href="https://v2.reparin.my.id"
                   target="_blank"
-                  class="link link-hover text-base-content/70 hover:text-primary flex items-center gap-2"
+                  class="link link-hover text-content-secondary hover:text-primary flex items-center gap-2"
                 >
                   Reparatech
                   <svg
@@ -181,7 +181,7 @@ export default component$(() => {
               <li>
                 <Link
                   href="mailto:hisyam@kamil.my.id"
-                  class="link link-hover text-base-content/70 hover:text-primary flex items-center gap-2"
+                  class="link link-hover text-content-secondary hover:text-primary flex items-center gap-2"
                 >
                   Email Me
                   <svg
@@ -206,13 +206,13 @@ export default component$(() => {
         {/* Bottom Footer */}
         <div class="border-base-300 border-t py-6">
           <div class="flex flex-col items-center justify-between gap-4 md:flex-row">
-            <p class="text-base-content/70 text-center md:text-left">
+            <p class="text-content-secondary text-center md:text-left">
               © {new Date().getFullYear()} Muhammad Hisyam Kamil. All rights
               reserved.
             </p>
 
             <div class="flex items-center gap-4">
-              <span class="text-base-content/70 text-sm">Built with</span>
+              <span class="text-content-secondary text-sm">Built with</span>
               <div class="flex items-center gap-2">
                 <Link
                   href="https://qwik.dev"
@@ -221,7 +221,7 @@ export default component$(() => {
                 >
                   Qwik
                 </Link>
-                <span class="text-base-content/70">+</span>
+                <span class="text-content-secondary">+</span>
                 <Link
                   href="https://daisyui.com"
                   target="_blank"

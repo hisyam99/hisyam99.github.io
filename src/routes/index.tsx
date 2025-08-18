@@ -282,7 +282,7 @@ export default component$(() => {
               class="bg-primary animate-scaleInCenter mx-auto mb-8 h-1 w-20"
               style="animation-delay: 0.3s"
             ></div>
-            <p class="text-base-content/70 mx-auto max-w-2xl text-lg">
+            <p class="text-content-secondary mx-auto max-w-2xl text-lg">
               I'm always open to discussing new opportunities, interesting
               projects, or just having a chat about technology. Feel free to
               reach out!

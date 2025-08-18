@@ -354,7 +354,7 @@ export const BottomNavbar = component$(() => {
           <div class="mb-6 flex items-center justify-between">
             <div>
               <h3 class="text-gradient text-lg font-bold">Navigation Menu</h3>
-              <p class="text-base-content/60 text-sm">Choose where to go</p>
+              <p class="text-content-tertiary text-sm">Choose where to go</p>
             </div>
             <button
               onClick$={toggleExpanded}
@@ -428,7 +428,7 @@ export const BottomNavbar = component$(() => {
                       >
                         {item.label}
                       </h4>
-                      <p class="text-base-content/60 text-xs">
+                      <p class="text-content-tertiary text-xs">
                         {item.description}
                       </p>
                     </div>
@@ -446,7 +446,7 @@ export const BottomNavbar = component$(() => {
           {/* Footer info */}
           <div class="border-base-content/10 mt-8 border-t pt-6">
             <div class="text-center">
-              <p class="text-base-content/50 text-xs">
+              <p class="text-content-quaternary text-xs">
                 Developed with ❤️ using Qwik & DaisyUI v5
               </p>
             </div>
@@ -473,7 +473,7 @@ export const BottomNavbar = component$(() => {
                 class={`group relative flex min-w-[60px] flex-col items-center justify-center rounded-2xl p-2 transition-all duration-300 ease-out hover:scale-110 active:scale-95 ${
                   isCurrentlyActive
                     ? "text-primary scale-105 transform"
-                    : "text-base-content/70 hover:text-primary"
+                    : "text-content-secondary hover:text-primary"
                 } `}
                 onClick$={() => handleTabClick(index)}
               >
@@ -499,7 +499,7 @@ export const BottomNavbar = component$(() => {
                   class={`relative z-10 text-xs font-medium transition-all duration-300 ${
                     isCurrentlyActive
                       ? "text-primary scale-105 font-semibold"
-                      : "text-base-content/60 group-hover:text-primary"
+                      : "text-content-tertiary group-hover:text-primary"
                   } `}
                 >
                   {item.label}
@@ -524,7 +524,7 @@ export const BottomNavbar = component$(() => {
             class={`group relative flex min-w-[60px] flex-col items-center justify-center rounded-2xl p-2 transition-all duration-500 ease-out hover:scale-110 active:scale-95 ${
               isExpanded.value
                 ? "text-primary bg-primary/10 scale-110 transform"
-                : "text-base-content/70 hover:text-primary"
+                : "text-content-secondary hover:text-primary"
             } `}
           >
             {/* Main button background */}
@@ -565,7 +565,7 @@ export const BottomNavbar = component$(() => {
               class={`relative z-10 text-xs font-medium transition-all duration-300 ${
                 isExpanded.value
                   ? "text-primary scale-105 font-semibold"
-                  : "text-base-content/60 group-hover:text-primary"
+                  : "text-content-tertiary group-hover:text-primary"
               } `}
             >
               Menu
@@ -588,7 +588,7 @@ export const BottomNavbar = component$(() => {
                 class={`group relative flex min-w-[60px] flex-col items-center justify-center rounded-2xl p-2 transition-all duration-300 ease-out hover:scale-110 active:scale-95 ${
                   isCurrentlyActive
                     ? "text-primary scale-105 transform"
-                    : "text-base-content/70 hover:text-primary"
+                    : "text-content-secondary hover:text-primary"
                 } `}
                 onClick$={() => handleTabClick(actualIndex)}
               >
@@ -614,7 +614,7 @@ export const BottomNavbar = component$(() => {
                   class={`relative z-10 text-xs font-medium transition-all duration-300 ${
                     isCurrentlyActive
                       ? "text-primary scale-105 font-semibold"
-                      : "text-base-content/60 group-hover:text-primary"
+                      : "text-content-tertiary group-hover:text-primary"
                   } `}
                 >
                   {item.label}

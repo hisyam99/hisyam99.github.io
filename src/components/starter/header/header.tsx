@@ -258,7 +258,7 @@ export default component$(() => {
                       class={`nav-link-modern group ${
                         isCurrentlyActive
                           ? "active text-primary bg-primary/10 scale-105"
-                          : "text-base-content/80 hover:text-primary"
+                          : "text-content-secondary hover:text-primary"
                       }`}
                       style={{ animationDelay: `${index * 0.1}s` }}
                     >
