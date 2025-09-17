@@ -3,12 +3,17 @@ import type {
   DayOfWeek,
   ScheduleData,
   TimeSlot,
+  ScheduleSource,
 } from "~/types/schedule";
 import type { TimeFormat } from "./settings";
 import timeSlotsData from "~/data/time-slots.json";
+import classScheduleData from "~/data/schedule.json";
+import assistantScheduleData from "~/data/assistant-schedule.json";
 
-// Type assertion for time slots data
+// Type assertion for data
 const timeSlots = timeSlotsData as TimeSlot[];
+const classSchedule = classScheduleData as unknown as ScheduleData;
+const assistantSchedule = assistantScheduleData as unknown as ScheduleData;
 
 /**
  * Get time slot by slot number
@@ -51,6 +56,86 @@ export function getCourseTimeRange(course: Course): {
     start_time: getStartTimeFromSlot(course.start_slot),
     end_time: getEndTimeFromSlot(course.end_slot),
   };
+}
+
+/**
+ * Get schedule data by source
+ */
+export function getScheduleBySource(source: ScheduleSource): ScheduleData {
+  switch (source) {
+    case "classes":
+      return classSchedule;
+    case "assistant":
+      return assistantSchedule;
+    case "combined":
+      return getCombinedSchedule();
+    default:
+      return classSchedule;
+  }
+}
+
+/**
+ * Combine class and assistant schedules
+ */
+export function getCombinedSchedule(): ScheduleData {
+  const combined: ScheduleData = {
+    semester: classSchedule.semester,
+    schedule: {} as Partial<Record<DayOfWeek, Course[]>>,
+  };
+
+  // Define proper day order
+  const daysOrder: DayOfWeek[] = [
+    "Senin",
+    "Selasa",
+    "Rabu",
+    "Kamis",
+    "Jumat",
+    "Sabtu",
+    "Minggu",
+  ];
+
+  // Combine courses for each day in proper order
+  daysOrder.forEach((day) => {
+    const classCourses = classSchedule.schedule[day] || [];
+    const assistantCourses = assistantSchedule.schedule[day] || [];
+
+    if (classCourses.length > 0 || assistantCourses.length > 0) {
+      // Combine and sort by start slot
+      const allCourses = [...classCourses, ...assistantCourses];
+      combined.schedule[day] = allCourses.sort(
+        (a, b) => a.start_slot - b.start_slot,
+      );
+    }
+  });
+
+  return combined;
+}
+
+/**
+ * Get available schedule sources
+ */
+export function getAvailableScheduleSources(): {
+  value: ScheduleSource;
+  label: string;
+  description: string;
+}[] {
+  return [
+    {
+      value: "combined",
+      label: "Semua Jadwal",
+      description: "Gabungan Kuliah + Asistensi",
+    },
+    {
+      value: "classes",
+      label: "Jadwal Kuliah",
+      description: "Jadwal kuliah reguler",
+    },
+    {
+      value: "assistant",
+      label: "Jadwal Asistensi",
+      description: "Asistensi laboratorium",
+    },
+  ];
 }
 
 /**
@@ -170,15 +255,34 @@ export function formatTimeRemaining(minutes: number): string {
 export function getCoursesForDay(
   schedule: ScheduleData,
   day: DayOfWeek,
+  source?: ScheduleSource,
 ): Course[] {
-  return schedule.schedule[day] || [];
+  const data = source ? getScheduleBySource(source) : schedule;
+  return data.schedule[day] || [];
 }
 
 /**
  * Get all days with courses
  */
-export function getActiveDays(schedule: ScheduleData): DayOfWeek[] {
-  return Object.keys(schedule.schedule) as DayOfWeek[];
+export function getActiveDays(
+  schedule: ScheduleData,
+  source?: ScheduleSource,
+): DayOfWeek[] {
+  const data = source ? getScheduleBySource(source) : schedule;
+  const daysOrder: DayOfWeek[] = [
+    "Senin",
+    "Selasa",
+    "Rabu",
+    "Kamis",
+    "Jumat",
+    "Sabtu",
+    "Minggu",
+  ];
+
+  return daysOrder.filter((day) => {
+    const courses = data.schedule[day];
+    return courses && courses.length > 0;
+  });
 }
 
 /**
@@ -281,6 +385,10 @@ export function getCourseCardColor(course: Course): string {
       return "from-primary to-primary-focus";
     case "Malam":
       return "from-secondary to-secondary-focus";
+    case "Praktikum":
+      return course.assistant_role === "CO"
+        ? "assistant-role-co"
+        : "assistant-role-assistant";
     default:
       return "from-accent to-accent-focus";
   }
@@ -295,6 +403,10 @@ export function getCourseBadgeColor(course: Course): string {
       return "badge-primary";
     case "Malam":
       return "badge-secondary";
+    case "Praktikum":
+      return course.assistant_role === "CO"
+        ? "badge-golden"
+        : "badge-golden-light";
     default:
       return "badge-accent";
   }

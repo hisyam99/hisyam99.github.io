@@ -9,12 +9,11 @@ import { DaySchedule } from "~/components/Schedule/DaySchedule";
 import { ScheduleOverview } from "~/components/Schedule/ScheduleOverview";
 import { LiveClassBanner } from "~/components/Schedule/LiveClassBanner";
 import { ScheduleToolbar } from "~/components/Schedule/ScheduleToolbar";
-import rawScheduleData from "~/data/schedule.json";
-import type { ScheduleData } from "~/types/schedule";
 import {
   getActiveDays,
   getCurrentDay,
   getCoursesForDay,
+  getScheduleBySource,
 } from "~/utils/schedule";
 
 export default component$(() => {
@@ -22,16 +21,18 @@ export default component$(() => {
   const { ref: overviewRef } = useScrollAnimation();
   const { ref: scheduleRef } = useScrollAnimation();
 
-  // Type assertion to ensure compatibility
-  const scheduleData = rawScheduleData as unknown as ScheduleData;
-
   const filters = useSignal<ScheduleFilterOptions>({
     selectedDay: "All",
     scheduleType: "All",
+    scheduleSource: "combined",
   });
   const viewMode = useSignal<"overview" | "daily">("overview");
 
-  const activeDays = getActiveDays(scheduleData);
+  // Get schedule data based on current filter
+  const scheduleData = getScheduleBySource(
+    filters.value.scheduleSource || "combined",
+  );
+  const activeDays = getActiveDays(scheduleData, filters.value.scheduleSource);
   const currentDay = getCurrentDay();
 
   const handleDayFilter = $((day: DayOfWeek | "All") => {

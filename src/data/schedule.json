@@ -50,8 +50,8 @@
         "credits": 3,
         "class": "A",
         "lecturer": {
-          "name": "Ir. Yufis Azhar",
-          "titles": ["S.Kom.", "M.Kom."]
+          "name": "Setio Basuki",
+          "titles": ["S.T.", "M.T.", "Ph.D."]
         },
         "location": {
           "room": "611",
@@ -102,6 +102,27 @@
         "note": null
       }
     ],
-    "Kamis": []
+    "Kamis": [
+      {
+        "course_code": "IF403-P",
+        "course_name": "Prak. Pembelajaran Mesin",
+        "original_name": "Praktikum Pembelajaran Mesin 7A/D",
+        "credits": 1,
+        "class": "7A/D",
+        "lecturer": {
+          "name": "Setio Basuki, S.T., M.T., Ph.D.",
+          "titles": ["Instruktur"]
+        },
+        "location": {
+          "room": "Lab EF",
+          "building": "Laboratorium"
+        },
+        "day": "Kamis",
+        "start_slot": 5,
+        "end_slot": 6,
+        "schedule_type": "Reguler",
+        "note": "Praktikum"
+      }
+    ]
   }
 }

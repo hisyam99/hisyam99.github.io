@@ -1090,3 +1090,47 @@ html {
 .dropdown-content {
   z-index: 1000 !important;
 }
+
+/* Custom Assistant Role Colors */
+.assistant-role-co {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  box-shadow: 0 4px 15px 0 rgba(251, 191, 36, 0.3);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+.assistant-role-co:hover {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+  box-shadow: 0 6px 20px 0 rgba(251, 191, 36, 0.4);
+  transform: translateY(-1px);
+}
+
+.assistant-role-assistant {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  box-shadow: 0 2px 10px 0 rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.1);
+  opacity: 0.8;
+}
+
+.assistant-role-assistant:hover {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+  box-shadow: 0 4px 15px 0 rgba(251, 191, 36, 0.25);
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
+
+/* Golden Badge Styles */
+.badge-golden {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #78350f;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.badge-golden-light {
+  background: linear-gradient(135deg, #d97706, #b45309);
+  color: #fef3c7;
+  border: 1px solid rgba(217, 119, 6, 0.3);
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}

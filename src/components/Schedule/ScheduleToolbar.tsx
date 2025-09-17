@@ -6,8 +6,12 @@ import {
   $,
 } from "@builder.io/qwik";
 import { TimeFormatToggle } from "~/components/TimeFormatToggle/TimeFormatToggle";
-import type { DayOfWeek, ScheduleFilterOptions } from "~/types/schedule";
-import { getCurrentDay } from "~/utils/schedule";
+import type {
+  DayOfWeek,
+  ScheduleFilterOptions,
+  ScheduleSource,
+} from "~/types/schedule";
+import { getCurrentDay, getAvailableScheduleSources } from "~/utils/schedule";
 
 interface ScheduleToolbarProps {
   activeDays?: DayOfWeek[];
@@ -92,6 +96,19 @@ export const ScheduleToolbar = component$<ScheduleToolbarProps>(
       const newFilters: ScheduleFilterOptions = {
         ...currentFilters,
         selectedDay: "All" as const,
+      };
+
+      window.dispatchEvent(
+        new CustomEvent("scheduleFilterChange", {
+          detail: newFilters,
+        }),
+      );
+    });
+
+    const handleScheduleSourceChange = $((source: ScheduleSource) => {
+      const newFilters: ScheduleFilterOptions = {
+        ...currentFilters,
+        scheduleSource: source,
       };
 
       window.dispatchEvent(
@@ -234,6 +251,59 @@ export const ScheduleToolbar = component$<ScheduleToolbarProps>(
                   <span class="text-sm font-medium opacity-70 hidden lg:inline">
                     Settings
                   </span>
+
+                  {/* Schedule Source Selector */}
+                  <div class="dropdown dropdown-end">
+                    <div
+                      tabIndex={0}
+                      role="button"
+                      class="btn btn-xs btn-ghost tooltip tooltip-bottom"
+                      data-tip="Pilih Sumber Jadwal"
+                    >
+                      <svg
+                        class="h-3 w-3"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 11H5m14-7l2 8-2 8M9 12l-2-8-2 8"
+                        />
+                      </svg>
+                      <span class="hidden lg:inline text-xs">
+                        {getAvailableScheduleSources().find(
+                          (s) => s.value === currentFilters.scheduleSource,
+                        )?.label || "Combined"}
+                      </span>
+                    </div>
+                    <ul
+                      tabIndex={0}
+                      class="menu dropdown-content w-64 rounded-box bg-base-100 p-2 shadow-xl border border-base-300 z-50"
+                    >
+                      {getAvailableScheduleSources().map((source) => (
+                        <li key={source.value}>
+                          <button
+                            class={`flex flex-col gap-1 text-left ${
+                              currentFilters.scheduleSource === source.value
+                                ? "active"
+                                : ""
+                            }`}
+                            onClick$={() =>
+                              handleScheduleSourceChange(source.value)
+                            }
+                          >
+                            <span class="font-medium">{source.label}</span>
+                            <span class="text-xs opacity-60">
+                              {source.description}
+                            </span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
                   {/* Time Format Toggle */}
                   <TimeFormatToggle />

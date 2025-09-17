@@ -26,13 +26,16 @@ export interface Course {
   day: DayOfWeek;
   start_slot: number;
   end_slot: number;
-  schedule_type: "Reguler" | "Malam";
+  schedule_type: "Reguler" | "Malam" | "Praktikum";
   note?: string | null;
+  // Assistant-specific fields (optional)
+  assistant_role?: "Assistant" | "CO";
+  lab_location?: string;
 }
 
 export interface ScheduleData {
   semester: string;
-  schedule: Record<DayOfWeek, Course[]>;
+  schedule: Partial<Record<DayOfWeek, Course[]>>;
 }
 
 export type DayOfWeek =
@@ -44,9 +47,12 @@ export type DayOfWeek =
   | "Sabtu"
   | "Minggu";
 
+export type ScheduleSource = "classes" | "assistant" | "combined";
+
 export interface ScheduleFilterOptions {
   selectedDay?: DayOfWeek | "All";
-  scheduleType?: "All" | "Reguler" | "Malam";
+  scheduleType?: "All" | "Reguler" | "Malam" | "Praktikum";
+  scheduleSource?: ScheduleSource;
 }
 
 export interface ScheduleTimeSlot {
