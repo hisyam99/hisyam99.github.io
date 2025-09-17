@@ -13,6 +13,7 @@ import {
   getTimeUntilCourse,
   formatTimeRemaining,
   formatTime,
+  getCourseTimeRange,
 } from "~/utils/schedule";
 import { getTimeFormat, type TimeFormat } from "~/utils/settings";
 
@@ -118,8 +119,11 @@ export const LiveClassBanner = component$<LiveClassBannerProps>(
                             </div>
                           )}
                           <div class="text-xs opacity-70">
-                            {formatTime(course.start_time, timeFormat.value)} -{" "}
-                            {formatTime(course.end_time, timeFormat.value)}
+                            {(() => {
+                              const { start_time, end_time } =
+                                getCourseTimeRange(course);
+                              return `${formatTime(start_time, timeFormat.value)} - ${formatTime(end_time, timeFormat.value)}`;
+                            })()}
                           </div>
                         </div>
                       </div>
@@ -180,7 +184,10 @@ export const LiveClassBanner = component$<LiveClassBannerProps>(
                           )}
                           <div class="text-xs opacity-70">
                             Mulai{" "}
-                            {formatTime(course.start_time, timeFormat.value)}
+                            {(() => {
+                              const { start_time } = getCourseTimeRange(course);
+                              return formatTime(start_time, timeFormat.value);
+                            })()}
                           </div>
                         </div>
                       </div>

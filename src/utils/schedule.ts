@@ -1,5 +1,57 @@
-import type { Course, DayOfWeek, ScheduleData } from "~/types/schedule";
+import type {
+  Course,
+  DayOfWeek,
+  ScheduleData,
+  TimeSlot,
+} from "~/types/schedule";
 import type { TimeFormat } from "./settings";
+import timeSlotsData from "~/data/time-slots.json";
+
+// Type assertion for time slots data
+const timeSlots = timeSlotsData as TimeSlot[];
+
+/**
+ * Get time slot by slot number
+ */
+export function getTimeSlot(slotNumber: number): TimeSlot | null {
+  return timeSlots.find((slot) => slot.slot === slotNumber) || null;
+}
+
+/**
+ * Get all time slots
+ */
+export function getTimeSlots(): TimeSlot[] {
+  return timeSlots;
+}
+
+/**
+ * Get start time from slot number
+ */
+export function getStartTimeFromSlot(slotNumber: number): string {
+  const slot = getTimeSlot(slotNumber);
+  return slot ? slot.start_time : "00:00";
+}
+
+/**
+ * Get end time from slot number
+ */
+export function getEndTimeFromSlot(slotNumber: number): string {
+  const slot = getTimeSlot(slotNumber);
+  return slot ? slot.end_time : "00:00";
+}
+
+/**
+ * Get course time range from slots
+ */
+export function getCourseTimeRange(course: Course): {
+  start_time: string;
+  end_time: string;
+} {
+  return {
+    start_time: getStartTimeFromSlot(course.start_slot),
+    end_time: getEndTimeFromSlot(course.end_slot),
+  };
+}
 
 /**
  * Format time string from HH:MM to readable format
@@ -68,7 +120,8 @@ export function getTimeUntilCourse(course: Course): number | null {
   if (course.day !== currentDay) return null;
 
   const currentTimeMinutes = getCurrentTimeInMinutes();
-  const courseStartMinutes = timeToMinutes(course.start_time);
+  const { start_time } = getCourseTimeRange(course);
+  const courseStartMinutes = timeToMinutes(start_time);
 
   if (currentTimeMinutes > courseStartMinutes) return null;
 
@@ -83,8 +136,9 @@ export function getTimeRemainingInCourse(course: Course): number | null {
   if (course.day !== currentDay) return null;
 
   const currentTimeMinutes = getCurrentTimeInMinutes();
-  const courseStartMinutes = timeToMinutes(course.start_time);
-  const courseEndMinutes = timeToMinutes(course.end_time);
+  const { start_time, end_time } = getCourseTimeRange(course);
+  const courseStartMinutes = timeToMinutes(start_time);
+  const courseEndMinutes = timeToMinutes(end_time);
 
   if (
     currentTimeMinutes < courseStartMinutes ||
@@ -132,8 +186,10 @@ export function getActiveDays(schedule: ScheduleData): DayOfWeek[] {
  */
 export function sortCoursesByTime(courses: Course[]): Course[] {
   return [...courses].sort((a, b) => {
-    const aMinutes = timeToMinutes(a.start_time);
-    const bMinutes = timeToMinutes(b.start_time);
+    const { start_time: startA } = getCourseTimeRange(a);
+    const { start_time: startB } = getCourseTimeRange(b);
+    const aMinutes = timeToMinutes(startA);
+    const bMinutes = timeToMinutes(startB);
     return aMinutes - bMinutes;
   });
 }
@@ -162,8 +218,9 @@ export function isCourseActive(course: Course): boolean {
   if (course.day !== currentDay) return false;
 
   const currentTimeMinutes = getCurrentTimeInMinutes();
-  const startTimeMinutes = timeToMinutes(course.start_time);
-  const endTimeMinutes = timeToMinutes(course.end_time);
+  const { start_time, end_time } = getCourseTimeRange(course);
+  const startTimeMinutes = timeToMinutes(start_time);
+  const endTimeMinutes = timeToMinutes(end_time);
 
   return (
     currentTimeMinutes >= startTimeMinutes &&
@@ -187,7 +244,8 @@ export function getNextCourse(courses: Course[]): Course | null {
   const sortedCourses = sortCoursesByTime(courses);
 
   for (const course of sortedCourses) {
-    const startTimeMinutes = timeToMinutes(course.start_time);
+    const { start_time } = getCourseTimeRange(course);
+    const startTimeMinutes = timeToMinutes(start_time);
     if (startTimeMinutes > currentTimeMinutes) {
       return course;
     }

@@ -17,8 +17,8 @@
           "building": "GKB II"
         },
         "day": "Senin",
-        "start_time": "07:00",
-        "end_time": "09:30",
+        "start_slot": 1,
+        "end_slot": 3,
         "schedule_type": "Reguler",
         "note": null
       },
@@ -36,8 +36,8 @@
           "building": "GKB III"
         },
         "day": "Senin",
-        "start_time": "18:15",
-        "end_time": "20:45",
+        "start_slot": 12,
+        "end_slot": 14,
         "schedule_type": "Malam",
         "note": null
       }
@@ -58,8 +58,8 @@
           "building": "GKB III"
         },
         "day": "Rabu",
-        "start_time": "07:00",
-        "end_time": "09:30",
+        "start_slot": 1,
+        "end_slot": 3,
         "schedule_type": "Reguler",
         "note": null
       },
@@ -77,8 +77,8 @@
           "building": "GKB IV"
         },
         "day": "Rabu",
-        "start_time": "09:30",
-        "end_time": "12:00",
+        "start_slot": 4,
+        "end_slot": 6,
         "schedule_type": "Reguler",
         "note": null
       },
@@ -96,8 +96,8 @@
           "building": "GKB III"
         },
         "day": "Rabu",
-        "start_time": "12:30",
-        "end_time": "14:10",
+        "start_slot": 7,
+        "end_slot": 8,
         "schedule_type": "Reguler",
         "note": null
       }

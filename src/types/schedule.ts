@@ -8,6 +8,13 @@ export interface Location {
   building: string;
 }
 
+export interface TimeSlot {
+  slot: number;
+  time_range: string;
+  start_time: string;
+  end_time: string;
+}
+
 export interface Course {
   course_code: string;
   course_name: string;
@@ -17,8 +24,8 @@ export interface Course {
   lecturer: Lecturer;
   location: Location;
   day: DayOfWeek;
-  start_time: string;
-  end_time: string;
+  start_slot: number;
+  end_slot: number;
   schedule_type: "Reguler" | "Malam";
   note?: string | null;
 }
@@ -42,7 +49,7 @@ export interface ScheduleFilterOptions {
   scheduleType?: "All" | "Reguler" | "Malam";
 }
 
-export interface TimeSlot {
+export interface ScheduleTimeSlot {
   start: string;
   end: string;
   course?: Course;

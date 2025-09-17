@@ -14,6 +14,7 @@ import {
   isCourseActive,
   getTimeRemainingInCourse,
   formatTimeRemaining,
+  getCourseTimeRange,
 } from "~/utils/schedule";
 import { getTimeFormat, type TimeFormat } from "~/utils/settings";
 
@@ -55,7 +56,8 @@ export const ScheduleCard = component$<ScheduleCardProps>(
     // Listen for time format changes
     useOnWindow("timeFormatChanged", handleTimeFormatChange);
 
-    const duration = calculateDuration(course.start_time, course.end_time);
+    const { start_time, end_time } = getCourseTimeRange(course);
+    const duration = calculateDuration(start_time, end_time);
     const cardColor = getCourseCardColor(course);
     const badgeColor = getCourseBadgeColor(course);
 
@@ -118,8 +120,8 @@ export const ScheduleCard = component$<ScheduleCardProps>(
                   ></path>
                 </svg>
                 <span class="font-medium">
-                  {formatTime(course.start_time, timeFormat.value)} -{" "}
-                  {formatTime(course.end_time, timeFormat.value)}
+                  {formatTime(start_time, timeFormat.value)} -{" "}
+                  {formatTime(end_time, timeFormat.value)}
                 </span>
               </div>
               <div class="text-white/80 text-sm">{duration}</div>

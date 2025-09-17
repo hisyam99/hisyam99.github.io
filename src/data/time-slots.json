@@ -1,0 +1,86 @@
+[
+  {
+    "slot": 1,
+    "time_range": "07:00-07:50",
+    "start_time": "07:00",
+    "end_time": "07:50"
+  },
+  {
+    "slot": 2,
+    "time_range": "07:50-08:40",
+    "start_time": "07:50",
+    "end_time": "08:40"
+  },
+  {
+    "slot": 3,
+    "time_range": "08:40-09:30",
+    "start_time": "08:40",
+    "end_time": "09:30"
+  },
+  {
+    "slot": 4,
+    "time_range": "09:30-10:20",
+    "start_time": "09:30",
+    "end_time": "10:20"
+  },
+  {
+    "slot": 5,
+    "time_range": "10:20-11:10",
+    "start_time": "10:20",
+    "end_time": "11:10"
+  },
+  {
+    "slot": 6,
+    "time_range": "11:10-12:00",
+    "start_time": "11:10",
+    "end_time": "12:00"
+  },
+  {
+    "slot": 7,
+    "time_range": "12:30-13:20",
+    "start_time": "12:30",
+    "end_time": "13:20"
+  },
+  {
+    "slot": 8,
+    "time_range": "13:20-14:10",
+    "start_time": "13:20",
+    "end_time": "14:10"
+  },
+  {
+    "slot": 9,
+    "time_range": "14:10-15:00",
+    "start_time": "14:10",
+    "end_time": "15:00"
+  },
+  {
+    "slot": 10,
+    "time_range": "15:30-16:20",
+    "start_time": "15:30",
+    "end_time": "16:20"
+  },
+  {
+    "slot": 11,
+    "time_range": "16:20-17:10",
+    "start_time": "16:20",
+    "end_time": "17:10"
+  },
+  {
+    "slot": 12,
+    "time_range": "18:15-19:05",
+    "start_time": "18:15",
+    "end_time": "19:05"
+  },
+  {
+    "slot": 13,
+    "time_range": "19:05-19:55",
+    "start_time": "19:05",
+    "end_time": "19:55"
+  },
+  {
+    "slot": 14,
+    "time_range": "19:55-20:45",
+    "start_time": "19:55",
+    "end_time": "20:45"
+  }
+]

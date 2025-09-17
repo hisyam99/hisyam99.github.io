@@ -13,6 +13,7 @@ import {
   sortCoursesByTime,
   isCourseActive,
   formatTime,
+  getCourseTimeRange,
 } from "~/utils/schedule";
 import { getTimeFormat, type TimeFormat } from "~/utils/settings";
 
@@ -241,7 +242,11 @@ export const ScheduleOverview = component$<ScheduleOverviewProps>(
                         <h4 class="font-semibold">Mata Kuliah Selanjutnya</h4>
                         <p class="text-sm">
                           {nextCourse.course_name} pada{" "}
-                          {formatTime(nextCourse.start_time, timeFormat.value)}
+                          {(() => {
+                            const { start_time } =
+                              getCourseTimeRange(nextCourse);
+                            return formatTime(start_time, timeFormat.value);
+                          })()}
                         </p>
                       </div>
                     </div>
@@ -271,8 +276,11 @@ export const ScheduleOverview = component$<ScheduleOverviewProps>(
                           <div class="flex-1">
                             <p class="font-medium">{course.course_name}</p>
                             <p class="text-sm opacity-70">
-                              {formatTime(course.start_time, timeFormat.value)}{" "}
-                              - {formatTime(course.end_time, timeFormat.value)}{" "}
+                              {(() => {
+                                const { start_time, end_time } =
+                                  getCourseTimeRange(course);
+                                return `${formatTime(start_time, timeFormat.value)} - ${formatTime(end_time, timeFormat.value)}`;
+                              })()}{" "}
                               | Ruang {course.location.room}
                             </p>
                           </div>

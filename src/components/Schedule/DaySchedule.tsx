@@ -7,7 +7,12 @@ import {
 } from "@builder.io/qwik";
 import type { Course, DayOfWeek } from "~/types/schedule";
 import { ScheduleCard } from "./ScheduleCard";
-import { sortCoursesByTime, getNextCourse, formatTime } from "~/utils/schedule";
+import {
+  sortCoursesByTime,
+  getNextCourse,
+  formatTime,
+  getCourseTimeRange,
+} from "~/utils/schedule";
 import { useStaggerAnimation } from "~/hooks/useScrollAnimation";
 import { getTimeFormat, type TimeFormat } from "~/utils/settings";
 
@@ -131,8 +136,11 @@ export const DaySchedule = component$<DayScheduleProps>(
                   <h4 class="font-semibold">Mata Kuliah Selanjutnya</h4>
                   <p class="text-sm">
                     {nextCourse.course_name} pada{" "}
-                    {formatTime(nextCourse.start_time, timeFormat.value)} -{" "}
-                    {formatTime(nextCourse.end_time, timeFormat.value)}
+                    {(() => {
+                      const { start_time, end_time } =
+                        getCourseTimeRange(nextCourse);
+                      return `${formatTime(start_time, timeFormat.value)} - ${formatTime(end_time, timeFormat.value)}`;
+                    })()}
                   </p>
                 </div>
               </div>
@@ -201,10 +209,12 @@ export const DaySchedule = component$<DayScheduleProps>(
                   <div class="stat-title">Jam Mulai</div>
                   <div class="stat-value text-accent text-lg">
                     {sortedCourses[0]
-                      ? formatTime(
-                          sortedCourses[0].start_time,
-                          timeFormat.value,
-                        )
+                      ? (() => {
+                          const { start_time } = getCourseTimeRange(
+                            sortedCourses[0],
+                          );
+                          return formatTime(start_time, timeFormat.value);
+                        })()
                       : "-"}
                   </div>
                 </div>
@@ -213,10 +223,12 @@ export const DaySchedule = component$<DayScheduleProps>(
                   <div class="stat-title">Jam Selesai</div>
                   <div class="stat-value text-info text-lg">
                     {sortedCourses[sortedCourses.length - 1]
-                      ? formatTime(
-                          sortedCourses[sortedCourses.length - 1].end_time,
-                          timeFormat.value,
-                        )
+                      ? (() => {
+                          const { end_time } = getCourseTimeRange(
+                            sortedCourses[sortedCourses.length - 1],
+                          );
+                          return formatTime(end_time, timeFormat.value);
+                        })()
                       : "-"}
                   </div>
                 </div>
