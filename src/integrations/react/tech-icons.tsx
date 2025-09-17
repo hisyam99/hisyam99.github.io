@@ -42,7 +42,7 @@ interface DeveloperIconProps {
   className?: string;
   size?: number;
   style?: React.CSSProperties;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 // Export qwikified versions of all icons

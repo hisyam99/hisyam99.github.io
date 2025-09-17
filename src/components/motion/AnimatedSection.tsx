@@ -3,6 +3,7 @@ import {
   useVisibleTask$,
   useSignal,
   type QRL,
+  type JSXNode,
 } from "@builder.io/qwik";
 
 interface AnimatedSectionProps {
@@ -17,7 +18,7 @@ interface AnimatedSectionProps {
   delay?: number;
   duration?: number;
   class?: string;
-  children?: any;
+  children?: JSXNode;
   onClick$?: QRL<() => void>;
 }
 
