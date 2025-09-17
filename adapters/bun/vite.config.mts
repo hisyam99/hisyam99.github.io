@@ -10,7 +10,7 @@ globalThis.TextEncoderStream ||= _TextEncoderStream_polyfill as {
   prototype: TextEncoderStream;
 };
 
-export default extendConfig(baseConfig as any, () => {
+export default extendConfig(baseConfig, () => {
   return {
     build: {
       ssr: true,
@@ -28,5 +28,5 @@ export default extendConfig(baseConfig as any, () => {
         },
       }),
     ],
-  } as any;
+  };
 });

@@ -1,0 +1,107 @@
+{
+  "semester": "Ganjil 2025/2026",
+  "schedule": {
+    "Senin": [
+      {
+        "course_code": "IF401",
+        "course_name": "Internet Forensik",
+        "original_name": "Internet Forensik (C)",
+        "credits": 3,
+        "class": "A",
+        "lecturer": {
+          "name": "Winda Andrini Wulandari",
+          "titles": ["S.Kom.", "M.Kom.", "CEH", "CITAP"]
+        },
+        "location": {
+          "room": "308",
+          "building": "GKB II"
+        },
+        "day": "Senin",
+        "start_time": "07:00",
+        "end_time": "09:30",
+        "schedule_type": "Reguler",
+        "note": null
+      },
+      {
+        "course_code": "IF405",
+        "course_name": "Temu Kembali Citra",
+        "credits": 3,
+        "class": "B",
+        "lecturer": {
+          "name": "Ir. Yufis Azhar",
+          "titles": ["S.Kom.", "M.Kom."]
+        },
+        "location": {
+          "room": "612",
+          "building": "GKB III"
+        },
+        "day": "Senin",
+        "start_time": "18:15",
+        "end_time": "20:45",
+        "schedule_type": "Malam",
+        "note": null
+      }
+    ],
+    "Rabu": [
+      {
+        "course_code": "IF403",
+        "course_name": "Pembelajaran Mesin",
+        "original_name": "Pembelajaran Mesin (D)",
+        "credits": 3,
+        "class": "A",
+        "lecturer": {
+          "name": "Ir. Yufis Azhar",
+          "titles": ["S.Kom.", "M.Kom."]
+        },
+        "location": {
+          "room": "611",
+          "building": "GKB III"
+        },
+        "day": "Rabu",
+        "start_time": "07:00",
+        "end_time": "09:30",
+        "schedule_type": "Reguler",
+        "note": null
+      },
+      {
+        "course_code": "IF400",
+        "course_name": "Pra Skripsi",
+        "credits": 3,
+        "class": "C",
+        "lecturer": {
+          "name": "Ir. Denar Regata Akbi",
+          "titles": ["S.Kom.", "M.Kom."]
+        },
+        "location": {
+          "room": "601",
+          "building": "GKB IV"
+        },
+        "day": "Rabu",
+        "start_time": "09:30",
+        "end_time": "12:00",
+        "schedule_type": "Reguler",
+        "note": null
+      },
+      {
+        "course_code": "IF404",
+        "course_name": "Analisis Big Data",
+        "credits": 2,
+        "class": "C",
+        "lecturer": {
+          "name": "Yuda Munarko",
+          "titles": ["S.Kom.", "M.Sc"]
+        },
+        "location": {
+          "room": "612",
+          "building": "GKB III"
+        },
+        "day": "Rabu",
+        "start_time": "12:30",
+        "end_time": "14:10",
+        "schedule_type": "Reguler",
+        "note": null
+      }
+    ],
+    "Kamis": []
+  }
+}
