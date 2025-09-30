@@ -1,0 +1,274 @@
+enum UserRole {
+  ADMIN
+  EDITOR
+  VIEWER
+  GUEST
+}
+
+enum BlogStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum SortDirection {
+  ASC
+  DESC
+}
+
+type PaginationInfo {
+  page: Int!
+  pageSize: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+# Auth Types
+type LoginResponse {
+  user: User!
+  tokens: TokenPair!
+}
+
+type TokenPair {
+  accessToken: String!
+  refreshToken: String!
+  expiresIn: Int!
+  tokenType: String!
+}
+
+type Query {
+  # Auth queries
+  me: User
+
+  # User queries
+  users(page: Int = 1, pageSize: Int = 10, sortBy: String = "createdAt", sortDirection: SortDirection = DESC): UserConnection!
+  user(id: ID!): User
+
+  # Category queries
+  categories(page: Int = 1, pageSize: Int = 10, sortBy: String = "name", sortDirection: SortDirection = ASC): CategoryConnection!
+  category(id: ID!): Category
+
+  # Resume content queries
+  resumeContents(page: Int = 1, pageSize: Int = 10, sortBy: String = "createdAt", sortDirection: SortDirection = DESC): ResumeContentConnection!
+  resumeContent(id: ID!): ResumeContent
+  resumeContentsByCategory(categoryId: ID!, page: Int = 1, pageSize: Int = 10, sortBy: String = "createdAt", sortDirection: SortDirection = DESC): ResumeContentConnection!
+
+  # Project queries
+  projects(page: Int = 1, pageSize: Int = 10, sortBy: String = "createdAt", sortDirection: SortDirection = DESC): ProjectConnection!
+  project(id: ID!): Project
+  projectsByUser(userId: ID!, page: Int = 1, pageSize: Int = 10, sortBy: String = "createdAt", sortDirection: SortDirection = DESC): ProjectConnection!
+
+  # Blog queries
+  blogs(page: Int = 1, pageSize: Int = 10, sortBy: String = "createdAt", sortDirection: SortDirection = DESC): BlogConnection!
+  blog(id: ID!): Blog
+  blogBySlug(slug: String!): Blog
+  publishedBlogs(page: Int = 1, pageSize: Int = 10, sortBy: String = "publishedAt", sortDirection: SortDirection = DESC): BlogConnection!
+  blogsByStatus(status: BlogStatus!, page: Int = 1, pageSize: Int = 10, sortBy: String = "createdAt", sortDirection: SortDirection = DESC): BlogConnection!
+}
+
+type Mutation {
+  # Auth mutations
+  login(input: LoginInput!): LoginResponse!
+  register(input: RegisterInput!): LoginResponse!
+  refreshToken(refreshToken: String!): TokenPair!
+  changePassword(input: ChangePasswordInput!): Boolean!
+  updateUserRole(userId: ID!, role: UserRole!): User!
+  deactivateUser(userId: ID!): Boolean!
+
+  # User mutations
+  createUser(input: CreateUserInput!): User!
+  updateUser(id: ID!, input: UpdateUserInput!): User!
+  deleteUser(id: ID!): Boolean!
+
+  # Category mutations
+  createCategory(input: CreateCategoryInput!): Category!
+  updateCategory(id: ID!, input: UpdateCategoryInput!): Category!
+  deleteCategory(id: ID!): Boolean!
+
+  # Resume content mutations
+  createResumeContent(input: CreateResumeContentInput!): ResumeContent!
+  updateResumeContent(id: ID!, input: UpdateResumeContentInput!): ResumeContent!
+  deleteResumeContent(id: ID!): Boolean!
+
+  # Project mutations
+  createProject(input: CreateProjectInput!): Project!
+  updateProject(id: ID!, input: UpdateProjectInput!): Project!
+  deleteProject(id: ID!): Boolean!
+
+  # Blog mutations
+  createBlog(input: CreateBlogInput!): Blog!
+  updateBlog(id: ID!, input: UpdateBlogInput!): Blog!
+  deleteBlog(id: ID!): Boolean!
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  role: UserRole!
+  isActive: Boolean!
+  lastLogin: String
+  createdAt: String!
+  updatedAt: String!
+  projects: [Project!]!
+}
+
+type Category {
+  id: ID!
+  name: String!
+  description: String
+  createdAt: String!
+  updatedAt: String!
+  resumeContents: [ResumeContent!]!
+}
+
+type ResumeContent {
+  id: ID!
+  title: String!
+  description: String
+  detail: String
+  categoryId: ID!
+  category: Category!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Project {
+  id: ID!
+  title: String!
+  description: String
+  userId: ID
+  user: User
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Blog {
+  id: ID!
+  title: String!
+  content: String!
+  summary: String
+  slug: String!
+  author: String
+  publishedAt: String
+  status: BlogStatus!
+  tags: [String!]!
+  metaDescription: String
+  createdAt: String!
+  updatedAt: String!
+}
+
+# Connection types for pagination
+type UserConnection {
+  data: [User!]!
+  pagination: PaginationInfo!
+}
+
+type CategoryConnection {
+  data: [Category!]!
+  pagination: PaginationInfo!
+}
+
+type ResumeContentConnection {
+  data: [ResumeContent!]!
+  pagination: PaginationInfo!
+}
+
+type ProjectConnection {
+  data: [Project!]!
+  pagination: PaginationInfo!
+}
+
+type BlogConnection {
+  data: [Blog!]!
+  pagination: PaginationInfo!
+}
+
+# Input types for mutations
+input CreateUserInput {
+  name: String!
+  email: String!
+  role: UserRole
+}
+
+input UpdateUserInput {
+  name: String
+  email: String
+  role: UserRole
+  isActive: Boolean
+}
+
+input CreateCategoryInput {
+  name: String!
+  description: String
+}
+
+input UpdateCategoryInput {
+  name: String
+  description: String
+}
+
+input CreateResumeContentInput {
+  title: String!
+  description: String
+  detail: String
+  categoryId: ID!
+}
+
+input UpdateResumeContentInput {
+  title: String
+  description: String
+  detail: String
+  categoryId: ID
+}
+
+input CreateProjectInput {
+  title: String!
+  description: String
+  userId: ID
+}
+
+input UpdateProjectInput {
+  title: String
+  description: String
+  userId: ID
+}
+
+input CreateBlogInput {
+  title: String!
+  content: String!
+  summary: String
+  slug: String!
+  author: String
+  status: BlogStatus = DRAFT
+  tags: [String!] = []
+  metaDescription: String
+}
+
+input UpdateBlogInput {
+  title: String
+  content: String
+  summary: String
+  slug: String
+  author: String
+  status: BlogStatus
+  tags: [String!]
+  metaDescription: String
+}
+
+# Auth Input Types
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input RegisterInput {
+  name: String!
+  email: String!
+  password: String!
+  role: UserRole
+}
+
+input ChangePasswordInput {
+  oldPassword: String!
+  newPassword: String!
+}

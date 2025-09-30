@@ -1,401 +1,313 @@
 import { component$ } from "@builder.io/qwik";
-import { Link, type DocumentHead } from "@builder.io/qwik-city";
-import ImgReparin from "~/media/reparin.png?jsx";
-import ImgXZ from "~/media/blog/xz-manpage.avif?jsx";
-import {
-  useScrollAnimation,
-  useStaggerAnimation,
-} from "~/hooks/useScrollAnimation";
+import { routeLoader$ } from "@builder.io/qwik-city";
+import type { DocumentHead } from "@builder.io/qwik-city";
+import { Link } from "@builder.io/qwik-city";
+import { getPublishedBlogs } from "~/services/blog";
+
+/**
+ * Blog listing page loader
+ * Loads published blogs with pagination
+ */
+export const useBlogListLoader = routeLoader$(async (requestEvent) => {
+  const url = new URL(requestEvent.url)
+  const page = parseInt(url.searchParams.get('page') || '1', 10)
+  const pageSize = parseInt(url.searchParams.get('pageSize') || '12', 10)
+  const sortBy = url.searchParams.get('sortBy') || 'publishedAt'
+  const sortDirection = (url.searchParams.get('sortDirection') || 'DESC') as 'ASC' | 'DESC'
+
+  try {
+    return await getPublishedBlogs({
+      page,
+      pageSize,
+      sortBy,
+      sortDirection,
+    })
+  } catch (error) {
+    console.error('Failed to load blogs:', error)
+    return {
+      data: [],
+      pagination: { page: 1, pageSize: 12, total: 0, totalPages: 0 }
+    }
+  }
+})
 
 export default component$(() => {
-  const { ref: blogRef } = useScrollAnimation();
-  const blogStaggerRef = useStaggerAnimation(150);
+  const blogData = useBlogListLoader()
+  const { data: blogs, pagination } = blogData.value
 
   return (
-    <section ref={blogRef} class="min-h-screen py-20 pt-32">
-      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div class="mb-8 text-center sm:mb-12">
-          <h1 class="animate-textReveal mb-4 text-3xl font-bold sm:text-4xl lg:text-5xl">
-            Blog
-          </h1>
-          <div class="bg-primary animate-scaleInCenter mx-auto mb-6 h-1 w-16 sm:mb-8 sm:w-20"></div>
-          <p class="text-content-secondary mx-auto max-w-2xl px-4 text-base sm:px-0 sm:text-lg">
-            Thoughts, tutorials, and insights about web development, technology,
-            and my journey as a developer.
-          </p>
-        </div>
-
-        {/* Search and Filter */}
-        <div class="animate-fadeInUp mb-8 flex flex-col gap-4 sm:mb-12">
-          {/* Filter Buttons */}
-          <div class="flex flex-wrap justify-center gap-2 sm:gap-3">
-            <button class="btn btn-primary btn-sm sm:btn-md hover-scale">
-              All Posts
-            </button>
-            <button class="btn btn-ghost btn-sm sm:btn-md hover-scale">
-              Tutorials
-            </button>
-            <button class="btn btn-ghost btn-sm sm:btn-md hover-scale">
-              Tech News
-            </button>
-            <button class="btn btn-ghost btn-sm sm:btn-md hover-scale">
-              Projects
-            </button>
+    <>
+      {/* Header */}
+      <section class="bg-base-200 py-20 pt-32">
+        <div class="container mx-auto px-4">
+          <div class="text-center">
+            <h1 class="animate-textReveal mb-4 text-5xl font-bold">
+              Blog
+            </h1>
+            <div class="bg-primary animate-scaleInCenter mx-auto h-1 w-20"></div>
+            <p class="mt-6 text-xl text-base-content/70 max-w-2xl mx-auto">
+              Thoughts, tutorials, and insights about web development, 
+              technology, and programming best practices.
+            </p>
           </div>
+        </div>
+      </section>
 
-          {/* Search Bar */}
-          <div class="mx-auto w-full max-w-md">
-            <div class="join w-full">
+      {/* Blog Posts Grid */}
+      <section class="py-20">
+        <div class="container mx-auto px-4">
+          {blogs.length > 0 ? (
+            <>
+              <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {blogs.map((blog) => (
+                  <article key={blog.id} class="card bg-base-100 hover-lift hover-glow shadow-xl">
+                    {/* Blog content placeholder since featuredImage not in schema */}
+                    <figure class="from-primary to-secondary bg-gradient-to-br">
+                      <div class="flex h-48 w-full items-center justify-center">
+                        <svg
+                          class="text-base-100 h-16 w-16"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                          />
+                        </svg>
+                      </div>
+                    </figure>
+
+                    <div class="card-body">
+                      <h2 class="card-title text-xl">
+                        <Link 
+                          href={`/blog/${blog.slug}`}
+                          class="hover:text-primary transition-colors"
+                        >
+                          {blog.title}
+                        </Link>
+                      </h2>
+                      
+                      <p class="text-base-content/70 line-clamp-3">
+                        {blog.summary || 'No summary available'}
+                      </p>
+
+                      {/* Tags */}
+                      {blog.tags && blog.tags.length > 0 && (
+                        <div class="flex flex-wrap gap-2 mt-4">
+                          {blog.tags.slice(0, 3).map((tag) => (
+                            <div key={tag} class="badge badge-outline badge-sm">
+                              {tag}
+                            </div>
+                          ))}
+                          {blog.tags.length > 3 && (
+                            <div class="badge badge-ghost badge-sm">
+                              +{blog.tags.length - 3} more
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Meta information */}
+                      <div class="mt-4 flex items-center justify-between text-sm text-base-content/60">
+                        <div class="flex items-center space-x-4">
+                          {blog.author && (
+                            <span>By {blog.author}</span>
+                          )}
+                          {blog.publishedAt && (
+                            <time>
+                              {new Date(blog.publishedAt).toLocaleDateString('id-ID', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                              })}
+                            </time>
+                          )}
+                        </div>
+                        <div class="badge badge-ghost badge-sm">
+                          {Math.ceil((blog.content?.length || 0) / 1000)} min read
+                        </div>
+                      </div>
+
+                      <div class="card-actions mt-6 justify-end">
+                        <Link
+                          href={`/blog/${blog.slug}`}
+                          class="btn btn-primary btn-sm hover-scale"
+                        >
+                          Read More
+                          <svg
+                            class="ml-1 h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M17 8l4 4m0 0l-4 4m4-4H3"
+                            />
+                          </svg>
+                        </Link>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+
+              {/* Pagination */}
+              {pagination.totalPages > 1 && (
+                <div class="mt-12 text-center">
+                  <div class="join">
+                    {pagination.page > 1 && (
+                      <Link
+                        href={`/blog?page=${pagination.page - 1}`}
+                        class="join-item btn btn-outline"
+                      >
+                        <svg
+                          class="h-4 w-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M15 19l-7-7 7-7"
+                          />
+                        </svg>
+                        Previous
+                      </Link>
+                    )}
+                    
+                    {/* Page numbers */}
+                    {Array.from({ length: Math.min(5, pagination.totalPages) }, (_, i) => {
+                      const pageNum = Math.max(1, pagination.page - 2) + i
+                      if (pageNum > pagination.totalPages) return null
+                      
+                      return (
+                        <Link
+                          key={pageNum}
+                          href={`/blog?page=${pageNum}`}
+                          class={`join-item btn ${pageNum === pagination.page ? 'btn-active' : 'btn-outline'}`}
+                        >
+                          {pageNum}
+                        </Link>
+                      )
+                    })}
+
+                    {pagination.page < pagination.totalPages && (
+                      <Link
+                        href={`/blog?page=${pagination.page + 1}`}
+                        class="join-item btn btn-outline"
+                      >
+                        Next
+                        <svg
+                          class="h-4 w-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </Link>
+                    )}
+                  </div>
+                  
+                  <p class="mt-4 text-sm text-base-content/60">
+                    Showing page {pagination.page} of {pagination.totalPages} 
+                    ({pagination.total} total posts)
+                  </p>
+                </div>
+              )}
+            </>
+          ) : (
+            /* Empty state */
+            <div class="text-center py-20">
+              <div class="text-6xl mb-6">📝</div>
+              <h2 class="text-3xl font-bold mb-4 text-base-content/70">
+                No blog posts yet
+              </h2>
+              <p class="text-lg text-base-content/60 mb-8 max-w-md mx-auto">
+                I'm working on creating amazing content for you. 
+                Check back soon for new posts!
+              </p>
+              <Link href="/" class="btn btn-primary">
+                Back to Home
+              </Link>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Subscribe Newsletter Section */}
+      <section class="bg-base-200 py-16">
+        <div class="container mx-auto px-4">
+          <div class="max-w-2xl mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-4">Stay Updated</h2>
+            <p class="text-base-content/70 mb-8">
+              Get notified when I publish new articles about web development and technology.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
               <input
-                type="text"
-                placeholder="Search articles..."
-                class="input input-bordered join-item focus:input-primary w-full flex-1"
+                type="email"
+                placeholder="Enter your email"
+                class="input input-bordered flex-1"
               />
-              <button
-                class="btn btn-primary join-item hover-scale"
-                aria-label="Search articles"
-              >
+              <button class="btn btn-primary">
+                Subscribe
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
+                  class="ml-2 h-4 w-4"
                   fill="none"
-                  viewBox="0 0 24 24"
                   stroke="currentColor"
-                  aria-hidden="true"
+                  viewBox="0 0 24 24"
                 >
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
                   />
                 </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Featured Post */}
-        <div class="animate-slideInBlur mb-8 sm:mb-12">
-          <div class="card lg:card-side bg-base-200 hover-lift shadow-xl">
-            <figure class="h-64 sm:h-72 lg:h-auto lg:w-1/2">
-              <ImgReparin class="h-full w-full object-cover" alt="Reparin" />
-            </figure>
-            <div class="card-body p-4 sm:p-6 lg:w-1/2 lg:p-8">
-              <div class="badge badge-secondary mb-2 text-xs sm:text-sm">
-                Featured
-              </div>
-              <h2 class="card-title text-xl leading-tight sm:text-2xl lg:text-3xl">
-                Reparin: #MauService? Reparin aja!
-              </h2>
-
-              {/* Meta Information */}
-              <div class="text-content-secondary mb-4 flex flex-col gap-2 text-xs sm:flex-row sm:items-center sm:gap-4 sm:text-sm">
-                <span class="flex items-center gap-1">
-                  <svg
-                    class="h-3 w-3 sm:h-4 sm:w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    ></path>
-                  </svg>
-                  <span class="hidden sm:inline">Muhammad Hisyam Kamil</span>
-                  <span class="sm:hidden">hisyam99</span>
-                </span>
-                <span class="flex items-center gap-1">
-                  <svg
-                    class="h-3 w-3 sm:h-4 sm:w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    ></path>
-                  </svg>
-                  June 11, 2024
-                </span>
-                <span class="flex items-center gap-1">
-                  <svg
-                    class="h-3 w-3 sm:h-4 sm:w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
-                  </svg>
-                  5 min read
-                </span>
-              </div>
-
-              <p class="mb-4 text-sm leading-relaxed sm:mb-6 sm:text-base lg:text-lg">
-                Reparin adalah platform inovatif yang menghubungkan pengguna
-                dengan teknisi perbaikan gadget terpercaya. Dibangun dengan
-                teknologi modern untuk memberikan pengalaman terbaik dalam
-                mencari solusi perbaikan perangkat elektronik Anda.
-              </p>
-
-              {/* Tags */}
-              <div class="mb-4 flex flex-wrap gap-1 sm:mb-6 sm:gap-2">
-                <div class="badge badge-outline text-xs">Startup</div>
-                <div class="badge badge-outline text-xs">Technology</div>
-                <div class="badge badge-outline text-xs">Next.js</div>
-                <div class="badge badge-outline text-xs">Golang</div>
-              </div>
-
-              <div class="card-actions">
-                <Link
-                  href="https://reparin.my.id/about"
-                  target="_blank"
-                  class="btn btn-primary btn-sm sm:btn-md hover-scale"
-                >
-                  <span class="hidden sm:inline">Read More</span>
-                  <span class="sm:hidden">Read</span>
-                  <svg
-                    class="ml-1 h-3 w-3 sm:ml-2 sm:h-4 sm:w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M14 5l7 7m0 0l-7 7m7-7H3"
-                    ></path>
-                  </svg>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Blog Grid */}
-        <div
-          ref={blogStaggerRef}
-          class="stagger-container grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-8"
-        >
-          {/* Blog Post 1 */}
-          <article class="card bg-base-100 hover-lift hover-glow shadow-xl">
-            <figure class="h-44 sm:h-48">
-              <ImgXZ class="h-full w-full object-cover" alt="XZ Backdoor" />
-            </figure>
-            <div class="card-body p-4 sm:p-6">
-              <div class="mb-2 flex items-center gap-1 sm:gap-2">
-                <div class="badge badge-primary text-xs">Linux</div>
-                <div class="badge badge-error text-xs">Security</div>
-              </div>
-              <h2 class="card-title mb-2 text-base leading-tight sm:text-lg">
-                Arch Linux: Paket xz telah di-backdoor
-              </h2>
-              <p class="text-content-secondary mb-4 text-sm leading-relaxed">
-                Critical security alert: The upstream release tarballs for xz
-                versions 5.6.0 and 5.6.1 contain malicious code that introduces
-                a backdoor.
-              </p>
-              <div class="text-content-tertiary mb-4 flex items-center justify-between text-xs sm:text-sm">
-                <span class="truncate">David Runge</span>
-                <span class="whitespace-nowrap">March 29, 2024</span>
-              </div>
-              <div class="card-actions justify-end">
-                <Link
-                  href="https://archlinux.org/news/the-xz-package-has-been-backdoored"
-                  target="_blank"
-                  class="btn btn-ghost btn-sm hover-scale text-xs sm:text-sm"
-                >
-                  <span class="hidden sm:inline">Read More →</span>
-                  <span class="sm:hidden">Read →</span>
-                </Link>
-              </div>
-            </div>
-          </article>
-
-          {/* Blog Post 2 - Placeholder */}
-          <article class="card bg-base-100 hover-lift hover-glow shadow-xl">
-            <figure class="from-primary to-secondary h-44 bg-gradient-to-br sm:h-48">
-              <div class="flex h-full w-full items-center justify-center">
-                <svg
-                  class="text-base-100 h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
-                  ></path>
-                </svg>
-              </div>
-            </figure>
-            <div class="card-body p-4 sm:p-6">
-              <div class="mb-2 flex items-center gap-1 sm:gap-2">
-                <div class="badge badge-secondary text-xs">Tutorial</div>
-                <div class="badge badge-accent text-xs">Web Dev</div>
-              </div>
-              <h2 class="card-title mb-2 text-base leading-tight sm:text-lg">
-                Building Modern Web Apps with Qwik
-              </h2>
-              <p class="text-content-secondary mb-4 text-sm leading-relaxed">
-                Learn how to build blazing fast web applications with Qwik
-                framework. Explore the benefits of resumability and lazy
-                loading.
-              </p>
-              <div class="text-content-tertiary mb-4 flex items-center justify-between text-xs sm:text-sm">
-                <span class="truncate">hisyam99</span>
-                <span class="whitespace-nowrap">Coming Soon</span>
-              </div>
-              <div class="card-actions justify-end">
-                <button
-                  class="btn btn-ghost btn-sm text-xs sm:text-sm"
-                  disabled
-                >
-                  Coming Soon
                 </button>
-              </div>
-            </div>
-          </article>
-
-          {/* Blog Post 3 - Skeleton */}
-          <article class="card bg-base-100 shadow-xl">
-            <figure class="h-44 sm:h-48">
-              <div class="skeleton h-full w-full"></div>
-            </figure>
-            <div class="card-body p-4 sm:p-6">
-              <div class="mb-2 flex gap-1 sm:gap-2">
-                <div class="skeleton h-5 w-12 sm:h-6 sm:w-16"></div>
-                <div class="skeleton h-5 w-16 sm:h-6 sm:w-20"></div>
-              </div>
-              <div class="skeleton mb-2 h-6 w-full sm:h-8"></div>
-              <div class="skeleton mb-1 h-3 w-full sm:h-4"></div>
-              <div class="skeleton mb-4 h-3 w-3/4 sm:h-4"></div>
-              <div class="mb-4 flex items-center justify-between">
-                <div class="skeleton h-3 w-20 sm:h-4 sm:w-24"></div>
-                <div class="skeleton h-3 w-16 sm:h-4 sm:w-20"></div>
-              </div>
-              <div class="card-actions justify-end">
-                <div class="skeleton h-6 w-20 sm:h-8 sm:w-24"></div>
-              </div>
-            </div>
-          </article>
-
-          {/* More skeleton posts */}
-          {Array.from({ length: 3 }, (_, i) => (
-            <article
-              key={`skeleton-placeholder-${i + 1}`}
-              class="card bg-base-100 shadow-xl"
-            >
-              <figure class="h-44 sm:h-48">
-                <div class="skeleton h-full w-full"></div>
-              </figure>
-              <div class="card-body p-4 sm:p-6">
-                <div class="mb-2 flex gap-1 sm:gap-2">
-                  <div class="skeleton h-5 w-12 sm:h-6 sm:w-16"></div>
-                  <div class="skeleton h-5 w-16 sm:h-6 sm:w-20"></div>
-                </div>
-                <div class="skeleton mb-2 h-6 w-full sm:h-8"></div>
-                <div class="skeleton mb-1 h-3 w-full sm:h-4"></div>
-                <div class="skeleton mb-4 h-3 w-3/4 sm:h-4"></div>
-                <div class="mb-4 flex items-center justify-between">
-                  <div class="skeleton h-3 w-20 sm:h-4 sm:w-24"></div>
-                  <div class="skeleton h-3 w-16 sm:h-4 sm:w-20"></div>
-                </div>
-                <div class="card-actions justify-end">
-                  <div class="skeleton h-6 w-20 sm:h-8 sm:w-24"></div>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-
-        {/* Pagination */}
-        <div class="animate-fadeInUp mt-8 flex justify-center sm:mt-12">
-          <div class="join">
-            <button class="join-item btn btn-sm sm:btn-md hover-scale">
-              «
-            </button>
-            <button class="join-item btn btn-sm sm:btn-md btn-active">1</button>
-            <button class="join-item btn btn-sm sm:btn-md hover-scale">
-              2
-            </button>
-            <button class="join-item btn btn-sm sm:btn-md hover-scale">
-              3
-            </button>
-            <button class="join-item btn btn-sm sm:btn-md btn-disabled">
-              ...
-            </button>
-            <button class="join-item btn btn-sm sm:btn-md hover-scale">
-              »
-            </button>
-          </div>
-        </div>
-
-        {/* Newsletter CTA */}
-        <div class="animate-scaleInCenter mt-12 sm:mt-16 lg:mt-20">
-          <div class="card from-primary to-secondary text-primary-content hover-glow bg-gradient-to-r">
-            <div class="card-body px-4 py-8 text-center sm:px-6 sm:py-10 lg:py-12">
-              <h2 class="card-title mb-3 justify-center text-xl sm:mb-4 sm:text-2xl lg:text-3xl">
-                Stay Updated
-              </h2>
-              <p class="mx-auto mb-4 max-w-2xl text-sm leading-relaxed sm:mb-6 sm:text-base lg:text-lg">
-                Subscribe to my newsletter and never miss a post. Get the latest
-                articles, tutorials, and insights delivered straight to your
-                inbox.
-              </p>
-              <div class="mx-auto flex w-full max-w-sm flex-col justify-center gap-3 sm:max-w-md sm:gap-4">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  class="input input-bordered text-base-content focus:input-accent w-full text-sm sm:text-base"
-                />
-                <button class="btn btn-accent btn-sm sm:btn-md hover-scale w-full sm:w-auto">
-                  <span class="text-sm sm:text-base">Subscribe</span>
-                  <svg
-                    class="ml-1 h-3 w-3 sm:ml-2 sm:h-4 sm:w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                    ></path>
-                  </svg>
-                </button>
-              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  );
-});
+      </section>
+    </>
+  )
+})
 
 export const head: DocumentHead = {
-  title: "Blog - Muhammad Hisyam Kamil",
+  title: "Blog - Hisyam Kamil",
   meta: [
     {
       name: "description",
-      content:
-        "Read my latest articles about web development, technology, and programming.",
+      content: "Read the latest articles about web development, programming tutorials, and technology insights by Hisyam Kamil.",
     },
-  ],
-};
+    {
+      name: "keywords",
+      content: "Blog, Web Development, Programming, Tutorials, React, Next.js, Node.js, TypeScript, JavaScript",
+    },
+    {
+      property: "og:title",
+      content: "Blog - Hisyam Kamil",
+    },
+    {
+      property: "og:description",
+      content: "Read the latest articles about web development, programming tutorials, and technology insights.",
+    },
+    {
+      property: "og:type",
+      content: "website",
+    },
+  ]
+}
