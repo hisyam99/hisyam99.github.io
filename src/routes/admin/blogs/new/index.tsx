@@ -1,7 +1,6 @@
 import { component$, useSignal, $ } from "@builder.io/qwik";
 import { routeAction$, Form, z, zod$ } from "@builder.io/qwik-city";
 import { createBlog } from "~/services/admin-blog";
-import RichTextEditor from "~/components/admin/RichTextEditor";
 
 const blogSchema = z.object({
   title: z.string().min(1, "Title is required").max(200, "Title too long"),
@@ -93,10 +92,6 @@ export default component$(() => {
     }
   });
 
-  const handleContentChange = $((newContent: string) => {
-    content.value = newContent;
-  });
-
   return (
     <div class="container mx-auto px-4 py-8">
       <div class="flex justify-between items-center mb-8">
@@ -129,18 +124,21 @@ export default component$(() => {
               />
             </div>
 
-            {/* Content Editor */}
+            {/* Content */}
             <div class="form-control">
               <label class="label">
                 <span class="label-text font-medium">Content *</span>
               </label>
-              <RichTextEditor
-                value={content.value}
-                onValueChange={handleContentChange}
+              <textarea
+                name="content"
+                class="textarea textarea-bordered h-96"
                 placeholder="Write your blog content here..."
-                minHeight="400px"
+                value={content.value}
+                onInput$={(e) => {
+                  content.value = (e.target as HTMLTextAreaElement).value;
+                }}
+                required
               />
-              <input type="hidden" name="content" value={content.value} />
             </div>
 
             {/* Summary */}
