@@ -23,7 +23,7 @@ export default extendConfig(baseConfig, () => {
       bunServerAdapter({
         ssg: {
           include: ["/*"],
-          exclude: ["/blog/*", "/auth/*", "/profile/*"], // Exclude dynamic content from SSG
+          exclude: ["/blog/*", "/auth/*", "/profile/*", "/admin/*"], // Exclude dynamic content from SSG
           origin: process.env.PUBLIC_BASE_URL || "https://hisyam.net",
           maxWorkers: 1, // Limit Workers to 1, otherwise SSG will hang when compiling Qwik City app with `bun run --bun build`.
         },
