@@ -1,31 +1,35 @@
-import { component$, useSignal, useTask$, $ } from '@builder.io/qwik';
-import { routeLoader$, routeAction$, Form } from '@builder.io/qwik-city';
-import { getAllBlogs, deleteBlog, bulkUpdateBlogStatus } from '~/services/admin-blog';
-import type { Blog } from '~/services/admin-blog';
+import { component$, useSignal, useTask$, $ } from "@builder.io/qwik";
+import { routeLoader$, routeAction$, Form } from "@builder.io/qwik-city";
+import {
+  getAllBlogs,
+  deleteBlog,
+  bulkUpdateBlogStatus,
+} from "~/services/admin-blog";
+import type { Blog } from "~/services/admin-blog";
 
 export const useBlogsData = routeLoader$(async (requestEvent) => {
-  const token = requestEvent.cookie.get('accessToken')?.value;
-  
+  const token = requestEvent.cookie.get("accessToken")?.value;
+
   if (!token) {
-    throw requestEvent.redirect(302, '/auth/login');
+    throw requestEvent.redirect(302, "/auth/login");
   }
 
   try {
     const result = await getAllBlogs(token);
     return { blogs: result.data, error: null };
   } catch (error) {
-    console.error('Failed to load blogs:', error);
-    return { blogs: [], error: 'Failed to load blogs' };
+    console.error("Failed to load blogs:", error);
+    return { blogs: [], error: "Failed to load blogs" };
   }
 });
 
 export const useDeleteBlog = routeAction$(async (data, requestEvent) => {
-  const token = requestEvent.cookie.get('accessToken')?.value;
-  
+  const token = requestEvent.cookie.get("accessToken")?.value;
+
   if (!token) {
     return {
       success: false,
-      error: 'Not authenticated'
+      error: "Not authenticated",
     };
   }
 
@@ -34,35 +38,38 @@ export const useDeleteBlog = routeAction$(async (data, requestEvent) => {
     await deleteBlog(token, blogId);
     return { success: true, error: null };
   } catch (error) {
-    console.error('Failed to delete blog:', error);
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Failed to delete blog' 
+    console.error("Failed to delete blog:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to delete blog",
     };
   }
 });
 
 export const useBulkAction = routeAction$(async (data, requestEvent) => {
-  const token = requestEvent.cookie.get('accessToken')?.value;
-  
+  const token = requestEvent.cookie.get("accessToken")?.value;
+
   if (!token) {
     return {
       success: false,
-      error: 'Not authenticated'
+      error: "Not authenticated",
     };
   }
 
   try {
     const blogIds = JSON.parse(data.blogIds as string) as string[];
-    const status = data.status as 'PUBLISHED' | 'DRAFT';
-    
+    const status = data.status as "PUBLISHED" | "DRAFT";
+
     await bulkUpdateBlogStatus(token, blogIds, status);
     return { success: true, error: null };
   } catch (error) {
-    console.error('Failed to perform bulk action:', error);
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Failed to perform bulk action' 
+    console.error("Failed to perform bulk action:", error);
+    return {
+      success: false,
+      error:
+        error instanceof Error
+          ? error.message
+          : "Failed to perform bulk action",
     };
   }
 });
@@ -71,9 +78,9 @@ export default component$(() => {
   const blogsData = useBlogsData();
   const deleteAction = useDeleteBlog();
   const bulkAction = useBulkAction();
-  
-  const searchTerm = useSignal('');
-  const statusFilter = useSignal('ALL');
+
+  const searchTerm = useSignal("");
+  const statusFilter = useSignal("ALL");
   const selectedBlogs = useSignal<string[]>([]);
   const filteredBlogs = useSignal<Blog[]>([]);
 
@@ -89,16 +96,17 @@ export default component$(() => {
     // Apply search filter
     if (searchTerm.value.trim()) {
       const term = searchTerm.value.toLowerCase();
-      filtered = filtered.filter(blog => 
-        blog.title.toLowerCase().includes(term) ||
-        blog.summary?.toLowerCase().includes(term) ||
-        blog.tags.some(tag => tag.toLowerCase().includes(term))
+      filtered = filtered.filter(
+        (blog) =>
+          blog.title.toLowerCase().includes(term) ||
+          blog.summary?.toLowerCase().includes(term) ||
+          blog.tags.some((tag) => tag.toLowerCase().includes(term)),
       );
     }
 
     // Apply status filter
-    if (statusFilter.value !== 'ALL') {
-      filtered = filtered.filter(blog => blog.status === statusFilter.value);
+    if (statusFilter.value !== "ALL") {
+      filtered = filtered.filter((blog) => blog.status === statusFilter.value);
     }
 
     filteredBlogs.value = filtered;
@@ -108,23 +116,23 @@ export default component$(() => {
     if (selectedBlogs.value.length === filteredBlogs.value.length) {
       selectedBlogs.value = [];
     } else {
-      selectedBlogs.value = filteredBlogs.value.map(blog => blog.id);
+      selectedBlogs.value = filteredBlogs.value.map((blog) => blog.id);
     }
   });
 
   const handleSelectBlog = $((blogId: string) => {
     if (selectedBlogs.value.includes(blogId)) {
-      selectedBlogs.value = selectedBlogs.value.filter(id => id !== blogId);
+      selectedBlogs.value = selectedBlogs.value.filter((id) => id !== blogId);
     } else {
       selectedBlogs.value = [...selectedBlogs.value, blogId];
     }
   });
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
@@ -174,14 +182,22 @@ export default component$(() => {
             </span>
             <div class="flex gap-2">
               <Form action={bulkAction}>
-                <input type="hidden" name="blogIds" value={JSON.stringify(selectedBlogs.value)} />
+                <input
+                  type="hidden"
+                  name="blogIds"
+                  value={JSON.stringify(selectedBlogs.value)}
+                />
                 <input type="hidden" name="status" value="PUBLISHED" />
                 <button type="submit" class="btn btn-sm btn-success">
                   Publish
                 </button>
               </Form>
               <Form action={bulkAction}>
-                <input type="hidden" name="blogIds" value={JSON.stringify(selectedBlogs.value)} />
+                <input
+                  type="hidden"
+                  name="blogIds"
+                  value={JSON.stringify(selectedBlogs.value)}
+                />
                 <input type="hidden" name="status" value="DRAFT" />
                 <button type="submit" class="btn btn-sm btn-warning">
                   Draft
@@ -201,7 +217,10 @@ export default component$(() => {
                 <input
                   type="checkbox"
                   class="checkbox"
-                  checked={selectedBlogs.value.length === filteredBlogs.value.length && filteredBlogs.value.length > 0}
+                  checked={
+                    selectedBlogs.value.length === filteredBlogs.value.length &&
+                    filteredBlogs.value.length > 0
+                  }
                   onChange$={handleSelectAll}
                 />
               </th>
@@ -235,11 +254,15 @@ export default component$(() => {
                   </div>
                 </td>
                 <td>
-                  <div class={`badge ${
-                    (blog.status === 'PUBLISHED' || blog.status === 'published') ? 'badge-success' :
-                    (blog.status === 'DRAFT' || blog.status === 'draft') ? 'badge-warning' :
-                    'badge-error'
-                  }`}>
+                  <div
+                    class={`badge ${
+                      blog.status === "PUBLISHED" || blog.status === "published"
+                        ? "badge-success"
+                        : blog.status === "DRAFT" || blog.status === "draft"
+                          ? "badge-warning"
+                          : "badge-error"
+                    }`}
+                  >
                     {blog.status.toUpperCase()}
                   </div>
                 </td>
@@ -261,19 +284,30 @@ export default component$(() => {
                 <td>{formatDate(blog.updatedAt)}</td>
                 <td>
                   <div class="flex gap-2">
-                    <a href={`/admin/blogs/${blog.id}/edit`} class="btn btn-sm btn-primary">
+                    <a
+                      href={`/admin/blogs/${blog.id}/edit`}
+                      class="btn btn-sm btn-primary"
+                    >
                       Edit
                     </a>
-                    <a href={`/blog/${blog.slug}`} class="btn btn-sm btn-ghost" target="_blank">
+                    <a
+                      href={`/blog/${blog.slug}`}
+                      class="btn btn-sm btn-ghost"
+                      target="_blank"
+                    >
                       View
                     </a>
                     <Form action={deleteAction}>
                       <input type="hidden" name="id" value={blog.id} />
-                      <button 
-                        type="submit" 
+                      <button
+                        type="submit"
                         class="btn btn-sm btn-error"
                         onClick$={(e) => {
-                          if (!confirm('Are you sure you want to delete this blog?')) {
+                          if (
+                            !confirm(
+                              "Are you sure you want to delete this blog?",
+                            )
+                          ) {
                             e.preventDefault();
                           }
                         }}
@@ -296,9 +330,9 @@ export default component$(() => {
               </div>
             ) : (
               <div>
-                {searchTerm.value || statusFilter.value !== 'ALL' 
-                  ? 'No blogs found matching your criteria.' 
-                  : 'No blogs available. Create your first blog!'}
+                {searchTerm.value || statusFilter.value !== "ALL"
+                  ? "No blogs found matching your criteria."
+                  : "No blogs available. Create your first blog!"}
               </div>
             )}
           </div>
@@ -313,7 +347,7 @@ export default component$(() => {
           </div>
         </div>
       )}
-      
+
       {deleteAction.value?.error && (
         <div class="toast toast-top toast-end">
           <div class="alert alert-error">
@@ -329,7 +363,7 @@ export default component$(() => {
           </div>
         </div>
       )}
-      
+
       {bulkAction.value?.error && (
         <div class="toast toast-top toast-end">
           <div class="alert alert-error">

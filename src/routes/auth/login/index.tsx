@@ -1,5 +1,12 @@
 import { component$ } from "@builder.io/qwik";
-import { routeAction$, routeLoader$, zod$, z, Form, useNavigate } from "@builder.io/qwik-city";
+import {
+  routeAction$,
+  routeLoader$,
+  zod$,
+  z,
+  Form,
+  useNavigate,
+} from "@builder.io/qwik-city";
 import { loginUser } from "~/services/auth";
 
 // Input validation schemas
@@ -8,65 +15,71 @@ const loginSchema = z.object({
   password: z.string().min(6, "Password minimal 6 karakter"),
 });
 
-export const useLoginAction = routeAction$(async (data, { cookie, redirect }) => {
-  try {
-    const validatedData = loginSchema.parse(data);
-    
-    const result = await loginUser(validatedData);
-    
-    // Set auth cookies
-    cookie.set('accessToken', result.tokens.accessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-      maxAge: result.tokens.expiresIn, // Use token expiry time
-      path: '/'
-    });
-    
-    cookie.set('refreshToken', result.tokens.refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60, // 7 days
-      path: '/'
-    });
+export const useLoginAction = routeAction$(
+  async (data, { cookie, redirect }) => {
+    try {
+      const validatedData = loginSchema.parse(data);
 
-    cookie.set('user', JSON.stringify(result.user), {
-      httpOnly: false,
-      secure: true,
-      sameSite: 'strict',
-      maxAge: result.tokens.expiresIn, // Use token expiry time
-      path: '/'
-    });
-    
-    // Redirect to dashboard or home
-    throw redirect(302, '/');
-  } catch (error) {
-    if (error instanceof z.ZodError) {
+      const result = await loginUser(validatedData);
+
+      // Set auth cookies
+      cookie.set("accessToken", result.tokens.accessToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: result.tokens.expiresIn, // Use token expiry time
+        path: "/",
+      });
+
+      cookie.set("refreshToken", result.tokens.refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60, // 7 days
+        path: "/",
+      });
+
+      cookie.set("user", JSON.stringify(result.user), {
+        httpOnly: false,
+        secure: true,
+        sameSite: "strict",
+        maxAge: result.tokens.expiresIn, // Use token expiry time
+        path: "/",
+      });
+
+      // Redirect to dashboard or home
+      throw redirect(302, "/");
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return {
+          success: false,
+          error: error.errors[0].message,
+          fieldErrors: error.errors.reduce(
+            (acc, err) => {
+              if (err.path[0]) {
+                acc[err.path[0] as string] = err.message;
+              }
+              return acc;
+            },
+            {} as Record<string, string>,
+          ),
+        };
+      }
+
       return {
         success: false,
-        error: error.errors[0].message,
-        fieldErrors: error.errors.reduce((acc, err) => {
-          if (err.path[0]) {
-            acc[err.path[0] as string] = err.message;
-          }
-          return acc;
-        }, {} as Record<string, string>)
+        error: error instanceof Error ? error.message : "Terjadi kesalahan",
       };
     }
-    
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Terjadi kesalahan'
-    };
-  }
-}, zod$(loginSchema));
+  },
+  zod$(loginSchema),
+);
 
 export const useCheckAuth = routeLoader$(async ({ cookie, redirect }) => {
-  const accessToken = cookie.get('accessToken');
+  const accessToken = cookie.get("accessToken");
   if (accessToken) {
     // User already logged in, redirect to home
-    throw redirect(302, '/');
+    throw redirect(302, "/");
   }
   return { authenticated: false };
 });
@@ -83,11 +96,11 @@ export default component$(() => {
             Masuk ke Akun Anda
           </h2>
           <p class="mt-2 text-center text-sm text-base-content/70">
-            Atau{' '}
+            Atau{" "}
             <button
               type="button"
               class="font-medium text-primary hover:text-primary-focus link"
-              onClick$={() => nav('/auth/register')}
+              onClick$={() => nav("/auth/register")}
             >
               buat akun baru
             </button>
@@ -107,7 +120,7 @@ export default component$(() => {
                   name="email"
                   placeholder="contoh@email.com"
                   class={`input input-bordered w-full ${
-                    loginAction.value?.fieldErrors?.email ? 'input-error' : ''
+                    loginAction.value?.fieldErrors?.email ? "input-error" : ""
                   }`}
                   required
                 />
@@ -130,7 +143,9 @@ export default component$(() => {
                   name="password"
                   placeholder="Masukkan password"
                   class={`input input-bordered w-full ${
-                    loginAction.value?.fieldErrors?.password ? 'input-error' : ''
+                    loginAction.value?.fieldErrors?.password
+                      ? "input-error"
+                      : ""
                   }`}
                   required
                 />
@@ -168,11 +183,11 @@ export default component$(() => {
                 <button
                   type="submit"
                   class={`btn btn-primary w-full ${
-                    loginAction.isRunning ? 'loading' : ''
+                    loginAction.isRunning ? "loading" : ""
                   }`}
                   disabled={loginAction.isRunning}
                 >
-                  {loginAction.isRunning ? 'Memproses...' : 'Masuk'}
+                  {loginAction.isRunning ? "Memproses..." : "Masuk"}
                 </button>
               </div>
 
@@ -183,7 +198,7 @@ export default component$(() => {
                   class="link link-primary text-sm"
                   onClick$={() => {
                     // TODO: Implement forgot password
-                    alert('Fitur lupa password akan segera hadir');
+                    alert("Fitur lupa password akan segera hadir");
                   }}
                 >
                   Lupa password?
@@ -198,7 +213,7 @@ export default component$(() => {
           <button
             type="button"
             class="btn btn-ghost btn-sm"
-            onClick$={() => nav('/')}
+            onClick$={() => nav("/")}
           >
             ← Kembali ke Beranda
           </button>

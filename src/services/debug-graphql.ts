@@ -1,15 +1,15 @@
-import { server$ } from '@builder.io/qwik-city'
-import { createGraphQLClient } from '../lib/graffle'
+import { server$ } from "@builder.io/qwik-city";
+import { createGraphQLClient } from "../lib/graffle";
 
 /**
  * Debug GraphQL response to see what we're actually getting
  */
 export const debugGraphQLResponse = server$(async () => {
-  const client = createGraphQLClient()
-  
+  const client = createGraphQLClient();
+
   try {
-    console.log('🔍 Starting GraphQL debug...')
-    
+    console.log("🔍 Starting GraphQL debug...");
+
     // Test 1: Simple introspection query
     const introspectionResult = await client.gql`
       query IntrospectionTest {
@@ -19,10 +19,13 @@ export const debugGraphQLResponse = server$(async () => {
           }
         }
       }
-    `.send()
-    
-    console.log('📊 Introspection result:', JSON.stringify(introspectionResult, null, 2))
-    
+    `.send();
+
+    console.log(
+      "📊 Introspection result:",
+      JSON.stringify(introspectionResult, null, 2),
+    );
+
     // Test 2: Try to get the actual published blogs
     const publishedBlogsResult = await client.gql`
       query GetPublishedBlogs($page: Int, $pageSize: Int, $sortBy: String, $sortDirection: SortDirection) {
@@ -52,11 +55,14 @@ export const debugGraphQLResponse = server$(async () => {
     `.send({
       page: 1,
       pageSize: 5,
-      sortBy: 'publishedAt',
-      sortDirection: 'DESC'
-    })
-    
-    console.log('📊 Published blogs result:', JSON.stringify(publishedBlogsResult, null, 2))
+      sortBy: "publishedAt",
+      sortDirection: "DESC",
+    });
+
+    console.log(
+      "📊 Published blogs result:",
+      JSON.stringify(publishedBlogsResult, null, 2),
+    );
 
     // Test 3: Try a simple test login/register to see response structure
     const testLoginResult = await client.gql`
@@ -77,12 +83,15 @@ export const debugGraphQLResponse = server$(async () => {
       }
     `.send({
       input: {
-        email: 'test@example.com',
-        password: 'testpassword'
-      }
-    })
-    
-    console.log('📊 Test login result structure:', JSON.stringify(testLoginResult, null, 2))
+        email: "test@example.com",
+        password: "testpassword",
+      },
+    });
+
+    console.log(
+      "📊 Test login result structure:",
+      JSON.stringify(testLoginResult, null, 2),
+    );
 
     // Test 4: Get all blogs
     const allBlogsResult = await client.gql`
@@ -104,24 +113,27 @@ export const debugGraphQLResponse = server$(async () => {
       }
     `.send({
       page: 1,
-      pageSize: 5
-    })
-    
-    console.log('📊 All blogs result:', JSON.stringify(allBlogsResult, null, 2))
+      pageSize: 5,
+    });
+
+    console.log(
+      "📊 All blogs result:",
+      JSON.stringify(allBlogsResult, null, 2),
+    );
 
     return {
       success: true,
       introspection: introspectionResult,
       publishedBlogs: publishedBlogsResult,
       testLogin: testLoginResult,
-      allBlogs: allBlogsResult
-    }
+      allBlogs: allBlogsResult,
+    };
   } catch (error) {
-    console.error('❌ GraphQL debug error:', error)
+    console.error("❌ GraphQL debug error:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : undefined
-    }
+      error: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
+    };
   }
-})
+});

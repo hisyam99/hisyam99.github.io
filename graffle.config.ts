@@ -1,8 +1,8 @@
-import { Generator } from 'graffle/generator'
+import { Generator } from "graffle/generator";
 
 export default Generator.configure({
-  name: 'GraphQLClient',
+  name: "GraphQLClient",
   lint: {
-    missingCustomScalarCodec: false
-  }
-})
+    missingCustomScalarCodec: false,
+  },
+});

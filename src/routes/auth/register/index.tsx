@@ -1,86 +1,109 @@
 import { component$ } from "@builder.io/qwik";
-import { routeAction$, routeLoader$, zod$, z, Form, useNavigate } from "@builder.io/qwik-city";
+import {
+  routeAction$,
+  routeLoader$,
+  zod$,
+  z,
+  Form,
+  useNavigate,
+} from "@builder.io/qwik-city";
 import { registerUser } from "~/services/auth";
 
 // Input validation schemas
-const registerSchema = z.object({
-  username: z.string()
-    .min(3, "Username minimal 3 karakter")
-    .max(20, "Username maksimal 20 karakter")
-    .regex(/^[a-zA-Z0-9_-]+$/, "Username hanya boleh mengandung huruf, angka, - dan _"),
-  email: z.string().email("Format email tidak valid"),
-  password: z.string()
-    .min(6, "Password minimal 6 karakter")
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, "Password harus mengandung huruf besar, kecil, dan angka"),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Konfirmasi password tidak sesuai",
-  path: ["confirmPassword"],
-});
+const registerSchema = z
+  .object({
+    username: z
+      .string()
+      .min(3, "Username minimal 3 karakter")
+      .max(20, "Username maksimal 20 karakter")
+      .regex(
+        /^[a-zA-Z0-9_-]+$/,
+        "Username hanya boleh mengandung huruf, angka, - dan _",
+      ),
+    email: z.string().email("Format email tidak valid"),
+    password: z
+      .string()
+      .min(6, "Password minimal 6 karakter")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+        "Password harus mengandung huruf besar, kecil, dan angka",
+      ),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Konfirmasi password tidak sesuai",
+    path: ["confirmPassword"],
+  });
 
-export const useRegisterAction = routeAction$(async (data, { cookie, redirect }) => {
-  try {
-    const validatedData = registerSchema.parse(data);
-    
-    const result = await registerUser({
-      name: validatedData.username,
-      email: validatedData.email,
-      password: validatedData.password
-    });
-    
-    // Set auth cookies
-    cookie.set('accessToken', result.tokens.accessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-      maxAge: result.tokens.expiresIn, // Use token expiry time
-      path: '/'
-    });
-    
-    cookie.set('refreshToken', result.tokens.refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60, // 7 days
-      path: '/'
-    });
+export const useRegisterAction = routeAction$(
+  async (data, { cookie, redirect }) => {
+    try {
+      const validatedData = registerSchema.parse(data);
 
-    cookie.set('user', JSON.stringify(result.user), {
-      httpOnly: false,
-      secure: true,
-      sameSite: 'strict',
-      maxAge: result.tokens.expiresIn, // Use token expiry time
-      path: '/'
-    });
-    
-    // Redirect to dashboard or home
-    throw redirect(302, '/');
-  } catch (error) {
-    if (error instanceof z.ZodError) {
+      const result = await registerUser({
+        name: validatedData.username,
+        email: validatedData.email,
+        password: validatedData.password,
+      });
+
+      // Set auth cookies
+      cookie.set("accessToken", result.tokens.accessToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: result.tokens.expiresIn, // Use token expiry time
+        path: "/",
+      });
+
+      cookie.set("refreshToken", result.tokens.refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60, // 7 days
+        path: "/",
+      });
+
+      cookie.set("user", JSON.stringify(result.user), {
+        httpOnly: false,
+        secure: true,
+        sameSite: "strict",
+        maxAge: result.tokens.expiresIn, // Use token expiry time
+        path: "/",
+      });
+
+      // Redirect to dashboard or home
+      throw redirect(302, "/");
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return {
+          success: false,
+          error: error.errors[0].message,
+          fieldErrors: error.errors.reduce(
+            (acc, err) => {
+              if (err.path[0]) {
+                acc[err.path[0] as string] = err.message;
+              }
+              return acc;
+            },
+            {} as Record<string, string>,
+          ),
+        };
+      }
+
       return {
         success: false,
-        error: error.errors[0].message,
-        fieldErrors: error.errors.reduce((acc, err) => {
-          if (err.path[0]) {
-            acc[err.path[0] as string] = err.message;
-          }
-          return acc;
-        }, {} as Record<string, string>)
+        error: error instanceof Error ? error.message : "Terjadi kesalahan",
       };
     }
-    
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Terjadi kesalahan'
-    };
-  }
-}, zod$(registerSchema));
+  },
+  zod$(registerSchema),
+);
 
 export const useCheckAuth = routeLoader$(async ({ cookie, redirect }) => {
-  const accessToken = cookie.get('accessToken');
+  const accessToken = cookie.get("accessToken");
   if (accessToken) {
     // User already logged in, redirect to home
-    throw redirect(302, '/');
+    throw redirect(302, "/");
   }
   return { authenticated: false };
 });
@@ -97,11 +120,11 @@ export default component$(() => {
             Buat Akun Baru
           </h2>
           <p class="mt-2 text-center text-sm text-base-content/70">
-            Sudah punya akun?{' '}
+            Sudah punya akun?{" "}
             <button
               type="button"
               class="font-medium text-primary hover:text-primary-focus link"
-              onClick$={() => nav('/auth/login')}
+              onClick$={() => nav("/auth/login")}
             >
               masuk di sini
             </button>
@@ -121,7 +144,9 @@ export default component$(() => {
                   name="username"
                   placeholder="username_anda"
                   class={`input input-bordered w-full ${
-                    registerAction.value?.fieldErrors?.username ? 'input-error' : ''
+                    registerAction.value?.fieldErrors?.username
+                      ? "input-error"
+                      : ""
                   }`}
                   required
                 />
@@ -133,7 +158,9 @@ export default component$(() => {
                   </label>
                 )}
                 <label class="label">
-                  <span class="label-text-alt">3-20 karakter, hanya huruf, angka, - dan _</span>
+                  <span class="label-text-alt">
+                    3-20 karakter, hanya huruf, angka, - dan _
+                  </span>
                 </label>
               </div>
 
@@ -147,7 +174,9 @@ export default component$(() => {
                   name="email"
                   placeholder="contoh@email.com"
                   class={`input input-bordered w-full ${
-                    registerAction.value?.fieldErrors?.email ? 'input-error' : ''
+                    registerAction.value?.fieldErrors?.email
+                      ? "input-error"
+                      : ""
                   }`}
                   required
                 />
@@ -170,7 +199,9 @@ export default component$(() => {
                   name="password"
                   placeholder="Masukkan password"
                   class={`input input-bordered w-full ${
-                    registerAction.value?.fieldErrors?.password ? 'input-error' : ''
+                    registerAction.value?.fieldErrors?.password
+                      ? "input-error"
+                      : ""
                   }`}
                   required
                 />
@@ -182,7 +213,9 @@ export default component$(() => {
                   </label>
                 )}
                 <label class="label">
-                  <span class="label-text-alt">Minimal 6 karakter dengan huruf besar, kecil, dan angka</span>
+                  <span class="label-text-alt">
+                    Minimal 6 karakter dengan huruf besar, kecil, dan angka
+                  </span>
                 </label>
               </div>
 
@@ -196,7 +229,9 @@ export default component$(() => {
                   name="confirmPassword"
                   placeholder="Ulangi password"
                   class={`input input-bordered w-full ${
-                    registerAction.value?.fieldErrors?.confirmPassword ? 'input-error' : ''
+                    registerAction.value?.fieldErrors?.confirmPassword
+                      ? "input-error"
+                      : ""
                   }`}
                   required
                 />
@@ -232,15 +267,19 @@ export default component$(() => {
               {/* Terms of Service */}
               <div class="form-control">
                 <label class="label cursor-pointer justify-start gap-2">
-                  <input type="checkbox" class="checkbox checkbox-primary" required />
+                  <input
+                    type="checkbox"
+                    class="checkbox checkbox-primary"
+                    required
+                  />
                   <span class="label-text text-sm">
-                    Saya setuju dengan{' '}
+                    Saya setuju dengan{" "}
                     <button
                       type="button"
                       class="link link-primary"
                       onClick$={() => {
                         // TODO: Show terms of service modal
-                        alert('Syarat dan ketentuan akan segera hadir');
+                        alert("Syarat dan ketentuan akan segera hadir");
                       }}
                     >
                       syarat dan ketentuan
@@ -254,11 +293,13 @@ export default component$(() => {
                 <button
                   type="submit"
                   class={`btn btn-primary w-full ${
-                    registerAction.isRunning ? 'loading' : ''
+                    registerAction.isRunning ? "loading" : ""
                   }`}
                   disabled={registerAction.isRunning}
                 >
-                  {registerAction.isRunning ? 'Memproses...' : 'Daftar Sekarang'}
+                  {registerAction.isRunning
+                    ? "Memproses..."
+                    : "Daftar Sekarang"}
                 </button>
               </div>
             </Form>
@@ -270,7 +311,7 @@ export default component$(() => {
           <button
             type="button"
             class="btn btn-ghost btn-sm"
-            onClick$={() => nav('/')}
+            onClick$={() => nav("/")}
           >
             ← Kembali ke Beranda
           </button>

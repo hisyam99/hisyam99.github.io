@@ -1,62 +1,83 @@
-import { component$, useSignal, useTask$, $ } from '@builder.io/qwik';
-import { routeLoader$, routeAction$, Form, z, zod$ } from '@builder.io/qwik-city';
-import { getBlogById, updateBlog } from '~/services/admin-blog';
+import { component$, useSignal, useTask$, $ } from "@builder.io/qwik";
+import {
+  routeLoader$,
+  routeAction$,
+  Form,
+  z,
+  zod$,
+} from "@builder.io/qwik-city";
+import { getBlogById, updateBlog } from "~/services/admin-blog";
 
-import RichTextEditor from '~/components/admin/RichTextEditor';
+import RichTextEditor from "~/components/admin/RichTextEditor";
 
 const blogSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(200, 'Title too long'),
-  content: z.string().min(1, 'Content is required'),
-  summary: z.string().min(1, 'Summary is required').max(500, 'Summary too long'),
-  slug: z.string().min(1, 'Slug is required').regex(/^[a-z0-9-]+$/, 'Slug must contain only lowercase letters, numbers, and hyphens'),
-  author: z.string().min(1, 'Author is required'),
-  status: z.enum(['DRAFT', 'PUBLISHED']),
-  tags: z.string().min(1, 'At least one tag is required'),
-  metaDescription: z.string().min(1, 'Meta description is required').max(160, 'Meta description too long')
+  title: z.string().min(1, "Title is required").max(200, "Title too long"),
+  content: z.string().min(1, "Content is required"),
+  summary: z
+    .string()
+    .min(1, "Summary is required")
+    .max(500, "Summary too long"),
+  slug: z
+    .string()
+    .min(1, "Slug is required")
+    .regex(
+      /^[a-z0-9-]+$/,
+      "Slug must contain only lowercase letters, numbers, and hyphens",
+    ),
+  author: z.string().min(1, "Author is required"),
+  status: z.enum(["DRAFT", "PUBLISHED"]),
+  tags: z.string().min(1, "At least one tag is required"),
+  metaDescription: z
+    .string()
+    .min(1, "Meta description is required")
+    .max(160, "Meta description too long"),
 });
 
 export const useBlogData = routeLoader$(async (requestEvent) => {
   const blogId = requestEvent.params.id;
-  const token = requestEvent.cookie.get('accessToken')?.value;
-  
+  const token = requestEvent.cookie.get("accessToken")?.value;
+
   if (!token) {
-    throw requestEvent.redirect(302, '/auth/login');
+    throw requestEvent.redirect(302, "/auth/login");
   }
 
   if (!blogId) {
-    throw requestEvent.redirect(302, '/admin/blogs');
+    throw requestEvent.redirect(302, "/admin/blogs");
   }
 
   try {
     const blog = await getBlogById(token, blogId);
     return { blog, error: null };
   } catch (error) {
-    console.error('Failed to load blog:', error);
-    return { blog: null, error: 'Failed to load blog' };
+    console.error("Failed to load blog:", error);
+    return { blog: null, error: "Failed to load blog" };
   }
 });
 
 export const useUpdateBlog = routeAction$(async (data, requestEvent) => {
-  const token = requestEvent.cookie.get('accessToken')?.value;
+  const token = requestEvent.cookie.get("accessToken")?.value;
   const blogId = requestEvent.params.id;
-  
+
   if (!token) {
     return {
       success: false,
-      error: 'Not authenticated'
+      error: "Not authenticated",
     };
   }
 
   if (!blogId) {
     return {
       success: false,
-      error: 'Blog ID is required'
+      error: "Blog ID is required",
     };
   }
 
   try {
-    const tagsArray = (data.tags as string).split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
-    
+    const tagsArray = (data.tags as string)
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter((tag) => tag.length > 0);
+
     const blogData = {
       id: blogId,
       title: data.title as string,
@@ -64,23 +85,23 @@ export const useUpdateBlog = routeAction$(async (data, requestEvent) => {
       summary: data.summary as string,
       slug: data.slug as string,
       author: data.author as string,
-      status: data.status as 'DRAFT' | 'PUBLISHED',
+      status: data.status as "DRAFT" | "PUBLISHED",
       tags: tagsArray,
-      metaDescription: data.metaDescription as string
+      metaDescription: data.metaDescription as string,
     };
 
     await updateBlog(token, blogData);
-    
-    throw requestEvent.redirect(302, '/admin/blogs');
+
+    throw requestEvent.redirect(302, "/admin/blogs");
   } catch (error) {
     if (error instanceof Response) {
       throw error; // Re-throw redirect responses
     }
-    
-    console.error('Failed to update blog:', error);
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Failed to update blog' 
+
+    console.error("Failed to update blog:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to update blog",
     };
   }
 }, zod$(blogSchema));
@@ -88,20 +109,20 @@ export const useUpdateBlog = routeAction$(async (data, requestEvent) => {
 export default component$(() => {
   const blogData = useBlogData();
   const updateAction = useUpdateBlog();
-  
-  const title = useSignal('');
-  const content = useSignal('');
-  const summary = useSignal('');
-  const slug = useSignal('');
-  const author = useSignal('');
-  const status = useSignal<'DRAFT' | 'PUBLISHED'>('DRAFT');
-  const tags = useSignal('');
-  const metaDescription = useSignal('');
+
+  const title = useSignal("");
+  const content = useSignal("");
+  const summary = useSignal("");
+  const slug = useSignal("");
+  const author = useSignal("");
+  const status = useSignal<"DRAFT" | "PUBLISHED">("DRAFT");
+  const tags = useSignal("");
+  const metaDescription = useSignal("");
 
   // Initialize form values when blog data loads
   useTask$(({ track }) => {
     track(() => blogData.value.blog);
-    
+
     const blog = blogData.value.blog;
     if (blog) {
       title.value = blog.title;
@@ -110,10 +131,13 @@ export default component$(() => {
       slug.value = blog.slug;
       author.value = blog.author;
       // Convert backend status to frontend format
-      status.value = blog.status === 'published' ? 'PUBLISHED' : 
-                     blog.status === 'draft' ? 'DRAFT' : 
-                     blog.status as 'DRAFT' | 'PUBLISHED';
-      tags.value = blog.tags.join(', ');
+      status.value =
+        blog.status === "published"
+          ? "PUBLISHED"
+          : blog.status === "draft"
+            ? "DRAFT"
+            : (blog.status as "DRAFT" | "PUBLISHED");
+      tags.value = blog.tags.join(", ");
       metaDescription.value = blog.metaDescription;
     }
   });
@@ -122,10 +146,10 @@ export default component$(() => {
     if (title.value) {
       const generatedSlug = title.value
         .toLowerCase()
-        .replace(/[^a-z0-9\s]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-|-$/g, '');
+        .replace(/[^a-z0-9\s]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
       slug.value = generatedSlug;
     }
   });
@@ -138,7 +162,7 @@ export default component$(() => {
     return (
       <div class="container mx-auto px-4 py-8">
         <div class="alert alert-error">
-          <span>{blogData.value.error || 'Blog not found'}</span>
+          <span>{blogData.value.error || "Blog not found"}</span>
         </div>
         <a href="/admin/blogs" class="btn btn-primary mt-4">
           ← Back to Blogs
@@ -219,7 +243,7 @@ export default component$(() => {
             <div class="card bg-base-200">
               <div class="card-body">
                 <h3 class="card-title text-lg">Publish Settings</h3>
-                
+
                 {/* Status */}
                 <div class="form-control">
                   <label class="label">
@@ -230,7 +254,9 @@ export default component$(() => {
                     class="select select-bordered"
                     value={status.value}
                     onChange$={(e) => {
-                      status.value = (e.target as HTMLSelectElement).value as 'DRAFT' | 'PUBLISHED';
+                      status.value = (e.target as HTMLSelectElement).value as
+                        | "DRAFT"
+                        | "PUBLISHED";
                     }}
                   >
                     <option value="DRAFT">Draft</option>
@@ -262,7 +288,7 @@ export default component$(() => {
             <div class="card bg-base-200">
               <div class="card-body">
                 <h3 class="card-title text-lg">SEO Settings</h3>
-                
+
                 {/* Slug */}
                 <div class="form-control">
                   <label class="label">
@@ -283,7 +309,7 @@ export default component$(() => {
                   />
                   <div class="label">
                     <span class="label-text-alt">
-                      URL: /blog/{slug.value || 'your-slug'}
+                      URL: /blog/{slug.value || "your-slug"}
                     </span>
                   </div>
                 </div>
@@ -291,8 +317,12 @@ export default component$(() => {
                 {/* Meta Description */}
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text font-medium">Meta Description *</span>
-                    <span class="label-text-alt">{metaDescription.value.length}/160</span>
+                    <span class="label-text font-medium">
+                      Meta Description *
+                    </span>
+                    <span class="label-text-alt">
+                      {metaDescription.value.length}/160
+                    </span>
                   </label>
                   <textarea
                     name="metaDescription"
@@ -300,7 +330,9 @@ export default component$(() => {
                     placeholder="SEO meta description"
                     value={metaDescription.value}
                     onInput$={(e) => {
-                      metaDescription.value = (e.target as HTMLTextAreaElement).value;
+                      metaDescription.value = (
+                        e.target as HTMLTextAreaElement
+                      ).value;
                     }}
                     maxLength={160}
                     required
@@ -339,7 +371,11 @@ export default component$(() => {
                   <button type="submit" class="btn btn-primary">
                     Update Blog
                   </button>
-                  <a href={`/blog/${blogData.value.blog.slug}`} target="_blank" class="btn btn-outline">
+                  <a
+                    href={`/blog/${blogData.value.blog.slug}`}
+                    target="_blank"
+                    class="btn btn-outline"
+                  >
                     Preview
                   </a>
                 </div>
@@ -360,11 +396,14 @@ export default component$(() => {
             <div>
               <div class="font-medium">Please fix the following errors:</div>
               <ul class="list-disc list-inside mt-2">
-                {Object.entries(updateAction.value.fieldErrors).map(([field, errors]) => (
-                  <li key={field}>
-                    <strong>{field}:</strong> {Array.isArray(errors) ? errors.join(', ') : errors}
-                  </li>
-                ))}
+                {Object.entries(updateAction.value.fieldErrors).map(
+                  ([field, errors]) => (
+                    <li key={field}>
+                      <strong>{field}:</strong>{" "}
+                      {Array.isArray(errors) ? errors.join(", ") : errors}
+                    </li>
+                  ),
+                )}
               </ul>
             </div>
           </div>

@@ -3,7 +3,7 @@ import { routeLoader$ } from "@builder.io/qwik-city";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { Link } from "@builder.io/qwik-city";
 import Hero from "../components/starter/hero/hero";
-import { 
+import {
   useScrollAnimation,
   useStaggerAnimation,
 } from "~/hooks/useScrollAnimation";
@@ -18,34 +18,76 @@ import { getCategories } from "~/services/category";
 export const useHomepageDataLoader = routeLoader$(async () => {
   try {
     const [blogs, projects, categories] = await Promise.allSettled([
-      getPublishedBlogs({ page: 1, pageSize: 3, sortBy: 'publishedAt', sortDirection: 'DESC' }),
-      getProjects({ page: 1, pageSize: 4, sortBy: 'createdAt', sortDirection: 'DESC' }),
-      getCategories({ page: 1, pageSize: 10, sortBy: 'name', sortDirection: 'ASC' }),
-    ])
+      getPublishedBlogs({
+        page: 1,
+        pageSize: 3,
+        sortBy: "publishedAt",
+        sortDirection: "DESC",
+      }),
+      getProjects({
+        page: 1,
+        pageSize: 4,
+        sortBy: "createdAt",
+        sortDirection: "DESC",
+      }),
+      getCategories({
+        page: 1,
+        pageSize: 10,
+        sortBy: "name",
+        sortDirection: "ASC",
+      }),
+    ]);
 
     return {
-      featuredBlogs: blogs.status === 'fulfilled' ? blogs.value : { data: [], pagination: { page: 1, pageSize: 3, total: 0, totalPages: 0 } },
-      featuredProjects: projects.status === 'fulfilled' ? projects.value : { data: [], pagination: { page: 1, pageSize: 4, total: 0, totalPages: 0 } },
-      categories: categories.status === 'fulfilled' ? categories.value : { data: [], pagination: { page: 1, pageSize: 10, total: 0, totalPages: 0 } },
-    }
+      featuredBlogs:
+        blogs.status === "fulfilled"
+          ? blogs.value
+          : {
+              data: [],
+              pagination: { page: 1, pageSize: 3, total: 0, totalPages: 0 },
+            },
+      featuredProjects:
+        projects.status === "fulfilled"
+          ? projects.value
+          : {
+              data: [],
+              pagination: { page: 1, pageSize: 4, total: 0, totalPages: 0 },
+            },
+      categories:
+        categories.status === "fulfilled"
+          ? categories.value
+          : {
+              data: [],
+              pagination: { page: 1, pageSize: 10, total: 0, totalPages: 0 },
+            },
+    };
   } catch (error) {
-    console.error('Failed to load homepage data:', error)
+    console.error("Failed to load homepage data:", error);
     // Return empty data structure instead of throwing
     return {
-      featuredBlogs: { data: [], pagination: { page: 1, pageSize: 3, total: 0, totalPages: 0 } },
-      featuredProjects: { data: [], pagination: { page: 1, pageSize: 4, total: 0, totalPages: 0 } },
-      categories: { data: [], pagination: { page: 1, pageSize: 10, total: 0, totalPages: 0 } },
-    }
+      featuredBlogs: {
+        data: [],
+        pagination: { page: 1, pageSize: 3, total: 0, totalPages: 0 },
+      },
+      featuredProjects: {
+        data: [],
+        pagination: { page: 1, pageSize: 4, total: 0, totalPages: 0 },
+      },
+      categories: {
+        data: [],
+        pagination: { page: 1, pageSize: 10, total: 0, totalPages: 0 },
+      },
+    };
   }
-})
+});
 
 export default component$(() => {
-  const homepageData = useHomepageDataLoader()
-  const projectsStaggerRef = useStaggerAnimation(200)
-  const blogsStaggerRef = useStaggerAnimation(300)
-  const { ref: contactRef } = useScrollAnimation()
-  
-  const { featuredBlogs, featuredProjects, categories } = homepageData.value
+  const homepageData = useHomepageDataLoader();
+  const projectsStaggerRef = useStaggerAnimation(200);
+  const blogsStaggerRef = useStaggerAnimation(300);
+  const { ref: contactRef } = useScrollAnimation();
+
+  const { featuredBlogs, featuredProjects, categories } = homepageData.value;
 
   return (
     <>
@@ -70,32 +112,37 @@ export default component$(() => {
           >
             {featuredProjects.data.length > 0 ? (
               featuredProjects.data.map((project, index) => (
-                <div key={project.id} class="card bg-base-100 hover-lift hover-glow shadow-xl">
+                <div
+                  key={project.id}
+                  class="card bg-base-100 hover-lift hover-glow shadow-xl"
+                >
                   {/* No image field in schema, use gradient background */}
                   <figure class="from-primary to-secondary bg-gradient-to-br">
                     <div class="flex h-48 w-full items-center justify-center">
-                        <svg
-                          class="text-base-100 h-24 w-24"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
-                          />
-                        </svg>
-                      </div>
-                    </figure>
+                      <svg
+                        class="text-base-100 h-24 w-24"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
+                        />
+                      </svg>
+                    </div>
+                  </figure>
                   <div class="card-body">
                     <h3 class="card-title">
                       {project.title}
-                      {index === 0 && <div class="badge badge-secondary">Featured</div>}
+                      {index === 0 && (
+                        <div class="badge badge-secondary">Featured</div>
+                      )}
                     </h3>
                     <p class="text-sm text-base-content/70">
-                      {project.description || 'No description available'}
+                      {project.description || "No description available"}
                     </p>
                     {/* Technologies not available in current schema */}
                     <div class="mt-4 flex flex-wrap gap-2">
@@ -104,7 +151,10 @@ export default component$(() => {
                     </div>
                     <div class="card-actions mt-4 justify-end">
                       {/* URLs not available in current schema - show placeholder */}
-                      <button class="btn btn-primary btn-sm hover-scale" disabled>
+                      <button
+                        class="btn btn-primary btn-sm hover-scale"
+                        disabled
+                      >
                         View Project
                       </button>
                     </div>
@@ -195,8 +245,8 @@ export default component$(() => {
                       <div class="badge badge-primary">New</div>
                     </h3>
                     <p>
-                      Aplikasi pemendek URL yang cepat dan efisien dengan analytics
-                      dashboard untuk tracking link performance.
+                      Aplikasi pemendek URL yang cepat dan efisien dengan
+                      analytics dashboard untuk tracking link performance.
                     </p>
                     <div class="mt-4 flex flex-wrap gap-2">
                       <div class="badge badge-outline">Deno</div>
@@ -230,10 +280,7 @@ export default component$(() => {
           </div>
 
           <div class="mt-12 text-center">
-            <Link
-              href="/projects"
-              class="btn btn-outline btn-lg hover-scale"
-            >
+            <Link href="/projects" class="btn btn-outline btn-lg hover-scale">
               View All Projects
               <svg
                 class="ml-2 h-5 w-5"
@@ -272,11 +319,14 @@ export default component$(() => {
           >
             {featuredBlogs.data.length > 0 ? (
               featuredBlogs.data.map((blog) => (
-                <article key={blog.id} class="card bg-base-100 hover-lift hover-glow shadow-xl">
+                <article
+                  key={blog.id}
+                  class="card bg-base-100 hover-lift hover-glow shadow-xl"
+                >
                   {/* Featured image not available in current schema */}
                   <div class="card-body">
                     <h3 class="card-title text-lg">
-                      <Link 
+                      <Link
                         href={`/blog/${blog.slug}`}
                         class="hover:text-primary transition-colors"
                       >
@@ -284,15 +334,19 @@ export default component$(() => {
                       </Link>
                     </h3>
                     <p class="text-sm text-base-content/70 line-clamp-3">
-                      {blog.summary || 'No summary available'}
+                      {blog.summary || "No summary available"}
                     </p>
                     <div class="mt-4 flex items-center justify-between">
                       <div class="text-xs text-base-content/60">
-                        {blog.publishedAt && new Date(blog.publishedAt).toLocaleDateString('id-ID', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric'
-                        })}
+                        {blog.publishedAt &&
+                          new Date(blog.publishedAt).toLocaleDateString(
+                            "id-ID",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            },
+                          )}
                       </div>
                       {/* Read time not available in current schema */}
                       <div class="badge badge-ghost badge-sm">
@@ -325,10 +379,7 @@ export default component$(() => {
 
           {featuredBlogs.data.length > 0 && (
             <div class="mt-12 text-center">
-              <Link
-                href="/blog"
-                class="btn btn-outline btn-lg hover-scale"
-              >
+              <Link href="/blog" class="btn btn-outline btn-lg hover-scale">
                 View All Posts
                 <svg
                   class="ml-2 h-5 w-5"
@@ -365,7 +416,10 @@ export default component$(() => {
 
             <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {categories.data.map((category) => (
-                <div key={category.id} class="card bg-base-100 hover-lift shadow-lg">
+                <div
+                  key={category.id}
+                  class="card bg-base-100 hover-lift shadow-lg"
+                >
                   <div class="card-body p-6 text-center">
                     <h3 class="card-title justify-center text-lg">
                       {category.name}
@@ -384,11 +438,7 @@ export default component$(() => {
       )}
 
       {/* Contact Section */}
-      <section
-        id="contact"
-        ref={contactRef}
-        class="animate-fadeInUp py-20"
-      >
+      <section id="contact" ref={contactRef} class="animate-fadeInUp py-20">
         <div class="container mx-auto px-4">
           <div class="animate-fadeInDown mb-12 text-center">
             <h2 class="animate-textReveal mb-4 text-4xl font-bold">
@@ -513,10 +563,7 @@ export default component$(() => {
                       ></textarea>
                     </div>
                     <div class="card-actions justify-end">
-                      <button
-                        type="submit"
-                        class="btn btn-primary hover-scale"
-                      >
+                      <button type="submit" class="btn btn-primary hover-scale">
                         Send Message
                         <svg
                           class="ml-2 h-4 w-4"
@@ -541,19 +588,21 @@ export default component$(() => {
         </div>
       </section>
     </>
-  )
-})
+  );
+});
 
 export const head: DocumentHead = {
   title: "Hisyam Kamil - Full Stack Developer",
   meta: [
     {
       name: "description",
-      content: "Full Stack Developer specializing in modern web technologies. Building scalable applications with React, Next.js, Node.js, and more.",
+      content:
+        "Full Stack Developer specializing in modern web technologies. Building scalable applications with React, Next.js, Node.js, and more.",
     },
     {
       name: "keywords",
-      content: "Full Stack Developer, React, Next.js, Node.js, TypeScript, JavaScript, Web Development, Hisyam Kamil",
+      content:
+        "Full Stack Developer, React, Next.js, Node.js, TypeScript, JavaScript, Web Development, Hisyam Kamil",
     },
     {
       property: "og:title",
@@ -561,7 +610,8 @@ export const head: DocumentHead = {
     },
     {
       property: "og:description",
-      content: "Full Stack Developer specializing in modern web technologies. Building scalable applications with React, Next.js, Node.js, and more.",
+      content:
+        "Full Stack Developer specializing in modern web technologies. Building scalable applications with React, Next.js, Node.js, and more.",
     },
     {
       property: "og:type",
@@ -577,7 +627,8 @@ export const head: DocumentHead = {
     },
     {
       name: "twitter:description",
-      content: "Full Stack Developer specializing in modern web technologies. Building scalable applications with React, Next.js, Node.js, and more.",
+      content:
+        "Full Stack Developer specializing in modern web technologies. Building scalable applications with React, Next.js, Node.js, and more.",
     },
-  ]
-}
+  ],
+};
