@@ -11,8 +11,9 @@
 import { createQwikCity } from "@builder.io/qwik-city/middleware/bun";
 import qwikCityPlan from "@qwik-city-plan";
 import render from "./entry.ssr";
-import { readFileSync, existsSync } from "fs";
+import { readFileSync, existsSync, mkdirSync } from "fs";
 import { resolve } from "path";
+import { execSync } from "child_process";
 
 // Get origin from environment or construct it
 const origin =
@@ -30,28 +31,67 @@ const { router, notFound, staticFile } = createQwikCity({
 // Allow for dynamic port
 const port = Number(Bun.env.PORT ?? 5173);
 
-// Check if we should use HTTPS
-const useHttps =
-  Bun.env.NODE_ENV === "development" || Bun.env.USE_HTTPS === "true";
-const protocol = useHttps ? "https" : "http";
+// ALWAYS use HTTPS - no exceptions
+const protocol = "https";
 
-// SSL configuration
-const httpsConfig =
-  useHttps && existsSync(resolve("certs/cert.pem"))
-    ? {
-        key: readFileSync(resolve("certs/key.pem")),
-        cert: readFileSync(resolve("certs/cert.pem")),
-      }
-    : undefined;
+// SSL configuration - create default cert if not exists
+let httpsConfig;
 
-console.log(`Server started: ${protocol}://localhost:${port}/`);
-console.log(`Expected origin: ${origin}`);
-console.log(`HTTPS enabled: ${!!httpsConfig}`);
+if (existsSync(resolve("certs/cert.pem"))) {
+  // Use existing certificate
+  httpsConfig = {
+    key: readFileSync(resolve("certs/key.pem")),
+    cert: readFileSync(resolve("certs/cert.pem")),
+  };
+} else {
+  // Auto-generate self-signed certificate for development
+  console.log("⚠️  SSL certificate not found, creating self-signed certificate...");
+  
+  // Create certs directory if it doesn't exist
+  if (!existsSync(resolve("certs"))) {
+    mkdirSync(resolve("certs"), { recursive: true });
+  }
+  
+  try {
+    // Generate self-signed certificate
+    execSync(`openssl req -x509 -newkey rsa:4096 -keyout certs/key.pem -out certs/cert.pem -days 365 -nodes -subj "/C=ID/ST=Jakarta/L=Jakarta/O=Development/OU=Dev/CN=localhost"`, {
+      cwd: process.cwd(),
+      stdio: 'pipe'
+    });
+    
+    httpsConfig = {
+      key: readFileSync(resolve("certs/key.pem")),
+      cert: readFileSync(resolve("certs/cert.pem")),
+    };
+    
+    console.log("✅ Self-signed certificate created successfully!");
+  } catch (error) {
+    console.error("❌ Failed to create SSL certificate:", (error as Error).message);
+    console.log("🔧 Please install OpenSSL or create certificate manually");
+    process.exit(1);
+  }
+}
+
+console.log(`🚀 Server started: ${protocol}://localhost:${port}/`);
+console.log(`🔒 Expected origin: ${origin}`);
+console.log(`✅ HTTPS enabled: ALWAYS (forced)`);
+console.log(`📋 SSL certificate: ${existsSync(resolve("certs/cert.pem")) ? "Found" : "Auto-generated"}`);
 
 Bun.serve({
   async fetch(request: Request) {
-    // Handle reverse proxy headers for production
+    // Force HTTPS - redirect if HTTP is detected
     const url = new URL(request.url);
+    if (url.protocol === "http:") {
+      const httpsUrl = url.toString().replace("http:", "https:");
+      return new Response(null, {
+        status: 301,
+        headers: {
+          Location: httpsUrl,
+        },
+      });
+    }
+
+    // Handle reverse proxy headers for production
     const forwardedProto = request.headers.get("x-forwarded-proto");
     const forwardedHost = request.headers.get("x-forwarded-host");
 
@@ -82,8 +122,6 @@ Bun.serve({
     return notFound(correctedRequest);
   },
   port,
-  // Add HTTPS support
-  ...(httpsConfig && {
-    tls: httpsConfig,
-  }),
+  // ALWAYS use HTTPS - required
+  tls: httpsConfig,
 });
