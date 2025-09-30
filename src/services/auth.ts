@@ -75,15 +75,22 @@ export const loginUser = server$(async (credentials: LoginCredentials): Promise<
       }
     `.send({ input: credentials })
 
+    console.log('🔍 Login GraphQL result:', JSON.stringify(result, null, 2))
+
     if (result?.errors?.length) {
+      console.error('Login GraphQL errors:', result.errors)
       throw new Error(result.errors[0].message || 'Login failed')
     }
 
-    if (!result?.data?.login) {
-      throw new Error('Invalid login response')
+    // Fix: Access the data correctly based on how Graffle returns it
+    const loginData = result?.data?.login || result?.login
+    
+    if (!loginData) {
+      console.error('No login data in response:', result)
+      throw new Error('Invalid login response structure')
     }
 
-    return result.login
+    return loginData
   } catch (error) {
     console.error('Login error:', error)
     throw new Error(error instanceof Error ? error.message : 'Login failed')
@@ -121,15 +128,22 @@ export const registerUser = server$(async (userData: RegisterData): Promise<Logi
       }
     `.send({ input: userData })
 
+    console.log('🔍 Register GraphQL result:', JSON.stringify(result, null, 2))
+
     if (result?.errors?.length) {
+      console.error('Register GraphQL errors:', result.errors)
       throw new Error(result.errors[0].message || 'Registration failed')
     }
 
-    if (!result?.data?.register) {
-      throw new Error('Invalid registration response')
+    // Fix: Access the data correctly based on how Graffle returns it
+    const registerData = result?.data?.register || result?.register
+    
+    if (!registerData) {
+      console.error('No register data in response:', result)
+      throw new Error('Invalid registration response structure')
     }
 
-    return result.register
+    return registerData
   } catch (error) {
     console.error('Registration error:', error)
     throw new Error(error instanceof Error ? error.message : 'Registration failed')
@@ -155,15 +169,19 @@ export const refreshAuthToken = server$(async (refreshToken: string): Promise<To
       }
     `.send({ refreshToken })
 
+    console.log('🔍 Refresh token GraphQL result:', JSON.stringify(result, null, 2))
+
     if (result?.errors?.length) {
       throw new Error(result.errors[0].message || 'Token refresh failed')
     }
 
-    if (!result?.data?.refreshToken) {
+    const tokenData = result?.data?.refreshToken || result?.refreshToken
+    
+    if (!tokenData) {
       throw new Error('Invalid token refresh response')
     }
 
-    return result.refreshToken
+    return tokenData
   } catch (error) {
     console.error('Token refresh error:', error)
     throw new Error(error instanceof Error ? error.message : 'Token refresh failed')
@@ -193,12 +211,15 @@ export const getCurrentUser = server$(async (token: string): Promise<User | null
       }
     `.send()
 
+    console.log('🔍 Get current user GraphQL result:', JSON.stringify(result, null, 2))
+
     if (result?.errors?.length) {
       console.error('Get current user error:', result.errors[0].message)
       return null
     }
 
-    return result?.data?.me || null
+    const userData = result?.data?.me || result?.me
+    return userData || null
   } catch (error) {
     console.error('Get current user error:', error)
     return null
@@ -222,11 +243,14 @@ export const changePassword = server$(async (
       }
     `.send({ input: passwordData })
 
+    console.log('🔍 Change password GraphQL result:', JSON.stringify(result, null, 2))
+
     if (result?.errors?.length) {
       throw new Error(result.errors[0].message || 'Password change failed')
     }
 
-    return result?.data?.changePassword || false
+    const changeResult = result?.data?.changePassword || result?.changePassword
+    return changeResult || false
   } catch (error) {
     console.error('Password change error:', error)
     throw new Error(error instanceof Error ? error.message : 'Password change failed')
@@ -242,10 +266,12 @@ export const logoutUser = () => {
   if (typeof window !== 'undefined') {
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token')
+    localStorage.removeItem('user')
     
-    // Also clear any cookies if they exist
+    // Clear cookies
     document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
     document.cookie = 'refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+    document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
   }
 }
 
@@ -272,8 +298,9 @@ export const tokenUtils = {
   /**
    * Store tokens in localStorage
    */
-  setTokens: (tokens: TokenPair): void => {
+  storeTokens: (tokens: TokenPair): void => {
     if (typeof window === 'undefined') return
+    
     localStorage.setItem('access_token', tokens.accessToken)
     localStorage.setItem('refresh_token', tokens.refreshToken)
     

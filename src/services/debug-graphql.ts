@@ -51,20 +51,47 @@ export const debugGraphQLResponse = server$(async () => {
       }
     `.send({
       page: 1,
-      pageSize: 10,
+      pageSize: 5,
       sortBy: 'publishedAt',
       sortDirection: 'DESC'
     })
-
-    console.log('📊 Published blogs result:', JSON.stringify(publishedBlogsResult, null, 2))
     
-    // Test 3: Try the simpler blogs query
+    console.log('📊 Published blogs result:', JSON.stringify(publishedBlogsResult, null, 2))
+
+    // Test 3: Try a simple test login/register to see response structure
+    const testLoginResult = await client.gql`
+      mutation TestLogin($input: LoginInput!) {
+        login(input: $input) {
+          user {
+            id
+            name
+            email
+          }
+          tokens {
+            accessToken
+            refreshToken
+            expiresIn
+            tokenType
+          }
+        }
+      }
+    `.send({
+      input: {
+        email: 'test@example.com',
+        password: 'testpassword'
+      }
+    })
+    
+    console.log('📊 Test login result structure:', JSON.stringify(testLoginResult, null, 2))
+
+    // Test 4: Get all blogs
     const allBlogsResult = await client.gql`
-      query GetBlogs($page: Int, $pageSize: Int) {
+      query GetAllBlogs($page: Int, $pageSize: Int) {
         blogs(page: $page, pageSize: $pageSize) {
           data {
             id
             title
+            slug
             status
           }
           pagination {
@@ -79,13 +106,14 @@ export const debugGraphQLResponse = server$(async () => {
       page: 1,
       pageSize: 5
     })
-
+    
     console.log('📊 All blogs result:', JSON.stringify(allBlogsResult, null, 2))
 
     return {
       success: true,
       introspection: introspectionResult,
       publishedBlogs: publishedBlogsResult,
+      testLogin: testLoginResult,
       allBlogs: allBlogsResult
     }
   } catch (error) {
