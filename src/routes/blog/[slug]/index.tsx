@@ -7,6 +7,7 @@ import { getBlogBySlug } from "~/services/blog";
 /**
  * Blog detail page loader
  * Loads a single blog post by slug
+ * This runs on every request (SSR) to ensure fresh data
  */
 // eslint-disable-next-line qwik/loader-location
 export const useBlogDetailLoader = routeLoader$(async (requestEvent) => {
@@ -16,17 +17,21 @@ export const useBlogDetailLoader = routeLoader$(async (requestEvent) => {
     throw new Error('Blog slug is required')
   }
 
+  console.log(`🔄 Fetching fresh blog data for slug: ${slug}`)
+
   try {
     const blog = await getBlogBySlug(slug)
     
     if (!blog) {
+      console.log(`❌ Blog not found for slug: ${slug}`)
       requestEvent.status(404)
       throw new Error('Blog not found')
     }
 
+    console.log(`✅ Loaded blog: ${blog.title}`)
     return blog
   } catch (error) {
-    console.error('Failed to load blog by slug:', error)
+    console.error('❌ Failed to load blog by slug:', error)
     throw error
   }
 })

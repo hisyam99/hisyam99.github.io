@@ -7,6 +7,7 @@ import { getPublishedBlogs } from "~/services/blog";
 /**
  * Blog listing page loader
  * Loads published blogs with pagination
+ * This runs on every request (SSR) to ensure fresh data
  */
 export const useBlogListLoader = routeLoader$(async (requestEvent) => {
   const url = new URL(requestEvent.url)
@@ -15,15 +16,20 @@ export const useBlogListLoader = routeLoader$(async (requestEvent) => {
   const sortBy = url.searchParams.get('sortBy') || 'publishedAt'
   const sortDirection = (url.searchParams.get('sortDirection') || 'DESC') as 'ASC' | 'DESC'
 
+  console.log('🔄 Fetching fresh blog data from server...')
+  
   try {
-    return await getPublishedBlogs({
+    const result = await getPublishedBlogs({
       page,
       pageSize,
       sortBy,
       sortDirection,
     })
+    
+    console.log(`✅ Loaded ${result.data.length} blogs (page ${page})`)
+    return result
   } catch (error) {
-    console.error('Failed to load blogs:', error)
+    console.error('❌ Failed to load blogs:', error)
     return {
       data: [],
       pagination: { page: 1, pageSize: 12, total: 0, totalPages: 0 }
@@ -49,6 +55,11 @@ export default component$(() => {
               Thoughts, tutorials, and insights about web development, 
               technology, and programming best practices.
             </p>
+            
+            {/* Real-time Update Info */}
+            <div class="mt-4 text-sm text-base-content/50">
+              Content updated in real-time • Total: {pagination.total} articles
+            </div>
           </div>
         </div>
       </section>
