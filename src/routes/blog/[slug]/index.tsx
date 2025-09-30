@@ -9,7 +9,6 @@ import { getBlogBySlug } from "~/services/blog";
  * Loads a single blog post by slug
  * This runs on every request (SSR) to ensure fresh data
  */
-// eslint-disable-next-line qwik/loader-location
 export const useBlogDetailLoader = routeLoader$(async (requestEvent) => {
   const slug = requestEvent.params.slug;
 
