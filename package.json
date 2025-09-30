@@ -51,5 +51,11 @@
     "vite": "^7.1.7",
     "vite-tsconfig-paths": "^5.1.4"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@urql/devtools": "^2.0.3",
+    "@urql/exchange-auth": "^3.0.0",
+    "graphql-ws": "^6.0.6",
+    "urql": "^5.0.1",
+    "wonka": "^6.3.5"
+  }
 }

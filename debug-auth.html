@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Auth</title>
+</head>
+<body>
+    <h1>Debug Auth</h1>
+    <div id="output"></div>
+    
+    <script>
+        function debugAuth() {
+            const output = document.getElementById('output');
+            
+            // Check localStorage
+            const token = localStorage.getItem('auth_token');
+            const refreshToken = localStorage.getItem('refresh_token');
+            const expiresAt = localStorage.getItem('token_expires_at');
+            
+            output.innerHTML = `
+                <h2>LocalStorage Debug:</h2>
+                <p><strong>Token:</strong> ${token ? 'Found' : 'Not found'}</p>
+                <p><strong>Refresh Token:</strong> ${refreshToken ? 'Found' : 'Not found'}</p>
+                <p><strong>Expires At:</strong> ${expiresAt || 'Not set'}</p>
+                ${expiresAt ? `<p><strong>Expires At Date:</strong> ${new Date(parseInt(expiresAt))}</p>` : ''}
+                <p><strong>Current Time:</strong> ${new Date()}</p>
+                <p><strong>Is Expired:</strong> ${expiresAt ? (Date.now() >= parseInt(expiresAt) - 60000) : 'Unknown'}</p>
+                
+                <h2>Test GraphQL ME Query:</h2>
+                <button onclick="testMeQuery()" id="testBtn">Test ME Query</button>
+                <div id="meResult"></div>
+            `;
+        }
+        
+        async function testMeQuery() {
+            const token = localStorage.getItem('auth_token');
+            const result = document.getElementById('meResult');
+            const btn = document.getElementById('testBtn');
+            
+            if (!token) {
+                result.innerHTML = '<p style="color: red;">No token found</p>';
+                return;
+            }
+            
+            btn.disabled = true;
+            result.innerHTML = '<p>Loading...</p>';
+            
+            try {
+                const response = await fetch('http://localhost:4001/graphql', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        query: `
+                            query Me {
+                                me {
+                                    id
+                                    name
+                                    email
+                                    role
+                                    isActive
+                                }
+                            }
+                        `
+                    })
+                });
+                
+                const data = await response.json();
+                
+                result.innerHTML = `
+                    <h3>Response:</h3>
+                    <pre style="background: #f5f5f5; padding: 10px; border-radius: 5px;">
+${JSON.stringify(data, null, 2)}
+                    </pre>
+                `;
+            } catch (error) {
+                result.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            } finally {
+                btn.disabled = false;
+            }
+        }
+        
+        // Run debug on load
+        debugAuth();
+    </script>
+</body>
+</html>

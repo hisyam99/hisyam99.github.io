@@ -211,7 +211,7 @@ export default component$(() => {
                     ),
                   },
                   {
-                    href: "/#projects",
+                    href: "/projects",
                     label: "Projects",
                     icon: (
                       <svg
