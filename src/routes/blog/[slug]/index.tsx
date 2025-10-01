@@ -27,6 +27,13 @@ export const useBlogDetailLoader = routeLoader$(async (requestEvent) => {
       throw new Error("Blog not found");
     }
 
+    // Tambahkan pemeriksaan status: hanya blog PUBLISHED yang bisa diakses public
+    if (blog.status !== "PUBLISHED") {
+      console.log(`❌ Blog is draft for slug: ${slug}`);
+      requestEvent.status(404);
+      throw new Error("Blog not found");
+    }
+
     console.log(`✅ Loaded blog: ${blog.title}`);
     return blog;
   } catch (error) {
