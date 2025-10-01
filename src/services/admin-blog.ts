@@ -1,5 +1,5 @@
 import { server$ } from "@builder.io/qwik-city";
-import { createAuthenticatedClient } from "../lib/graffle";
+import { createAuthenticatedClient } from "../lib/graphql/graffle";
 
 /**
  * Admin Blog Management Types

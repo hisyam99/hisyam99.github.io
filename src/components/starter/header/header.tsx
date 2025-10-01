@@ -1,7 +1,7 @@
 import { component$, useSignal, $, useOnWindow } from "@builder.io/qwik";
 import { Link, useLocation } from "@builder.io/qwik-city";
 import { ThemeToggle } from "~/components/ThemeToggle/ThemeToggle";
-import { useAuth } from "~/hooks/useAuth";
+import { useAuth, logoutServer } from "~/hooks/useAuth";
 
 export default component$(() => {
   const location = useLocation();
@@ -12,7 +12,7 @@ export default component$(() => {
   const handleLogout = $(async () => {
     userDropdownOpen.value = false;
     // Call logout server action directly
-    await import("~/hooks/useAuth").then((m) => m.logoutServer());
+    await logoutServer();
     // Force page refresh to update auth state
     window.location.href = "/";
   });

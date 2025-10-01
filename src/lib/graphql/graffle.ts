@@ -1,9 +1,7 @@
-import { Graffle } from 'graffle'
-import '../../graffle/modules/global.js'
-import { Graffle as GraphQLClient } from '../../graffle/_namespace.js'
+import { Graffle as GraphQLClient } from './graffle/_namespace.js'
 
 // Environment variables for GraphQL endpoint
-const GRAPHQL_ENDPOINT = import.meta.env.VITE_GRAPHQL_ENDPOINT || 'http://localhost:4001/graphql'
+const GRAPHQL_ENDPOINT = import.meta.env.GRAPHQL_ENDPOINT || 'http://localhost:4001/graphql'
 
 /**
  * Create a base Graffle client instance

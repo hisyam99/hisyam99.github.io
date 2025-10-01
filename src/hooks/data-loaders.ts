@@ -12,7 +12,7 @@ import {
   getResumeContentsByCategory,
 } from "../services/category";
 import { getCurrentUser } from "../services/auth";
-import type { PaginationInput } from "../lib/graffle";
+import type { PaginationInput } from "../lib/graphql/graffle";
 
 /**
  * Blog Data Loaders

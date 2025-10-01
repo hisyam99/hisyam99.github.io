@@ -1,25 +1,31 @@
 # 🔒 HTTPS Always-On Configuration
 
 ## Overview
+
 Konfigurasi ini memastikan server **SELALU menggunakan HTTPS** tanpa terkecuali, baik untuk development maupun production.
 
 ## 🎯 Features
 
 ### ✅ Always HTTPS
+
 - Server akan **selalu** menggunakan HTTPS, tidak pernah HTTP
 - Auto-generate SSL certificate jika tidak ditemukan
 - HTTP to HTTPS redirect otomatis
 
 ### ✅ Auto SSL Certificate
+
 ```typescript
 // Jika certificate tidak ditemukan, akan auto-generate
 if (!existsSync(resolve("certs/cert.pem"))) {
   // Auto-create self-signed certificate
-  execSync(`openssl req -x509 -newkey rsa:4096 -keyout certs/key.pem -out certs/cert.pem -days 365 -nodes -subj "/C=ID/ST=Jakarta/L=Jakarta/O=Development/OU=Dev/CN=localhost"`);
+  execSync(
+    `openssl req -x509 -newkey rsa:4096 -keyout certs/key.pem -out certs/cert.pem -days 365 -nodes -subj "/C=ID/ST=Jakarta/L=Jakarta/O=Development/OU=Dev/CN=localhost"`,
+  );
 }
 ```
 
 ### ✅ HTTP Redirect
+
 ```typescript
 // Force HTTPS - redirect if HTTP is detected
 if (url.protocol === "http:") {
@@ -34,11 +40,13 @@ if (url.protocol === "http:") {
 ## 🚀 Usage
 
 ### Development
+
 ```bash
 bun run dev      # https://localhost:5173
 ```
 
 ### Production
+
 ```bash
 bun run build
 bun run serve    # https://localhost:5173
@@ -47,6 +55,7 @@ bun run serve    # https://localhost:5173
 ## 🔧 Configuration
 
 ### Environment Variables
+
 ```bash
 ORIGIN=https://your-domain.com
 PUBLIC_BASE_URL=your-domain.com
@@ -54,10 +63,12 @@ PORT=5173
 ```
 
 ### SSL Certificate Locations
+
 - `certs/cert.pem` - SSL Certificate
 - `certs/key.pem` - SSL Private Key
 
 ## 📋 Console Output
+
 ```
 🚀 Server started: https://localhost:5173/
 🔒 Expected origin: https://localhost:5173
@@ -75,12 +86,14 @@ PORT=5173
 ## 🔍 CSRF Error Resolution
 
 Error sebelumnya:
+
 ```
 CSRF check failed. Cross-site POST form submissions are forbidden.
 The request origin "https://hisyam.tar.my.id" does not match the server origin "http://hisyam.tar.my.id".
 ```
 
 ✅ **Resolved** dengan selalu menggunakan HTTPS:
+
 - Origin: `https://hisyam.tar.my.id`
 - Server: `https://hisyam.tar.my.id`
 - ✅ **Match!** - No more CSRF errors

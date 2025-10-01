@@ -1,5 +1,8 @@
 import { server$ } from "@builder.io/qwik-city";
-import { createGraphQLClient, createAuthenticatedClient } from "../lib/graffle";
+import {
+  createGraphQLClient,
+  createAuthenticatedClient,
+} from "../lib/graphql/graffle";
 
 /**
  * Authentication Types

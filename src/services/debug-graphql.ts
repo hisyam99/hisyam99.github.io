@@ -1,5 +1,5 @@
 import { server$ } from "@builder.io/qwik-city";
-import { createGraphQLClient } from "../lib/graffle";
+import { createGraphQLClient } from "../lib/graphql/graffle";
 
 /**
  * Debug GraphQL response to see what we're actually getting

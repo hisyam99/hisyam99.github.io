@@ -4,7 +4,7 @@ import {
   createAuthenticatedClient,
   type PaginationInput,
   type PaginatedResponse,
-} from "../lib/graffle";
+} from "../lib/graphql/graffle";
 
 /**
  * Blog Types

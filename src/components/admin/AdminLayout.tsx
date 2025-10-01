@@ -1,6 +1,6 @@
 import { component$, Slot, useSignal, $, type QRL } from "@builder.io/qwik";
 import { Link, useLocation } from "@builder.io/qwik-city";
-import { useAuth } from "~/hooks/useAuth";
+import { useAuth, logoutServer } from "~/hooks/useAuth";
 import type { User } from "~/services/auth";
 
 interface AuthData {
@@ -237,7 +237,7 @@ const AdminHeader = component$<{
   const auth = useAuth();
 
   const handleLogout = $(async () => {
-    await import("~/hooks/useAuth").then((m) => m.logoutServer());
+    await logoutServer();
     window.location.href = "/";
   });
 
