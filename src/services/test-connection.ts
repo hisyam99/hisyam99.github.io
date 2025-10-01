@@ -4,12 +4,12 @@ import { server$ } from "@builder.io/qwik-city";
  * Simple GraphQL connection test
  */
 export const testGraphQLConnection = server$(async () => {
-  const GRAPHQL_ENDPOINT = "http://localhost:4001/graphql";
+  const PUBLIC_GRAPHQL_ENDPOINT = "http://localhost:4001/graphql";
 
   try {
-    console.log("🔍 Testing GraphQL connection to:", GRAPHQL_ENDPOINT);
+    console.log("🔍 Testing GraphQL connection to:", PUBLIC_GRAPHQL_ENDPOINT);
 
-    const response = await fetch(GRAPHQL_ENDPOINT, {
+    const response = await fetch(PUBLIC_GRAPHQL_ENDPOINT, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

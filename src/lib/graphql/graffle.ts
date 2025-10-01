@@ -1,7 +1,7 @@
 import { Graffle as GraphQLClient } from './graffle/_namespace.js'
 
 // Environment variables for GraphQL endpoint
-const GRAPHQL_ENDPOINT = import.meta.env.GRAPHQL_ENDPOINT || 'http://localhost:4001/graphql'
+const PUBLIC_GRAPHQL_ENDPOINT = import.meta.env.PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:4001/graphql'
 
 /**
  * Create a base Graffle client instance
@@ -15,7 +15,7 @@ export const createGraphQLClient = (options?: {
   
   return GraphQLClient.create()
     .transport({
-      url: GRAPHQL_ENDPOINT,
+      url: PUBLIC_GRAPHQL_ENDPOINT,
       headers: {
         'Content-Type': 'application/json',
         ...headers,
