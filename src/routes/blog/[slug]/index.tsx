@@ -27,9 +27,16 @@ export const useBlogDetailLoader = routeLoader$(async (requestEvent) => {
       throw new Error("Blog not found");
     }
 
+    console.log(
+      `🔍 Blog status: "${blog.status}" (type: ${typeof blog.status})`,
+    );
+
     // Tambahkan pemeriksaan status: hanya blog PUBLISHED yang bisa diakses public
-    if (blog.status !== "PUBLISHED") {
-      console.log(`❌ Blog is draft for slug: ${slug}`);
+    // Case insensitive check untuk menangani "published" atau "PUBLISHED"
+    if (blog.status?.toUpperCase() !== "PUBLISHED") {
+      console.log(
+        `❌ Blog is draft for slug: ${slug} (status: ${blog.status})`,
+      );
       requestEvent.status(404);
       throw new Error("Blog not found");
     }
