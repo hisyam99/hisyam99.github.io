@@ -232,13 +232,12 @@ export default component$(() => {
                       >
                         Edit
                       </Link>
-                      <a
+                      <Link
                         href={`/blog/${blog.slug}`}
-                        target="_blank"
                         class="btn btn-sm btn-ghost"
                       >
                         View
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 ))}

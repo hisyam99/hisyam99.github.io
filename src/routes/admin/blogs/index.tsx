@@ -284,19 +284,18 @@ export default component$(() => {
                 <td>{formatDate(blog.updatedAt)}</td>
                 <td>
                   <div class="flex gap-2">
-                    <a
+                    <Link
                       href={`/admin/blogs/${blog.id}/edit`}
                       class="btn btn-sm btn-primary"
                     >
                       Edit
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                       href={`/blog/${blog.slug}`}
                       class="btn btn-sm btn-ghost"
-                      target="_blank"
                     >
                       View
-                    </a>
+                    </Link>
                     <Form action={deleteAction}>
                       <input type="hidden" name="id" value={blog.id} />
                       <button

@@ -372,13 +372,12 @@ export default component$(() => {
                   <button type="submit" class="btn btn-primary">
                     Update Blog
                   </button>
-                  <a
+                  <Link
                     href={`/blog/${blogData.value.blog.slug}`}
-                    target="_blank"
                     class="btn btn-outline"
                   >
                     Preview
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
