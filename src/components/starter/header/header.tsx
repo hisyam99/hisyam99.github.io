@@ -1,10 +1,11 @@
 import { component$, useSignal, $, useOnWindow } from "@builder.io/qwik";
-import { Link, useLocation } from "@builder.io/qwik-city";
+import { Link, useLocation, useNavigate } from "@builder.io/qwik-city";
 import { ThemeToggle } from "~/components/ThemeToggle/ThemeToggle";
 import { useAuth, logoutServer } from "~/hooks/useAuth";
 
 export default component$(() => {
   const location = useLocation();
+  const nav = useNavigate();
   const currentHash = useSignal(location.url.hash);
   const auth = useAuth();
   const userDropdownOpen = useSignal(false);
@@ -14,7 +15,7 @@ export default component$(() => {
     // Call logout server action directly
     await logoutServer();
     // Force page refresh to update auth state
-    window.location.href = "/";
+    nav("/");
   });
 
   const findClosestSection = $((sections: string[], scrollPosition: number) => {
@@ -50,11 +51,7 @@ export default component$(() => {
     currentHash.value = newHash;
 
     // Update URL hash tanpa scroll
-    if (newHash) {
-      history.replaceState(null, "", newHash);
-    } else if (window.location.hash) {
-      history.replaceState(null, "", window.location.pathname);
-    }
+    nav(newHash || location.url.pathname, { replaceState: true });
   });
 
   const updateActiveSection = $(async () => {
@@ -86,7 +83,7 @@ export default component$(() => {
   useOnWindow(
     "hashchange",
     $(() => {
-      currentHash.value = window.location.hash;
+      currentHash.value = location.url.hash;
       // Delay untuk memastikan scroll selesai
       setTimeout(() => {
         updateActiveSection();

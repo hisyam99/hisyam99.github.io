@@ -1,5 +1,5 @@
 import { component$, useSignal, $ } from "@builder.io/qwik";
-import { routeAction$, Form, z, zod$ } from "@builder.io/qwik-city";
+import { routeAction$, Form, z, zod$, Link } from "@builder.io/qwik-city";
 import { createBlog } from "~/services/admin-blog";
 import RichTextEditor from "~/components/admin/RichTextEditor";
 
@@ -101,9 +101,9 @@ export default component$(() => {
     <div class="container mx-auto px-4 py-8">
       <div class="flex justify-between items-center mb-8">
         <h1 class="text-3xl font-bold">Create New Blog</h1>
-        <a href="/admin/blogs" class="btn btn-ghost">
+        <Link href="/admin/blogs" class="btn btn-ghost">
           ← Back to Blogs
-        </a>
+        </Link>
       </div>
 
       <Form action={createAction} class="max-w-4xl">

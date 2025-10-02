@@ -1,5 +1,5 @@
 import { component$, useSignal, useTask$, $ } from "@builder.io/qwik";
-import { routeLoader$, routeAction$, Form } from "@builder.io/qwik-city";
+import { routeLoader$, routeAction$, Form, Link } from "@builder.io/qwik-city";
 import {
   getAllBlogs,
   deleteBlog,
@@ -140,9 +140,9 @@ export default component$(() => {
     <div class="container mx-auto px-4 py-8">
       <div class="flex justify-between items-center mb-8">
         <h1 class="text-3xl font-bold">Blog Management</h1>
-        <a href="/admin/blogs/new" class="btn btn-primary">
+        <Link href="/admin/blogs/new" class="btn btn-primary">
           Create New Blog
-        </a>
+        </Link>
       </div>
 
       {/* Search and Filters */}

@@ -5,6 +5,7 @@ import {
   Form,
   z,
   zod$,
+  Link,
 } from "@builder.io/qwik-city";
 import { getBlogById, updateBlog } from "~/services/admin-blog";
 
@@ -164,9 +165,9 @@ export default component$(() => {
         <div class="alert alert-error">
           <span>{blogData.value.error || "Blog not found"}</span>
         </div>
-        <a href="/admin/blogs" class="btn btn-primary mt-4">
+        <Link href="/admin/blogs" class="btn btn-primary mt-4">
           ← Back to Blogs
-        </a>
+        </Link>
       </div>
     );
   }
@@ -175,9 +176,9 @@ export default component$(() => {
     <div class="container mx-auto px-4 py-8">
       <div class="flex justify-between items-center mb-8">
         <h1 class="text-3xl font-bold">Edit Blog</h1>
-        <a href="/admin/blogs" class="btn btn-ghost">
+        <Link href="/admin/blogs" class="btn btn-ghost">
           ← Back to Blogs
-        </a>
+        </Link>
       </div>
 
       <Form action={updateAction} class="max-w-4xl">
