@@ -364,8 +364,22 @@ export const getResumeContents = server$(
         );
       }
 
-      if (!result?.data?.resumeContents) {
-        throw new Error("Invalid resume contents response");
+      // Graffle returns the data directly, not wrapped in a "data" property
+      if (!result?.resumeContents) {
+        console.warn(
+          "⚠️ Resume contents query not available or returned empty result. Returning empty data.",
+          result,
+        );
+        // Return empty result instead of throwing error
+        return {
+          data: [],
+          pagination: {
+            page: pagination.page || 1,
+            pageSize: pagination.pageSize || 10,
+            total: 0,
+            totalPages: 0,
+          },
+        };
       }
 
       return result.resumeContents;
@@ -476,8 +490,22 @@ export const getResumeContentsByCategory = server$(
         );
       }
 
-      if (!result?.data?.resumeContentsByCategory) {
-        throw new Error("Invalid resume contents by category response");
+      // Graffle returns the data directly, not wrapped in a "data" property
+      if (!result?.resumeContentsByCategory) {
+        console.warn(
+          "⚠️ Resume contents by category query not available or returned empty result. Returning empty data.",
+          result,
+        );
+        // Return empty result instead of throwing error
+        return {
+          data: [],
+          pagination: {
+            page: pagination.page || 1,
+            pageSize: pagination.pageSize || 10,
+            total: 0,
+            totalPages: 0,
+          },
+        };
       }
 
       return result.resumeContentsByCategory;

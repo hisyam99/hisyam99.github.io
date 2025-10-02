@@ -10,8 +10,10 @@ import {
   getCategoryById,
   getResumeContents,
   getResumeContentsByCategory,
+  getResumeContentById,
 } from "../services/category";
 import { getCurrentUser } from "../services/auth";
+import { getUsers, getUserById } from "../services/user";
 import type { PaginationInput } from "../lib/graphql/graffle";
 
 /**
@@ -449,5 +451,224 @@ export const useResumePageDataLoader = routeLoader$(async () => {
         pagination: { page: 1, pageSize: 50, total: 0, totalPages: 0 },
       },
     };
+  }
+});
+
+/**
+ * Admin Data Loaders
+ */
+
+/**
+ * Load all users for admin (with pagination)
+ * Used in admin user management pages
+ */
+// eslint-disable-next-line qwik/loader-location
+export const useAdminUsersLoader = routeLoader$(async (requestEvent) => {
+  const token = requestEvent.cookie.get("accessToken")?.value;
+
+  if (!token) {
+    throw requestEvent.redirect(302, "/auth/login");
+  }
+
+  const url = new URL(requestEvent.url);
+  const page = parseInt(url.searchParams.get("page") || "1", 10);
+  const pageSize = parseInt(url.searchParams.get("pageSize") || "20", 10);
+  const sortBy = url.searchParams.get("sortBy") || "createdAt";
+  const sortDirection = (url.searchParams.get("sortDirection") || "DESC") as
+    | "ASC"
+    | "DESC";
+
+  const pagination: PaginationInput = {
+    page,
+    pageSize,
+    sortBy,
+
+    sortDirection,
+  };
+
+  try {
+    return await getUsers(token, pagination);
+  } catch (error) {
+    console.error("Failed to load admin users:", error);
+    throw new Error("Failed to load users");
+  }
+});
+
+/**
+ * Load user by ID for admin edit
+ */
+// eslint-disable-next-line qwik/loader-location
+export const useAdminUserLoader = routeLoader$(async (requestEvent) => {
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  const userId = requestEvent.params.id;
+
+  if (!token) {
+    throw requestEvent.redirect(302, "/auth/login");
+  }
+
+  if (!userId) {
+    throw requestEvent.redirect(302, "/admin/users");
+  }
+
+  try {
+    const user = await getUserById(token, userId);
+    return { user, error: null };
+  } catch (error) {
+    console.error("Failed to load user:", error);
+    return { user: null, error: "Failed to load user" };
+  }
+});
+
+/**
+ * Load all categories for admin
+ */
+// eslint-disable-next-line qwik/loader-location
+export const useAdminCategoriesLoader = routeLoader$(async (requestEvent) => {
+  const token = requestEvent.cookie.get("accessToken")?.value;
+
+  if (!token) {
+    throw requestEvent.redirect(302, "/auth/login");
+  }
+
+  const url = new URL(requestEvent.url);
+  const page = parseInt(url.searchParams.get("page") || "1", 10);
+  const pageSize = parseInt(url.searchParams.get("pageSize") || "20", 10);
+  const sortBy = url.searchParams.get("sortBy") || "name";
+  const sortDirection = (url.searchParams.get("sortDirection") || "ASC") as
+    | "ASC"
+    | "DESC";
+
+  const pagination: PaginationInput = {
+    page,
+    pageSize,
+    sortBy,
+    sortDirection,
+  };
+
+  try {
+    return await getCategories(pagination);
+  } catch (error) {
+    console.error("Failed to load admin categories:", error);
+    throw new Error("Failed to load categories");
+  }
+});
+
+/**
+ * Load category by ID for admin edit
+ */
+// eslint-disable-next-line qwik/loader-location
+export const useAdminCategoryLoader = routeLoader$(async (requestEvent) => {
+  const categoryId = requestEvent.params.id;
+
+  if (!categoryId) {
+    throw requestEvent.redirect(302, "/admin/categories");
+  }
+
+  try {
+    const category = await getCategoryById(categoryId);
+    return { category, error: null };
+  } catch (error) {
+    console.error("Failed to load category:", error);
+    return { category: null, error: "Failed to load category" };
+  }
+});
+
+/**
+ * Load all resume contents for admin
+ */
+// eslint-disable-next-line qwik/loader-location
+export const useAdminResumeContentsLoader = routeLoader$(
+  async (requestEvent) => {
+    const url = new URL(requestEvent.url);
+    const page = parseInt(url.searchParams.get("page") || "1", 10);
+    const pageSize = parseInt(url.searchParams.get("pageSize") || "20", 10);
+    const sortBy = url.searchParams.get("sortBy") || "createdAt";
+    const sortDirection = (url.searchParams.get("sortDirection") || "DESC") as
+      | "ASC"
+      | "DESC";
+
+    const pagination: PaginationInput = {
+      page,
+      pageSize,
+      sortBy,
+      sortDirection,
+    };
+
+    try {
+      return await getResumeContents(pagination);
+    } catch (error) {
+      console.error("Failed to load admin resume contents:", error);
+      throw new Error("Failed to load resume contents");
+    }
+  },
+);
+
+/**
+ * Load resume content by ID for admin edit
+ */
+// eslint-disable-next-line qwik/loader-location
+export const useAdminResumeContentLoader = routeLoader$(
+  async (requestEvent) => {
+    const resumeContentId = requestEvent.params.id;
+
+    if (!resumeContentId) {
+      throw requestEvent.redirect(302, "/admin/resume-contents");
+    }
+
+    try {
+      const resumeContent = await getResumeContentById(resumeContentId);
+      return { resumeContent, error: null };
+    } catch (error) {
+      console.error("Failed to load resume content:", error);
+      return { resumeContent: null, error: "Failed to load resume content" };
+    }
+  },
+);
+
+/**
+ * Load all projects for admin
+ */
+// eslint-disable-next-line qwik/loader-location
+export const useAdminProjectsLoader = routeLoader$(async (requestEvent) => {
+  const url = new URL(requestEvent.url);
+  const page = parseInt(url.searchParams.get("page") || "1", 10);
+  const pageSize = parseInt(url.searchParams.get("pageSize") || "20", 10);
+  const sortBy = url.searchParams.get("sortBy") || "createdAt";
+  const sortDirection = (url.searchParams.get("sortDirection") || "DESC") as
+    | "ASC"
+    | "DESC";
+
+  const pagination: PaginationInput = {
+    page,
+    pageSize,
+    sortBy,
+    sortDirection,
+  };
+
+  try {
+    return await getProjects(pagination);
+  } catch (error) {
+    console.error("Failed to load admin projects:", error);
+    throw new Error("Failed to load projects");
+  }
+});
+
+/**
+ * Load project by ID for admin edit
+ */
+// eslint-disable-next-line qwik/loader-location
+export const useAdminProjectLoader = routeLoader$(async (requestEvent) => {
+  const projectId = requestEvent.params.id;
+
+  if (!projectId) {
+    throw requestEvent.redirect(302, "/admin/projects");
+  }
+
+  try {
+    const project = await getProjectById(projectId);
+    return { project, error: null };
+  } catch (error) {
+    console.error("Failed to load project:", error);
+    return { project: null, error: "Failed to load project" };
   }
 });
