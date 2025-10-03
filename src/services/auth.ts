@@ -47,12 +47,23 @@ export interface AuthError {
   code?: string;
 }
 
+export interface ContextualAggregateError {
+  message: string;
+  errors: Array<{ message: string; context?: unknown }>;
+}
+
 /**
  * Login user with email and password
  * Server-side GraphQL mutation using Qwik server$
  */
 export const loginUser = server$(
-  async (credentials: LoginCredentials): Promise<LoginResponse> => {
+  async (
+    credentials: LoginCredentials,
+  ): Promise<{
+    success: boolean;
+    data?: LoginResponse;
+    error?: string;
+  }> => {
     const client = createGraphQLClient();
 
     try {
@@ -83,7 +94,10 @@ export const loginUser = server$(
 
       if (result?.errors?.length) {
         console.error("Login GraphQL errors:", result.errors);
-        throw new Error(result.errors[0].message || "Login failed");
+        return {
+          success: false,
+          error: result.errors[0].message || "Login failed",
+        };
       }
 
       // Fix: Access the data correctly based on how Graffle returns it
@@ -91,13 +105,33 @@ export const loginUser = server$(
 
       if (!loginData) {
         console.error("No login data in response:", result);
-        throw new Error("Invalid login response structure");
+        return { success: false, error: "Invalid login response structure" };
       }
 
-      return loginData;
+      return { success: true, data: loginData };
     } catch (error) {
       console.error("Login error:", error);
-      throw new Error(error instanceof Error ? error.message : "Login failed");
+
+      // Handle Graffle ContextualAggregateError
+      if (
+        error &&
+        typeof error === "object" &&
+        "errors" in error &&
+        Array.isArray(error.errors)
+      ) {
+        const contextualError = error as ContextualAggregateError;
+        if (contextualError.errors.length > 0) {
+          return {
+            success: false,
+            error: contextualError.errors[0].message || "Login failed",
+          };
+        }
+      }
+
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Login failed",
+      };
     }
   },
 );

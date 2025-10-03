@@ -22,16 +22,20 @@ export const useLoginAction = routeAction$(
 
       const result = await loginUser(validatedData);
 
+      if (!result.success) {
+        return { success: false, error: result.error };
+      }
+
       // Set auth cookies
-      cookie.set("accessToken", result.tokens.accessToken, {
+      cookie.set("accessToken", result.data!.tokens.accessToken, {
         httpOnly: true,
         secure: true,
         sameSite: "strict",
-        maxAge: result.tokens.expiresIn, // Use token expiry time
+        maxAge: result.data!.tokens.expiresIn, // Use token expiry time
         path: "/",
       });
 
-      cookie.set("refreshToken", result.tokens.refreshToken, {
+      cookie.set("refreshToken", result.data!.tokens.refreshToken, {
         httpOnly: true,
         secure: true,
         sameSite: "strict",
@@ -39,11 +43,11 @@ export const useLoginAction = routeAction$(
         path: "/",
       });
 
-      cookie.set("user", JSON.stringify(result.user), {
+      cookie.set("user", JSON.stringify(result.data!.user), {
         httpOnly: false,
         secure: true,
         sameSite: "strict",
-        maxAge: result.tokens.expiresIn, // Use token expiry time
+        maxAge: result.data!.tokens.expiresIn, // Use token expiry time
         path: "/",
       });
 
