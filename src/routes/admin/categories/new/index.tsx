@@ -1,68 +1,134 @@
-import { component$ } from "@builder.io/qwik";
-import { routeAction$, Form } from "@builder.io/qwik-city";
-import { createCategory } from "~/services/category";
-import { z } from "zod";
+import { component$, useSignal } from "@builder.io/qwik";
+import { routeAction$, Form, z, zod$, Link } from "@builder.io/qwik-city";
+import { createCategory } from "~/services/admin-categories";
 
 const createCategorySchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  description: z.string().optional(),
+  name: z.string().min(1, "Name is required").max(100, "Name too long"),
+  description: z.string().max(500, "Description too long").optional(),
 });
 
 export const useCreateCategory = routeAction$(async (data, requestEvent) => {
   const token = requestEvent.cookie.get("accessToken")?.value;
 
   if (!token) {
-    return { success: false, error: "Unauthorized" };
-  }
-
-  const validation = createCategorySchema.safeParse(data);
-  if (!validation.success) {
-    return { success: false, error: validation.error.message };
+    return { success: false, error: "Not authenticated" };
   }
 
   try {
-    await createCategory(token, {
-      name: validation.data.name,
-      description: validation.data.description,
-    });
-    return { success: true };
+    const categoryData = {
+      name: data.name as string,
+      description: (data.description as string) || undefined,
+    };
+
+    await createCategory(token, categoryData);
+
+    // Redirect to categories list after successful creation
+    throw requestEvent.redirect(302, "/admin/categories");
   } catch (error) {
+    if (error instanceof Response) {
+      throw error; // Re-throw redirect responses
+    }
+
     console.error("Failed to create category:", error);
-    return { success: false, error: "Failed to create category" };
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "Failed to create category",
+    };
   }
-});
+}, zod$(createCategorySchema));
 
 export default component$(() => {
-  const createCategoryAction = useCreateCategory();
+  const createAction = useCreateCategory();
+
+  const name = useSignal("");
+  const description = useSignal("");
 
   return (
-    <div class="admin-new-category">
-      <h1 class="text-2xl font-bold mb-6">Create New Category</h1>
+    <div class="container mx-auto px-4 py-8">
+      <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold">Create New Category</h1>
+        <Link href="/admin/categories" class="btn btn-ghost">
+          ← Back to Categories
+        </Link>
+      </div>
 
-      <Form action={createCategoryAction} class="form-control">
-        <div class="mb-4">
-          <label class="label">Name</label>
-          <input
-            type="text"
-            name="name"
-            class="input input-bordered"
-            required
-          />
-        </div>
+      <div class="max-w-2xl">
+        <Form action={createAction} class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title mb-6">Category Information</h2>
 
-        <div class="mb-4">
-          <label class="label">Description</label>
-          <textarea
-            name="description"
-            class="textarea textarea-bordered"
-            rows={4}
-          />
-        </div>
+            {/* Name Field */}
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-medium">Name *</span>
+              </label>
+              <input
+                type="text"
+                name="name"
+                placeholder="Enter category name"
+                class="input input-bordered w-full"
+                value={name.value}
+                onInput$={(e) => {
+                  name.value = (e.target as HTMLInputElement).value;
+                }}
+                required
+              />
+              <div class="label">
+                <span class="label-text-alt">
+                  Choose a descriptive name for the category
+                </span>
+              </div>
+            </div>
 
-        <button type="submit" class="btn btn-primary">
-          Create Category
-        </button>
-      </Form>
+            {/* Description Field */}
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-medium">Description</span>
+                <span class="label-text-alt">
+                  {description.value.length}/500
+                </span>
+              </label>
+              <textarea
+                name="description"
+                placeholder="Optional description for the category"
+                class="textarea textarea-bordered w-full h-24"
+                value={description.value}
+                onInput$={(e) => {
+                  description.value = (e.target as HTMLTextAreaElement).value;
+                }}
+                maxLength={500}
+              />
+              <div class="label">
+                <span class="label-text-alt">
+                  Provide additional context about this category (optional)
+                </span>
+              </div>
+            </div>
+
+            {/* Error Display */}
+            {createAction.value?.error && (
+              <div class="alert alert-error">
+                <span>{createAction.value.error}</span>
+              </div>
+            )}
+
+            {/* Actions */}
+            <div class="card-actions justify-end mt-6">
+              <Link href="/admin/categories" class="btn btn-outline">
+                Cancel
+              </Link>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                disabled={createAction.isRunning}
+              >
+                {createAction.isRunning ? "Creating..." : "Create Category"}
+              </button>
+            </div>
+          </div>
+        </Form>
+      </div>
     </div>
   );
 });
