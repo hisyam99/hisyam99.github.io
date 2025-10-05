@@ -3,6 +3,7 @@ import { routeLoader$ } from "@builder.io/qwik-city";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { Link } from "@builder.io/qwik-city";
 import { getPublishedBlogs } from "~/services/blog";
+import { Breadcrumbs, useBreadcrumbs } from "~/components/Breadcrumbs";
 
 /**
  * Blog listing page loader
@@ -42,11 +43,22 @@ export const useBlogListLoader = routeLoader$(async (requestEvent) => {
 export default component$(() => {
   const blogData = useBlogListLoader();
   const { data: blogs, pagination } = blogData.value;
+  const breadcrumbs = useBreadcrumbs();
 
   return (
     <>
       {/* Header */}
       <section class="bg-base-200 py-20 pt-32">
+        <div class="container mx-auto px-4">
+          {/* Breadcrumbs */}
+          <div class="mb-6">
+            <Breadcrumbs
+              items={breadcrumbs}
+              size="sm"
+              class="text-base-content/70"
+            />
+          </div>
+        </div>
         <div class="container mx-auto px-4">
           <div class="text-center">
             <h1 class="animate-textReveal mb-4 text-5xl font-bold">Blog</h1>

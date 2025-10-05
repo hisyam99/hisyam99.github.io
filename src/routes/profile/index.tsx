@@ -1,6 +1,7 @@
 import { component$ } from "@builder.io/qwik";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import { requireAuth } from "~/utils/auth-middleware";
+import { Breadcrumbs, useBreadcrumbs } from "~/components/Breadcrumbs";
 
 export const useAuthUser = routeLoader$(async ({ redirect }) => {
   try {
@@ -14,10 +15,16 @@ export const useAuthUser = routeLoader$(async ({ redirect }) => {
 
 export default component$(() => {
   const authUser = useAuthUser();
+  const breadcrumbs = useBreadcrumbs();
 
   return (
     <div class="min-h-screen bg-base-200 py-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-4xl mx-auto">
+        {/* Breadcrumbs */}
+        <div class="mb-6">
+          <Breadcrumbs items={breadcrumbs} size="sm" />
+        </div>
+
         {/* Header */}
         <div class="text-center mb-8">
           <h1 class="text-4xl font-bold text-base-content mb-2">

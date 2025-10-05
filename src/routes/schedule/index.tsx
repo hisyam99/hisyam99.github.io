@@ -15,11 +15,13 @@ import {
   getCoursesForDay,
   getScheduleBySource,
 } from "~/utils/schedule";
+import { Breadcrumbs, useBreadcrumbs } from "~/components/Breadcrumbs";
 
 export default component$(() => {
   const scheduleStaggerRef = useStaggerAnimation(200);
   const { ref: overviewRef } = useScrollAnimation();
   const { ref: scheduleRef } = useScrollAnimation();
+  const breadcrumbs = useBreadcrumbs();
 
   const filters = useSignal<ScheduleFilterOptions>({
     selectedDay: "All",
@@ -74,6 +76,11 @@ export default component$(() => {
       {/* Hero Section - Dynamic padding based on toolbar state */}
       <section class="from-base-200 to-base-300 bg-gradient-to-br py-20 pt-40 transition-all duration-500">
         <div class="container mx-auto px-4">
+          {/* Breadcrumbs */}
+          <div class="mb-6 text-left">
+            <Breadcrumbs items={breadcrumbs} size="sm" />
+          </div>
+
           <div class="animate-fadeInDown text-center">
             <div class="mb-8">
               <div class="badge badge-primary badge-lg mb-4">

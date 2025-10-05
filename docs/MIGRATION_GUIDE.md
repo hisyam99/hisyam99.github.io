@@ -11,48 +11,39 @@ This guide helps developers understand and migrate from the old admin panel stru
 ### Layout System
 
 #### Before (Old)
+
 ```tsx
 <div class="min-h-screen bg-base-100">
-  <aside class="fixed w-64 h-full">
-    {/* Sidebar */}
-  </aside>
+  <aside class="fixed w-64 h-full">{/* Sidebar */}</aside>
   <div class="lg:ml-64">
-    <header class="h-16">
-      {/* Header */}
-    </header>
-    <main class="p-6">
-      {/* Content */}
-    </main>
+    <header class="h-16">{/* Header */}</header>
+    <main class="p-6">{/* Content */}</main>
   </div>
 </div>
 ```
 
 #### After (New)
+
 ```tsx
 <div class="drawer lg:drawer-open">
   <input id="admin-drawer" type="checkbox" class="drawer-toggle" />
-  
+
   <div class="drawer-content flex flex-col">
-    <header class="sticky top-0 z-30">
-      {/* Responsive Header */}
-    </header>
+    <header class="sticky top-0 z-30">{/* Responsive Header */}</header>
     <main class="flex-1">
-      <div class="container mx-auto p-4 lg:p-6 xl:p-8">
-        {/* Content */}
-      </div>
+      <div class="container mx-auto p-4 lg:p-6 xl:p-8">{/* Content */}</div>
     </main>
   </div>
-  
+
   <div class="drawer-side z-40">
     <label for="admin-drawer" class="drawer-overlay"></label>
-    <aside class="w-64 lg:w-72">
-      {/* Responsive Sidebar */}
-    </aside>
+    <aside class="w-64 lg:w-72">{/* Responsive Sidebar */}</aside>
   </div>
 </div>
 ```
 
 **Key Changes:**
+
 - ✅ Uses DaisyUI drawer pattern
 - ✅ Mobile-first with overlay sidebar
 - ✅ Desktop persistent sidebar
@@ -66,20 +57,22 @@ This guide helps developers understand and migrate from the old admin panel stru
 ### Dashboard
 
 #### Before
+
 ```tsx
 <div class="container mx-auto px-4 py-8">
   <div class="flex justify-between items-center mb-8">
     <h1 class="text-3xl font-bold">Title</h1>
-    <Link href="/path" class="btn btn-primary">Action</Link>
+    <Link href="/path" class="btn btn-primary">
+      Action
+    </Link>
   </div>
-  
-  <div class="grid grid-cols-4 gap-6">
-    {/* Stats */}
-  </div>
+
+  <div class="grid grid-cols-4 gap-6">{/* Stats */}</div>
 </div>
 ```
 
 #### After
+
 ```tsx
 <div class="space-y-4 lg:space-y-6">
   {/* Header */}
@@ -93,7 +86,7 @@ This guide helps developers understand and migrate from the old admin panel stru
       Action
     </Link>
   </div>
-  
+
   {/* Stats */}
   <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6">
     {/* Stats cards */}
@@ -102,6 +95,7 @@ This guide helps developers understand and migrate from the old admin panel stru
 ```
 
 **Changes:**
+
 - ✅ Mobile-first flex direction
 - ✅ Responsive text sizing
 - ✅ Full-width buttons on mobile
@@ -114,26 +108,28 @@ This guide helps developers understand and migrate from the old admin panel stru
 ### List Pages (Blogs, Categories, etc.)
 
 #### Before
+
 ```tsx
 <div class="container mx-auto px-4 py-8">
   <div class="flex justify-between items-center mb-8">
     <h1 class="text-3xl font-bold">List</h1>
-    <Link href="/new" class="btn btn-primary">Create</Link>
+    <Link href="/new" class="btn btn-primary">
+      Create
+    </Link>
   </div>
-  
+
   <div class="bg-base-200 p-4 rounded-lg mb-6">
     <input type="text" class="input input-bordered w-full" />
   </div>
-  
+
   <div class="overflow-x-auto">
-    <table class="table w-full">
-      {/* Table content */}
-    </table>
+    <table class="table w-full">{/* Table content */}</table>
   </div>
 </div>
 ```
 
 #### After
+
 ```tsx
 <div class="space-y-4 lg:space-y-6">
   {/* Header */}
@@ -147,7 +143,7 @@ This guide helps developers understand and migrate from the old admin panel stru
       Create
     </Link>
   </div>
-  
+
   {/* Search & Filters */}
   <div class="card bg-base-200 shadow-lg">
     <div class="card-body p-4 lg:p-6">
@@ -160,12 +156,10 @@ This guide helps developers understand and migrate from the old admin panel stru
           {/* Clear button if needed */}
         </div>
       </div>
-      <div class="text-sm text-base-content/70 mt-2">
-        Showing X of Y items
-      </div>
+      <div class="text-sm text-base-content/70 mt-2">Showing X of Y items</div>
     </div>
   </div>
-  
+
   {/* Content - Table or Grid */}
   <div class="card bg-base-200 shadow-xl">
     <div class="overflow-x-auto">
@@ -184,6 +178,7 @@ This guide helps developers understand and migrate from the old admin panel stru
 ```
 
 **Changes:**
+
 - ✅ Card-based filter section
 - ✅ Input groups with icons
 - ✅ Results counter
@@ -196,13 +191,16 @@ This guide helps developers understand and migrate from the old admin panel stru
 ### Form Pages
 
 #### Before
+
 ```tsx
 <div class="container mx-auto px-4 py-8">
   <div class="flex justify-between items-center mb-8">
     <h1 class="text-3xl font-bold">Create</h1>
-    <Link href="/back" class="btn btn-ghost">Back</Link>
+    <Link href="/back" class="btn btn-ghost">
+      Back
+    </Link>
   </div>
-  
+
   <Form class="max-w-4xl">
     <div class="space-y-6">
       <div class="form-control">
@@ -212,15 +210,18 @@ This guide helps developers understand and migrate from the old admin panel stru
         <input type="text" class="input input-bordered" />
       </div>
     </div>
-    
+
     <div class="mt-6">
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn btn-primary">
+        Submit
+      </button>
     </div>
   </Form>
 </div>
 ```
 
 #### After
+
 ```tsx
 <div class="space-y-4 lg:space-y-6">
   {/* Header */}
@@ -234,7 +235,7 @@ This guide helps developers understand and migrate from the old admin panel stru
       Back
     </Link>
   </div>
-  
+
   <Form class="w-full">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
       {/* Main Content - 2 columns on desktop */}
@@ -242,7 +243,7 @@ This guide helps developers understand and migrate from the old admin panel stru
         <div class="card bg-base-200 shadow-lg">
           <div class="card-body p-4 sm:p-6">
             <h2 class="card-title text-lg sm:text-xl mb-4">Section Title</h2>
-            
+
             <div class="form-control">
               <label class="label">
                 <span class="label-text font-semibold">
@@ -257,7 +258,7 @@ This guide helps developers understand and migrate from the old admin panel stru
           </div>
         </div>
       </div>
-      
+
       {/* Sidebar - 1 column on desktop */}
       <div class="space-y-4 lg:space-y-6">
         <div class="card bg-base-200 shadow-lg">
@@ -266,7 +267,7 @@ This guide helps developers understand and migrate from the old admin panel stru
               <svg>...</svg>
               Settings
             </h3>
-            
+
             <div class="flex flex-col gap-2">
               <button type="submit" class="btn btn-primary w-full gap-2">
                 <svg>...</svg>
@@ -282,6 +283,7 @@ This guide helps developers understand and migrate from the old admin panel stru
 ```
 
 **Changes:**
+
 - ✅ Two-column layout (stacks on mobile)
 - ✅ Card-based sections
 - ✅ Icon titles
@@ -297,11 +299,13 @@ This guide helps developers understand and migrate from the old admin panel stru
 ### Buttons
 
 #### Before
+
 ```tsx
 <button class="btn btn-primary">Action</button>
 ```
 
 #### After
+
 ```tsx
 <button class="btn btn-primary gap-2 w-full sm:w-auto">
   <svg class="w-5 h-5">...</svg>
@@ -310,6 +314,7 @@ This guide helps developers understand and migrate from the old admin panel stru
 ```
 
 **Add:**
+
 - `gap-2` for icon spacing
 - `w-full sm:w-auto` for mobile full-width
 - Icon SVG before text
@@ -319,24 +324,23 @@ This guide helps developers understand and migrate from the old admin panel stru
 ### Cards
 
 #### Before
+
 ```tsx
 <div class="card bg-base-100 shadow-xl">
-  <div class="card-body">
-    {/* Content */}
-  </div>
+  <div class="card-body">{/* Content */}</div>
 </div>
 ```
 
 #### After
+
 ```tsx
 <div class="card bg-base-200 shadow-xl hover:shadow-2xl transition-all">
-  <div class="card-body p-4 sm:p-6">
-    {/* Content */}
-  </div>
+  <div class="card-body p-4 sm:p-6">{/* Content */}</div>
 </div>
 ```
 
 **Changes:**
+
 - `bg-base-200` instead of `bg-base-100`
 - `hover:shadow-2xl` for interaction feedback
 - `transition-all` for smooth effects
@@ -347,6 +351,7 @@ This guide helps developers understand and migrate from the old admin panel stru
 ### Tables
 
 #### Before
+
 ```tsx
 <table class="table w-full">
   <thead>
@@ -360,6 +365,7 @@ This guide helps developers understand and migrate from the old admin panel stru
 ```
 
 #### After
+
 ```tsx
 <table class="table table-zebra">
   <thead>
@@ -373,6 +379,7 @@ This guide helps developers understand and migrate from the old admin panel stru
 ```
 
 **Add:**
+
 - `table-zebra` for alternating rows
 - `bg-base-300` on header cells
 - `hidden {breakpoint}:table-cell` for progressive columns
@@ -382,6 +389,7 @@ This guide helps developers understand and migrate from the old admin panel stru
 ### Grids
 
 #### Before
+
 ```tsx
 <div class="grid grid-cols-3 gap-6">
   {items.map(...)}
@@ -389,6 +397,7 @@ This guide helps developers understand and migrate from the old admin panel stru
 ```
 
 #### After
+
 ```tsx
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
   {items.map(...)}
@@ -396,6 +405,7 @@ This guide helps developers understand and migrate from the old admin panel stru
 ```
 
 **Changes:**
+
 - Start with `grid-cols-1` (mobile)
 - Scale up: `md:grid-cols-2 xl:grid-cols-3`
 - Responsive gaps: `gap-4 lg:gap-6`
@@ -410,20 +420,16 @@ This guide helps developers understand and migrate from the old admin panel stru
 <div class="form-control">
   <div class="input-group">
     <span class="bg-base-300">
-      <svg class="w-5 h-5">
-        {/* Search icon */}
-      </svg>
+      <svg class="w-5 h-5">{/* Search icon */}</svg>
     </span>
-    <input 
+    <input
       type="text"
       placeholder="Search..."
       class="input input-bordered w-full"
     />
     {searchTerm && (
       <button class="btn btn-ghost btn-square" onClick$={clearSearch}>
-        <svg class="w-5 h-5">
-          {/* X icon */}
-        </svg>
+        <svg class="w-5 h-5">{/* X icon */}</svg>
       </button>
     )}
   </div>
@@ -454,9 +460,7 @@ This guide helps developers understand and migrate from the old admin panel stru
 ```tsx
 <div class="toast toast-top toast-end z-50">
   <div class="alert alert-success shadow-lg">
-    <svg class="w-6 h-6">
-      {/* Check icon */}
-    </svg>
+    <svg class="w-6 h-6">{/* Check icon */}</svg>
     <span>Success message</span>
   </div>
 </div>
@@ -478,18 +482,16 @@ This guide helps developers understand and migrate from the old admin panel stru
         <h3 class="card-title text-lg font-bold">Title</h3>
       </div>
     </div>
-    
+
     {/* Content */}
     <p class="text-sm text-base-content/70">Description</p>
-    
+
     {/* Divider */}
     <div class="divider my-2"></div>
-    
+
     {/* Meta */}
-    <div class="text-xs text-base-content/60">
-      Meta information
-    </div>
-    
+    <div class="text-xs text-base-content/60">Meta information</div>
+
     {/* Actions */}
     <div class="card-actions justify-end mt-4 gap-2">
       <button class="btn btn-primary btn-sm gap-2">Action</button>
@@ -602,21 +604,25 @@ This guide helps developers understand and migrate from the old admin panel stru
 ### Don't
 
 ❌ **Use fixed widths**
+
 ```tsx
 <div style="width: 300px">
 ```
 
 ❌ **Design desktop-first**
+
 ```tsx
 <div class="grid grid-cols-3 sm:grid-cols-1">
 ```
 
 ❌ **Forget touch targets**
+
 ```tsx
 <button class="btn-xs">Too small for touch</button>
 ```
 
 ❌ **Hide critical features on mobile**
+
 ```tsx
 <button class="hidden sm:block">Important action</button>
 ```
@@ -624,21 +630,25 @@ This guide helps developers understand and migrate from the old admin panel stru
 ### Do
 
 ✅ **Use responsive utilities**
+
 ```tsx
 <div class="w-full max-w-4xl">
 ```
 
 ✅ **Mobile-first approach**
+
 ```tsx
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
 ```
 
 ✅ **Adequate touch targets**
+
 ```tsx
 <button class="btn btn-sm sm:btn-md">Tap-friendly</button>
 ```
 
 ✅ **Keep features accessible**
+
 ```tsx
 <button class="btn w-full sm:w-auto">Always visible</button>
 ```
@@ -648,15 +658,18 @@ This guide helps developers understand and migrate from the old admin panel stru
 ## 🎓 Learning Resources
 
 ### DaisyUI
+
 - Components: https://daisyui.com/components/
 - Themes: https://daisyui.com/docs/themes/
 
 ### Tailwind CSS
+
 - Responsive: https://tailwindcss.com/docs/responsive-design
 - Grid: https://tailwindcss.com/docs/grid-template-columns
 - Flexbox: https://tailwindcss.com/docs/flex
 
 ### Qwik
+
 - Components: https://qwik.builder.io/docs/components/overview/
 - Best Practices: https://qwik.builder.io/docs/advanced/
 
@@ -678,6 +691,7 @@ This guide helps developers understand and migrate from the old admin panel stru
 ## 📞 Support
 
 Need help? Check:
+
 1. Refactored page examples
 2. Documentation in `/docs`
 3. Component patterns above

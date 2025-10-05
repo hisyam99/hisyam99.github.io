@@ -3,6 +3,7 @@ import { Link, useLocation } from "@builder.io/qwik-city";
 import { useAuth, logoutServer } from "~/hooks/useAuth";
 import type { User } from "~/services/auth";
 import type { JSX } from "@builder.io/qwik";
+import { Breadcrumbs, useBreadcrumbs } from "~/components/Breadcrumbs";
 
 interface AuthData {
   user: User | null;
@@ -459,6 +460,7 @@ const AdminHeader = component$<AdminHeaderProps>(({ currentUser }) => {
 
 export default component$<AdminLayoutProps>(({ authData }) => {
   const auth = useAuth();
+  const breadcrumbs = useBreadcrumbs();
 
   // Use server-side auth data if available, otherwise fallback to client-side auth
   const currentAuthData = authData || {
@@ -479,6 +481,11 @@ export default component$<AdminLayoutProps>(({ authData }) => {
         {/* Page Content */}
         <main class="flex-1 overflow-y-auto">
           <div class="container mx-auto p-4 lg:p-6 xl:p-8 max-w-7xl">
+            {/* Breadcrumbs */}
+            <div class="mb-4 lg:mb-6">
+              <Breadcrumbs items={breadcrumbs} size="sm" />
+            </div>
+
             <Slot />
           </div>
         </main>

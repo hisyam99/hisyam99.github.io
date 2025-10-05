@@ -3,6 +3,11 @@ import { routeLoader$ } from "@builder.io/qwik-city";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { Link } from "@builder.io/qwik-city";
 import { getBlogBySlug } from "~/services/blog";
+import {
+  Breadcrumbs,
+  useBreadcrumbs,
+  mergeBreadcrumbs,
+} from "~/components/Breadcrumbs";
 
 /**
  * Blog detail page loader
@@ -52,6 +57,12 @@ export const useBlogDetailLoader = routeLoader$(async (requestEvent) => {
 export default component$(() => {
   const blogData = useBlogDetailLoader();
   const blog = blogData.value;
+  const autoBreadcrumbs = useBreadcrumbs();
+
+  // Merge auto breadcrumbs with custom blog title
+  const breadcrumbs = mergeBreadcrumbs(autoBreadcrumbs, [
+    { label: blog.title, isActive: true },
+  ]);
 
   return (
     <>
@@ -60,19 +71,13 @@ export default component$(() => {
         <div class="container mx-auto px-4">
           <div class="max-w-4xl mx-auto">
             {/* Breadcrumb */}
-            <nav class="mb-8">
-              <div class="breadcrumbs text-sm">
-                <ul>
-                  <li>
-                    <Link href="/">Home</Link>
-                  </li>
-                  <li>
-                    <Link href="/blog">Blog</Link>
-                  </li>
-                  <li class="text-base-content/60">{blog.title}</li>
-                </ul>
-              </div>
-            </nav>
+            <div class="mb-8">
+              <Breadcrumbs
+                items={breadcrumbs}
+                size="sm"
+                class="text-base-content/70"
+              />
+            </div>
 
             {/* Article Header */}
             <header class="text-center">

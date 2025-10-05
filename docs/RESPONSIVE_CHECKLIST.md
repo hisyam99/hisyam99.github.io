@@ -1,6 +1,7 @@
 # Admin Panel Responsive Testing Checklist
 
 ## 📋 Overview
+
 This checklist ensures all admin panel pages are fully responsive across all devices and screen sizes.
 
 ---
@@ -8,6 +9,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 ## 🔧 General Requirements
 
 ### Layout & Structure
+
 - [ ] No horizontal scrolling on any screen size
 - [ ] Content fits within viewport boundaries
 - [ ] Proper margin and padding on all sides
@@ -15,6 +17,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Safe area insets for mobile devices
 
 ### Navigation
+
 - [ ] Drawer/sidebar opens and closes smoothly
 - [ ] Hamburger menu visible and functional on mobile
 - [ ] Navigation links are tap-friendly (min 44x44px)
@@ -22,6 +25,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] User menu accessible on all screen sizes
 
 ### Typography
+
 - [ ] Text is readable at all sizes (min 16px for body)
 - [ ] Headings scale appropriately
 - [ ] No text overflow or truncation issues
@@ -29,6 +33,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Font weights render correctly
 
 ### Interactive Elements
+
 - [ ] All buttons are touch-friendly (min 44x44px)
 - [ ] Touch targets don't overlap
 - [ ] Hover states work on desktop
@@ -42,6 +47,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 ### Mobile (320px - 767px)
 
 #### iPhone SE (320px)
+
 - [ ] Dashboard loads without issues
 - [ ] Stats cards stack vertically
 - [ ] Forms are fully usable
@@ -49,6 +55,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Drawer menu accessible
 
 #### iPhone 12/13/14 (390px)
+
 - [ ] All content visible
 - [ ] Navigation works smoothly
 - [ ] Cards display properly
@@ -56,12 +63,14 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Buttons are full width where appropriate
 
 #### iPhone Pro Max (428px)
+
 - [ ] Optimal use of available space
 - [ ] Content doesn't look stretched
 - [ ] Images scale properly
 - [ ] Grid layouts appropriate
 
 #### Android (360px - 412px)
+
 - [ ] Chrome Mobile compatibility
 - [ ] Samsung Internet compatibility
 - [ ] Touch interactions smooth
@@ -70,12 +79,14 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 ### Tablet (768px - 1023px)
 
 #### iPad (768px)
+
 - [ ] Two-column layouts work
 - [ ] Sidebar transitions properly
 - [ ] Touch targets adequate
 - [ ] Landscape mode optimized
 
 #### iPad Pro (834px - 1024px)
+
 - [ ] Three-column layouts where appropriate
 - [ ] Desktop-like features appear
 - [ ] Split-screen friendly
@@ -84,12 +95,14 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 ### Desktop (1024px+)
 
 #### Laptop (1280px - 1440px)
+
 - [ ] Sidebar always visible
 - [ ] Multi-column layouts optimal
 - [ ] All features accessible
 - [ ] No wasted space
 
 #### Large Desktop (1920px+)
+
 - [ ] Max-width containers prevent stretch
 - [ ] Content remains centered
 - [ ] Grid gaps appropriate
@@ -102,6 +115,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 ### 1. Admin Layout (`/components/admin/AdminLayout.tsx`)
 
 #### Mobile
+
 - [ ] Drawer overlay works
 - [ ] Hamburger menu toggles drawer
 - [ ] Backdrop dismisses drawer
@@ -109,6 +123,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Header sticky at top
 
 #### Desktop
+
 - [ ] Sidebar always visible
 - [ ] Smooth transition to drawer-open
 - [ ] User menu in sidebar footer
@@ -118,6 +133,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 ### 2. Dashboard (`/admin`)
 
 #### Mobile
+
 - [ ] Stats cards stack (1 column)
 - [ ] Recent blogs list readable
 - [ ] Quick actions accessible
@@ -125,12 +141,14 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] CTA buttons full width
 
 #### Tablet
+
 - [ ] Stats in 2x2 grid
 - [ ] Recent blogs + sidebar layout
 - [ ] Cards have proper spacing
 - [ ] Buttons appropriate size
 
 #### Desktop
+
 - [ ] Stats in 1 row (4 columns)
 - [ ] Recent blogs 2/3 width
 - [ ] Sidebar 1/3 width
@@ -140,6 +158,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 ### 3. Blog Management (`/admin/blogs`)
 
 #### Mobile - Table View
+
 - [ ] Title and actions visible
 - [ ] Other columns hidden
 - [ ] Horizontal scroll works
@@ -147,6 +166,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Date shows in title area
 
 #### Mobile - Grid View
+
 - [ ] Cards stack vertically
 - [ ] All info visible in card
 - [ ] Actions easily accessible
@@ -154,12 +174,14 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Adequate card spacing
 
 #### Tablet
+
 - [ ] 2 columns in grid view
 - [ ] More table columns visible
 - [ ] Search bar adequate width
 - [ ] Filters don't wrap oddly
 
 #### Desktop
+
 - [ ] 3 columns in grid view
 - [ ] All table columns visible
 - [ ] View toggle accessible
@@ -167,6 +189,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Search + filters in one row
 
 #### Features
+
 - [ ] Search input full width on mobile
 - [ ] Filter dropdown works
 - [ ] View mode toggle functions
@@ -177,6 +200,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 ### 4. Categories (`/admin/categories`)
 
 #### Mobile
+
 - [ ] Cards stack (1 column)
 - [ ] Search input full width
 - [ ] Card content readable
@@ -184,18 +208,21 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Icons display correctly
 
 #### Tablet
+
 - [ ] 2 columns (sm:grid-cols-2)
 - [ ] Cards balanced
 - [ ] Hover effects work
 - [ ] Spacing appropriate
 
 #### Desktop
+
 - [ ] 3-4 columns (lg:grid-cols-3 xl:grid-cols-4)
 - [ ] Cards uniform height
 - [ ] Description truncated properly
 - [ ] Actions aligned right
 
 #### Features
+
 - [ ] Search clears properly
 - [ ] Empty state centered
 - [ ] Category icons render
@@ -205,6 +232,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 ### 5. Projects (`/admin/projects`)
 
 #### Mobile
+
 - [ ] Project cards stack
 - [ ] User info readable
 - [ ] Description truncated
@@ -212,12 +240,14 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Filter dropdown works
 
 #### Tablet
+
 - [ ] 2 columns layout
 - [ ] User avatars visible
 - [ ] Metadata displays
 - [ ] Cards have depth (shadow)
 
 #### Desktop
+
 - [ ] 3 columns layout
 - [ ] All project details visible
 - [ ] User info prominent
@@ -225,6 +255,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Filter in header row
 
 #### Features
+
 - [ ] User filter functional
 - [ ] Search works
 - [ ] Empty state helpful
@@ -234,6 +265,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 ### 6. Resume Contents (`/admin/resume-contents`)
 
 #### Mobile
+
 - [ ] Table scrolls horizontally
 - [ ] Title column adequate width
 - [ ] Actions always visible
@@ -241,12 +273,14 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Description shows on mobile
 
 #### Tablet
+
 - [ ] More columns visible
 - [ ] Category filter works
 - [ ] Updated date shows
 - [ ] Table readable
 
 #### Desktop
+
 - [ ] All columns visible
 - [ ] Category filter in header
 - [ ] Description full width
@@ -254,6 +288,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Detail preview truncated
 
 #### Features
+
 - [ ] Category filter functional
 - [ ] Search works across fields
 - [ ] Empty state displays
@@ -263,6 +298,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 ### 7. Users (`/admin/users`)
 
 #### Mobile
+
 - [ ] User name + avatar visible
 - [ ] Role dropdown accessible
 - [ ] Status badge clear
@@ -270,12 +306,14 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Table scrolls
 
 #### Tablet
+
 - [ ] More info visible
 - [ ] Role selector works
 - [ ] Filters functional
 - [ ] Last login shows
 
 #### Desktop
+
 - [ ] All user details visible
 - [ ] Role dropdown inline
 - [ ] Multiple filters in row
@@ -283,6 +321,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Bulk actions available
 
 #### Features
+
 - [ ] Role change works
 - [ ] Status filter functional
 - [ ] Search users works
@@ -292,6 +331,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 ### 8. Blog Creation Form (`/admin/blogs/new`)
 
 #### Mobile
+
 - [ ] All sections stack vertically
 - [ ] Title input full width
 - [ ] Rich text editor usable
@@ -300,12 +340,14 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Action buttons full width
 
 #### Tablet
+
 - [ ] Form still single column
 - [ ] Better spacing
 - [ ] Inputs larger
 - [ ] Sidebar starts appearing
 
 #### Desktop
+
 - [ ] Two-column layout (2:1 ratio)
 - [ ] Main content left (2 cols)
 - [ ] Sidebar right (1 col)
@@ -313,6 +355,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] All cards balanced
 
 #### Features
+
 - [ ] Character counters work
 - [ ] Slug auto-generates
 - [ ] Tags preview shows
@@ -325,6 +368,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 ## 🎨 Visual Testing
 
 ### Colors & Contrast
+
 - [ ] Text readable on all backgrounds
 - [ ] Links distinguishable
 - [ ] Buttons stand out
@@ -332,6 +376,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Error messages visible
 
 ### Spacing
+
 - [ ] Consistent padding in cards (p-4 sm:p-6)
 - [ ] Grid gaps uniform (gap-4 lg:gap-6)
 - [ ] Section spacing (space-y-4 lg:space-y-6)
@@ -339,6 +384,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] No excessive whitespace
 
 ### Shadows & Depth
+
 - [ ] Cards have shadow-lg
 - [ ] Hover shadow-2xl
 - [ ] Dropdowns shadow-xl
@@ -346,6 +392,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] No shadow clipping
 
 ### Animations
+
 - [ ] Transitions smooth (300ms)
 - [ ] Hover effects instant
 - [ ] Drawer slides smoothly
@@ -357,6 +404,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 ## ⚡ Performance Testing
 
 ### Load Time
+
 - [ ] First paint < 1s
 - [ ] Fully interactive < 2s
 - [ ] Images lazy load
@@ -364,6 +412,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] No blocking resources
 
 ### Interactions
+
 - [ ] Button clicks instant (<100ms)
 - [ ] Drawer opens smoothly
 - [ ] Scroll smooth
@@ -371,6 +420,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Form inputs responsive
 
 ### Layout Stability
+
 - [ ] No content jumps (CLS < 0.1)
 - [ ] Images have dimensions
 - [ ] Fonts load smoothly
@@ -382,6 +432,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 ## ♿ Accessibility Testing
 
 ### Keyboard Navigation
+
 - [ ] Tab order logical
 - [ ] All interactive elements focusable
 - [ ] Focus indicators visible
@@ -389,6 +440,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Enter submits forms
 
 ### Screen Readers
+
 - [ ] Semantic HTML used
 - [ ] ARIA labels present
 - [ ] Form labels associated
@@ -396,6 +448,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Loading states announced
 
 ### Color Blindness
+
 - [ ] Not relying on color alone
 - [ ] Icons supplement colors
 - [ ] Text labels clear
@@ -403,6 +456,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Patterns distinguish states
 
 ### Reduced Motion
+
 - [ ] Respects prefers-reduced-motion
 - [ ] Animations can be disabled
 - [ ] Transitions smooth but minimal
@@ -413,6 +467,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 ## 🌐 Browser Testing
 
 ### Desktop Browsers
+
 - [ ] Chrome (latest)
 - [ ] Firefox (latest)
 - [ ] Safari (latest)
@@ -420,6 +475,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Opera (latest)
 
 ### Mobile Browsers
+
 - [ ] Safari iOS (iPhone)
 - [ ] Safari iOS (iPad)
 - [ ] Chrome Android
@@ -427,6 +483,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Firefox Mobile
 
 ### Specific Features to Test
+
 - [ ] CSS Grid support
 - [ ] Flexbox support
 - [ ] CSS variables
@@ -439,6 +496,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 ## 🔄 Orientation Testing
 
 ### Portrait Mode
+
 - [ ] All pages functional
 - [ ] Content stacks appropriately
 - [ ] Navigation accessible
@@ -446,6 +504,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] No horizontal scroll
 
 ### Landscape Mode
+
 - [ ] Takes advantage of width
 - [ ] Header remains sticky
 - [ ] Content doesn't stretch
@@ -457,6 +516,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 ## 📊 Data Scenarios
 
 ### Empty States
+
 - [ ] No data message clear
 - [ ] Call-to-action present
 - [ ] Icon/illustration helpful
@@ -464,6 +524,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Styled consistently
 
 ### Loading States
+
 - [ ] Skeleton screens
 - [ ] Loading spinners
 - [ ] Progress indicators
@@ -471,6 +532,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Placeholder content
 
 ### Error States
+
 - [ ] Error messages clear
 - [ ] Recovery options provided
 - [ ] Retry buttons available
@@ -478,6 +540,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Network errors handled
 
 ### Success States
+
 - [ ] Toast notifications
 - [ ] Success messages
 - [ ] Confirmation dialogs
@@ -489,6 +552,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 ## 🧪 Edge Cases
 
 ### Content
+
 - [ ] Very long titles don't break layout
 - [ ] Empty descriptions handled
 - [ ] Missing images show placeholder
@@ -496,6 +560,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] HTML entities escaped
 
 ### Numbers
+
 - [ ] Zero count displays properly
 - [ ] Large numbers formatted
 - [ ] Negative numbers styled
@@ -503,6 +568,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Currency formatted
 
 ### Text
+
 - [ ] Truncation works (line-clamp)
 - [ ] Overflow handled
 - [ ] Word breaking appropriate
@@ -514,6 +580,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 ## 🎯 Final Verification
 
 ### Before Deployment
+
 - [ ] All above items checked
 - [ ] No console errors
 - [ ] No 404s for resources
@@ -524,6 +591,7 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 - [ ] Refresh doesn't break state
 
 ### After Deployment
+
 - [ ] Test on production
 - [ ] Check analytics setup
 - [ ] Monitor error logs
@@ -536,16 +604,19 @@ This checklist ensures all admin panel pages are fully responsive across all dev
 ## 📝 Sign-off
 
 ### Tested By
-- **Name:** _______________
-- **Date:** _______________
-- **Role:** _______________
+
+- **Name:** ******\_\_\_******
+- **Date:** ******\_\_\_******
+- **Role:** ******\_\_\_******
 
 ### Approved By
-- **Name:** _______________
-- **Date:** _______________
-- **Role:** _______________
+
+- **Name:** ******\_\_\_******
+- **Date:** ******\_\_\_******
+- **Role:** ******\_\_\_******
 
 ### Notes
+
 ```
 Space for additional notes or issues found:
 

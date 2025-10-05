@@ -41,6 +41,7 @@ The refactor follows these core principles:
    - Smooth transitions and proper z-index management
 
 2. **Responsive Sidebar**
+
    ```
    Mobile (< 1024px):  Hidden by default, overlays content
    Desktop (≥ 1024px): Always visible, pushes content
@@ -54,7 +55,7 @@ The refactor follows these core principles:
 
 4. **Content Area**
    - Maximum width container (max-w-7xl)
-   - Responsive padding: 
+   - Responsive padding:
      - Mobile: p-4
      - Tablet: p-6
      - Desktop: p-8
@@ -66,6 +67,7 @@ The refactor follows these core principles:
 ### 1. Dashboard (admin/index.tsx)
 
 **Responsive Grid System:**
+
 ```
 Mobile:     1 column (stats stack vertically)
 Tablet:     2 columns (2x2 grid)
@@ -73,6 +75,7 @@ Desktop:    4 columns (all stats in one row)
 ```
 
 **Key Features:**
+
 - Stats cards with hover effects
 - Responsive typography (text-2xl → text-4xl)
 - Recent blogs with card layout
@@ -80,6 +83,7 @@ Desktop:    4 columns (all stats in one row)
 - Collapsible sections for small screens
 
 **Layout:**
+
 ```
 lg:grid-cols-3
 ├── Recent Blogs (lg:col-span-2)
@@ -91,10 +95,12 @@ lg:grid-cols-3
 ### 2. Blog Management (admin/blogs/index.tsx)
 
 **View Modes:**
+
 - **Table View**: Default, responsive table with hidden columns on smaller screens
 - **Grid View**: Card-based layout for better mobile experience
 
 **Responsive Table:**
+
 ```
 Column Visibility:
 Mobile (xs):      Title, Actions only
@@ -104,6 +110,7 @@ Extra Large (xl): + Tags + all columns
 ```
 
 **Features:**
+
 - Advanced search with clear button
 - Status filter dropdown
 - View mode toggle (table/grid)
@@ -112,6 +119,7 @@ Extra Large (xl): + Tags + all columns
 - Empty states with illustrations
 
 **Grid Layout:**
+
 ```
 Mobile:  1 column
 Tablet:  2 columns (md:grid-cols-2)
@@ -123,6 +131,7 @@ Desktop: 3 columns (xl:grid-cols-3)
 ### 3. Categories (admin/categories/index.tsx)
 
 **Card Grid System:**
+
 ```
 Mobile:      1 column
 Tablet:      2 columns (sm:grid-cols-2)
@@ -131,6 +140,7 @@ Extra Large: 4 columns (xl:grid-cols-4)
 ```
 
 **Card Features:**
+
 - Icon-based visual identity
 - Hover scale effect (hover:scale-[1.02])
 - Truncated descriptions (line-clamp-3)
@@ -142,6 +152,7 @@ Extra Large: 4 columns (xl:grid-cols-4)
 ### 4. Projects (admin/projects/index.tsx)
 
 **Card Grid System:**
+
 ```
 Mobile:  1 column
 Tablet:  2 columns (md:grid-cols-2)
@@ -149,6 +160,7 @@ Desktop: 3 columns (xl:grid-cols-3)
 ```
 
 **User Information Display:**
+
 - Avatar with initials
 - User name and email
 - Responsive user card in each project
@@ -159,6 +171,7 @@ Desktop: 3 columns (xl:grid-cols-3)
 ### 5. Resume Contents (admin/resume-contents/index.tsx)
 
 **Responsive Table:**
+
 ```
 Column Visibility:
 Mobile (xs):  Title (with category badge), Actions
@@ -168,6 +181,7 @@ Extra Large:  + Description
 ```
 
 **Features:**
+
 - Category filter integration
 - Compact mobile view with badges
 - Line-clamped descriptions on mobile
@@ -177,6 +191,7 @@ Extra Large:  + Description
 ### 6. Blog Creation Form (admin/blogs/new/index.tsx)
 
 **Two-Column Layout:**
+
 ```
 Mobile:  Single column (stacks)
 Desktop: 2:1 ratio (lg:grid-cols-3)
@@ -185,6 +200,7 @@ Desktop: 2:1 ratio (lg:grid-cols-3)
 ```
 
 **Card Sections:**
+
 1. **Basic Information**
    - Title input with auto-slug generation
    - Character counter
@@ -216,7 +232,8 @@ Desktop: 2:1 ratio (lg:grid-cols-3)
    - Hidden on mobile to save space
 
 **Form Validation:**
-- Required field indicators (*)
+
+- Required field indicators (\*)
 - Real-time character counters
 - Pattern validation for slug
 - Disabled submit when incomplete
@@ -228,13 +245,13 @@ Desktop: 2:1 ratio (lg:grid-cols-3)
 
 Following DaisyUI/Tailwind CSS breakpoints:
 
-| Breakpoint | Min Width | Typical Devices        |
-|------------|-----------|------------------------|
-| `sm:`      | 640px     | Large phones           |
-| `md:`      | 768px     | Tablets                |
-| `lg:`      | 1024px    | Laptops                |
-| `xl:`      | 1280px    | Desktops               |
-| `2xl:`     | 1536px    | Large desktops         |
+| Breakpoint | Min Width | Typical Devices |
+| ---------- | --------- | --------------- |
+| `sm:`      | 640px     | Large phones    |
+| `md:`      | 768px     | Tablets         |
+| `lg:`      | 1024px    | Laptops         |
+| `xl:`      | 1280px    | Desktops        |
+| `2xl:`     | 1536px    | Large desktops  |
 
 ---
 
@@ -243,11 +260,13 @@ Following DaisyUI/Tailwind CSS breakpoints:
 ### 1. Navigation
 
 **Mobile:**
+
 - Hamburger menu (drawer toggle)
 - Bottom navigation possible for future
 - User avatar dropdown with full menu
 
 **Desktop:**
+
 - Persistent sidebar with icons and labels
 - Collapsible sidebar option (can be added)
 - Breadcrumbs in header
@@ -255,12 +274,14 @@ Following DaisyUI/Tailwind CSS breakpoints:
 ### 2. Data Display
 
 **Tables:**
+
 - Horizontal scroll on mobile
 - Progressive column display
 - Zebra striping for readability
 - Hover states on rows
 
 **Cards:**
+
 - Consistent padding (p-4 sm:p-6)
 - Shadow effects (shadow-lg)
 - Hover transitions
@@ -269,12 +290,14 @@ Following DaisyUI/Tailwind CSS breakpoints:
 ### 3. Forms
 
 **Input Groups:**
+
 - Full width on mobile
 - Icon prefixes/suffixes
 - Clear buttons for search
 - Character counters
 
 **Action Buttons:**
+
 - Full width on mobile (w-full sm:w-auto)
 - Appropriate sizing (btn-sm sm:btn-md)
 - Icon + text labels
@@ -283,6 +306,7 @@ Following DaisyUI/Tailwind CSS breakpoints:
 ### 4. Notifications
 
 **Toast Messages:**
+
 - Fixed position (toast-top toast-end)
 - High z-index (z-50)
 - Auto-dismiss (can be added)
@@ -292,6 +316,7 @@ Following DaisyUI/Tailwind CSS breakpoints:
 ### 5. Empty States
 
 **Components:**
+
 - Large icon illustration
 - Descriptive message
 - Call-to-action button
@@ -305,6 +330,7 @@ Following DaisyUI/Tailwind CSS breakpoints:
 ### 1. DaisyUI Components
 
 ✅ **Used Throughout:**
+
 - `drawer` - Responsive sidebar
 - `card` - Content containers
 - `stat` - Statistics display
@@ -318,6 +344,7 @@ Following DaisyUI/Tailwind CSS breakpoints:
 ### 2. Qwik Patterns
 
 ✅ **Implemented:**
+
 - `component$` - Lazy loaded components
 - `useSignal` - Reactive state
 - `useTask$` - Side effects
@@ -329,6 +356,7 @@ Following DaisyUI/Tailwind CSS breakpoints:
 ### 3. Accessibility
 
 ✅ **Features:**
+
 - Semantic HTML elements
 - ARIA labels where needed
 - Keyboard navigation support
@@ -339,6 +367,7 @@ Following DaisyUI/Tailwind CSS breakpoints:
 ### 4. Performance
 
 ✅ **Optimizations:**
+
 - Lazy loading of components
 - Minimal re-renders
 - Efficient filtering/search
@@ -349,6 +378,7 @@ Following DaisyUI/Tailwind CSS breakpoints:
 ### 5. UX Patterns
 
 ✅ **Implemented:**
+
 - Loading states (can be enhanced)
 - Error handling with clear messages
 - Confirmation dialogs for destructive actions
@@ -362,22 +392,23 @@ Following DaisyUI/Tailwind CSS breakpoints:
 
 ### Device Testing Matrix
 
-| Device Type    | Screen Size | Test Cases                          |
-|----------------|-------------|-------------------------------------|
-| Mobile         | 320-480px   | - All features accessible           |
-|                |             | - Touch targets adequate            |
-|                |             | - Text readable                     |
-|                |             | - Forms usable                      |
-| Tablet         | 768-1024px  | - Optimal column layout             |
-|                |             | - Sidebar behavior                  |
-|                |             | - Table readability                 |
-| Desktop        | 1280px+     | - All columns visible               |
-|                |             | - Sidebar persistent                |
-|                |             | - Efficient space usage             |
+| Device Type | Screen Size | Test Cases                |
+| ----------- | ----------- | ------------------------- |
+| Mobile      | 320-480px   | - All features accessible |
+|             |             | - Touch targets adequate  |
+|             |             | - Text readable           |
+|             |             | - Forms usable            |
+| Tablet      | 768-1024px  | - Optimal column layout   |
+|             |             | - Sidebar behavior        |
+|             |             | - Table readability       |
+| Desktop     | 1280px+     | - All columns visible     |
+|             |             | - Sidebar persistent      |
+|             |             | - Efficient space usage   |
 
 ### Browser Testing
 
 ✅ **Target Browsers:**
+
 - Chrome/Edge (Latest)
 - Firefox (Latest)
 - Safari (Latest)
@@ -424,9 +455,7 @@ Following DaisyUI/Tailwind CSS breakpoints:
 
   {/* Filters */}
   <div class="card bg-base-200 shadow-lg">
-    <div class="card-body p-4 lg:p-6">
-      {/* Search and filters */}
-    </div>
+    <div class="card-body p-4 lg:p-6">{/* Search and filters */}</div>
   </div>
 
   {/* Content */}
@@ -436,9 +465,7 @@ Following DaisyUI/Tailwind CSS breakpoints:
 
   {/* Toast Notifications */}
   <div class="toast toast-top toast-end z-50">
-    <div class="alert alert-success shadow-lg">
-      {/* Message */}
-    </div>
+    <div class="alert alert-success shadow-lg">{/* Message */}</div>
   </div>
 </div>
 ```
@@ -573,16 +600,20 @@ XL:       xl:grid-cols-4
 ### For Developers
 
 **Before:**
+
 ```tsx
 <div class="container mx-auto px-4 py-8">
   <div class="flex justify-between items-center mb-8">
     <h1 class="text-3xl font-bold">Title</h1>
-    <Link href="/path" class="btn btn-primary">Action</Link>
+    <Link href="/path" class="btn btn-primary">
+      Action
+    </Link>
   </div>
 </div>
 ```
 
 **After:**
+
 ```tsx
 <div class="space-y-4 lg:space-y-6">
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -599,6 +630,7 @@ XL:       xl:grid-cols-4
 ```
 
 **Key Changes:**
+
 - Added responsive text sizing
 - Mobile-first flex direction
 - Full-width buttons on mobile
@@ -615,6 +647,7 @@ This refactor provides a solid foundation for a fully responsive admin panel tha
 ### Success Metrics
 
 ✅ **Achieved:**
+
 - 100% mobile responsive
 - Touch-friendly interface
 - Fast page loads
@@ -626,6 +659,7 @@ This refactor provides a solid foundation for a fully responsive admin panel tha
 ### Maintenance
 
 **Regular Tasks:**
+
 - Test on new devices
 - Update dependencies
 - Monitor performance
