@@ -12,6 +12,7 @@ import {
   getResumeContentsByCategory,
   getResumeContentById,
 } from "../services/category";
+import { getCategoryById as getAdminCategoryById } from "../services/admin-categories";
 import { getCurrentUser } from "../services/auth";
 import { getUsers, getUserById } from "../services/user";
 import type { PaginationInput } from "../lib/graphql/graffle";
@@ -558,14 +559,19 @@ export const useAdminCategoriesLoader = routeLoader$(async (requestEvent) => {
  */
 // eslint-disable-next-line qwik/loader-location
 export const useAdminCategoryLoader = routeLoader$(async (requestEvent) => {
+  const token = requestEvent.cookie.get("accessToken")?.value;
   const categoryId = requestEvent.params.id;
+
+  if (!token) {
+    throw requestEvent.redirect(302, "/auth/login");
+  }
 
   if (!categoryId) {
     throw requestEvent.redirect(302, "/admin/categories");
   }
 
   try {
-    const category = await getCategoryById(categoryId);
+    const category = await getAdminCategoryById(token, categoryId);
     return { category, error: null };
   } catch (error) {
     console.error("Failed to load category:", error);
