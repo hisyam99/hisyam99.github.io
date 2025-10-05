@@ -124,10 +124,14 @@ export const Breadcrumbs = component$<BreadcrumbsProps>(
           {validItems.map((item, index) => {
             const isLast = index === validItems.length - 1;
             const isFirst = index === 0;
-            const shouldShowHomeIcon = isFirst && showHomeIcon && item.href === "/";
+            const shouldShowHomeIcon =
+              isFirst && showHomeIcon && item.href === "/";
 
             return (
-              <li key={`${item.href || item.label}-${index}`} class="flex items-center">
+              <li
+                key={`${item.href || item.label}-${index}`}
+                class="flex items-center"
+              >
                 {/* Breadcrumb Item */}
                 {item.href && !item.isActive ? (
                   <Link
@@ -174,5 +178,5 @@ export const Breadcrumbs = component$<BreadcrumbsProps>(
         </ul>
       </nav>
     );
-  }
+  },
 );

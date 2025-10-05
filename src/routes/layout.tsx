@@ -1,8 +1,6 @@
 import { component$, Slot } from "@builder.io/qwik";
 import type { RequestHandler } from "@builder.io/qwik-city";
 
-import Header from "../components/starter/header/header";
-import Footer from "../components/starter/footer/footer";
 import { BottomNavbar } from "~/components/BottomNavbar/BottomNavbar";
 import { AuthProvider } from "~/hooks/useAuth";
 
@@ -21,11 +19,9 @@ export default component$(() => {
   return (
     <AuthProvider>
       <div class="relative min-h-screen">
-        <Header />
-        <main class="relative">
+        <main>
           <Slot />
         </main>
-        <Footer />
         <div class="sticky bottom-0 z-40">
           <BottomNavbar />
         </div>

@@ -67,23 +67,23 @@ export default component$(() => {
 
 ### BreadcrumbsProps
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `items` | `BreadcrumbItem[]` | **Required** | Array of breadcrumb items to display |
-| `separator` | `'chevron' \| 'slash' \| 'arrow' \| 'dot'` | `'chevron'` | Separator style between breadcrumbs |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size of the breadcrumbs |
-| `class` | `string` | `''` | Additional CSS classes |
-| `maxWidth` | `string` | `undefined` | Maximum width before scrolling (e.g., '500px') |
-| `showHomeIcon` | `boolean` | `true` | Show home icon on first item if it's "/" |
-| `ariaLabel` | `string` | `'Breadcrumb navigation'` | ARIA label for screen readers |
+| Prop           | Type                                       | Default                   | Description                                    |
+| -------------- | ------------------------------------------ | ------------------------- | ---------------------------------------------- |
+| `items`        | `BreadcrumbItem[]`                         | **Required**              | Array of breadcrumb items to display           |
+| `separator`    | `'chevron' \| 'slash' \| 'arrow' \| 'dot'` | `'chevron'`               | Separator style between breadcrumbs            |
+| `size`         | `'sm' \| 'md' \| 'lg'`                     | `'md'`                    | Size of the breadcrumbs                        |
+| `class`        | `string`                                   | `''`                      | Additional CSS classes                         |
+| `maxWidth`     | `string`                                   | `undefined`               | Maximum width before scrolling (e.g., '500px') |
+| `showHomeIcon` | `boolean`                                  | `true`                    | Show home icon on first item if it's "/"       |
+| `ariaLabel`    | `string`                                   | `'Breadcrumb navigation'` | ARIA label for screen readers                  |
 
 ### BreadcrumbItem
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `label` | `string` | Display text for the breadcrumb |
-| `href` | `string?` | URL path (optional for current page) |
-| `icon` | `any?` | Icon component or SVG element |
+| Property   | Type       | Description                             |
+| ---------- | ---------- | --------------------------------------- |
+| `label`    | `string`   | Display text for the breadcrumb         |
+| `href`     | `string?`  | URL path (optional for current page)    |
+| `icon`     | `any?`     | Icon component or SVG element           |
 | `isActive` | `boolean?` | Whether this is the current/active page |
 
 ## Examples
@@ -108,20 +108,30 @@ export default component$(() => {
 
 ```tsx
 const breadcrumbs = createBreadcrumbs([
-  { 
-    label: "Home", 
+  {
+    label: "Home",
     href: "/",
     icon: (
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+      <svg
+        class="w-4 h-4"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+        />
       </svg>
-    )
+    ),
   },
   { label: "Settings", href: "/settings" },
   { label: "Profile", isActive: true },
 ]);
 
-<Breadcrumbs items={breadcrumbs} />
+<Breadcrumbs items={breadcrumbs} />;
 ```
 
 ### With Size Variants
@@ -140,20 +150,13 @@ const breadcrumbs = createBreadcrumbs([
 ### With Scrolling for Long Paths
 
 ```tsx
-<Breadcrumbs 
-  items={breadcrumbs} 
-  maxWidth="500px" 
-  class="overflow-x-auto"
-/>
+<Breadcrumbs items={breadcrumbs} maxWidth="500px" class="overflow-x-auto" />
 ```
 
 ### Without Home Icon
 
 ```tsx
-<Breadcrumbs 
-  items={breadcrumbs} 
-  showHomeIcon={false}
-/>
+<Breadcrumbs items={breadcrumbs} showHomeIcon={false} />
 ```
 
 ### In Admin Layout
@@ -167,10 +170,8 @@ export default component$(() => {
 
   return (
     <div class="min-h-screen">
-      <nav class="navbar bg-base-200">
-        {/* Navigation content */}
-      </nav>
-      
+      <nav class="navbar bg-base-200">{/* Navigation content */}</nav>
+
       <div class="container mx-auto px-4 py-4">
         <Breadcrumbs items={breadcrumbs} class="mb-6" />
         <Slot />
@@ -185,17 +186,21 @@ export default component$(() => {
 ```tsx
 import { component$ } from "@builder.io/qwik";
 import { useLocation } from "@builder.io/qwik-city";
-import { Breadcrumbs, useBreadcrumbs, mergeBreadcrumbs } from "~/components/Breadcrumbs";
+import {
+  Breadcrumbs,
+  useBreadcrumbs,
+  mergeBreadcrumbs,
+} from "~/components/Breadcrumbs";
 
 export default component$(() => {
   const location = useLocation();
   const autoBreadcrumbs = useBreadcrumbs();
-  
+
   // Get product name from loader or params
   const productName = location.params.name;
-  
+
   const breadcrumbs = mergeBreadcrumbs(autoBreadcrumbs, [
-    { label: productName, isActive: true }
+    { label: productName, isActive: true },
   ]);
 
   return <Breadcrumbs items={breadcrumbs} />;
@@ -204,7 +209,7 @@ export default component$(() => {
 
 ## Automatic Route Configuration
 
-The `useBreadcrumbs()` hook automatically generates breadcrumbs based on the route configuration defined in `useBreadcrumbs.ts`. 
+The `useBreadcrumbs()` hook automatically generates breadcrumbs based on the route configuration defined in `useBreadcrumbs.ts`.
 
 ### Supported Routes
 
@@ -262,10 +267,7 @@ The component uses DaisyUI classes and inherits the current theme:
 Add custom classes via the `class` prop:
 
 ```tsx
-<Breadcrumbs 
-  items={breadcrumbs}
-  class="bg-base-200 p-4 rounded-lg shadow-md"
-/>
+<Breadcrumbs items={breadcrumbs} class="bg-base-200 p-4 rounded-lg shadow-md" />
 ```
 
 ## Best Practices
@@ -292,10 +294,10 @@ The component is optimized for Qwik:
 Full TypeScript support with exported types:
 
 ```typescript
-import type { 
-  BreadcrumbItem, 
-  BreadcrumbsProps, 
-  RouteConfig 
+import type {
+  BreadcrumbItem,
+  BreadcrumbsProps,
+  RouteConfig,
 } from "~/components/Breadcrumbs";
 ```
 

@@ -2,7 +2,7 @@ import { component$ } from "@builder.io/qwik";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { Link } from "@builder.io/qwik-city";
-import Hero from "../components/starter/hero/hero";
+import Hero from "~/components/starter/hero/hero";
 import {
   useScrollAnimation,
   useStaggerAnimation,
