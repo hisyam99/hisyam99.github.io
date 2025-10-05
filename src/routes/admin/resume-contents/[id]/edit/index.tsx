@@ -1,16 +1,59 @@
-import { component$ } from "@builder.io/qwik";
-import { routeAction$, Form } from "@builder.io/qwik-city";
-import { useAdminResumeContentLoader } from "~/hooks/data-loaders";
-import { updateResumeContent } from "~/services/category";
-import { z } from "zod";
-
-export { useAdminResumeContentLoader };
+import { component$, useSignal, useTask$ } from "@builder.io/qwik";
+import {
+  routeLoader$,
+  routeAction$,
+  Form,
+  z,
+  zod$,
+  Link,
+} from "@builder.io/qwik-city";
+import { getResumeContentById } from "~/services/admin-resume-contents";
+import { getAllCategories } from "~/services/admin-categories";
+import { updateResumeContent } from "~/services/admin-resume-contents";
+import type { Category } from "~/services/admin-categories";
 
 const updateResumeContentSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  description: z.string().optional(),
+  title: z.string().min(1, "Title is required").max(200, "Title too long"),
+  description: z.string().max(1000, "Description too long").optional(),
   detail: z.string().optional(),
   categoryId: z.string().min(1, "Category is required"),
+});
+
+export const useResumeContentData = routeLoader$(async (requestEvent) => {
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  const resumeContentId = requestEvent.params.id;
+
+  if (!token) {
+    throw requestEvent.redirect(302, "/auth/login");
+  }
+
+  if (!resumeContentId) {
+    throw new Error("Resume content ID is required");
+  }
+
+  try {
+    const resumeContent = await getResumeContentById(token, resumeContentId);
+    return { resumeContent, error: null };
+  } catch (error) {
+    console.error("Failed to load resume content:", error);
+    return { resumeContent: null, error: "Failed to load resume content" };
+  }
+});
+
+export const useCategoriesData = routeLoader$(async (requestEvent) => {
+  const token = requestEvent.cookie.get("accessToken")?.value;
+
+  if (!token) {
+    throw requestEvent.redirect(302, "/auth/login");
+  }
+
+  try {
+    const result = await getAllCategories(token);
+    return { categories: result.data, error: null };
+  } catch (error) {
+    console.error("Failed to load categories:", error);
+    return { categories: [], error: "Failed to load categories" };
+  }
 });
 
 export const useUpdateResumeContent = routeAction$(
@@ -19,88 +62,249 @@ export const useUpdateResumeContent = routeAction$(
     const resumeContentId = requestEvent.params.id;
 
     if (!token) {
-      return { success: false, error: "Unauthorized" };
+      return { success: false, error: "Not authenticated" };
     }
 
-    const validation = updateResumeContentSchema.safeParse(data);
-    if (!validation.success) {
-      return { success: false, error: validation.error.message };
+    if (!resumeContentId) {
+      return { success: false, error: "Resume content ID is required" };
     }
 
     try {
-      await updateResumeContent(token, resumeContentId, validation.data);
-      return { success: true };
+      const resumeContentData = {
+        id: resumeContentId,
+        title: data.title as string,
+        description: (data.description as string) || undefined,
+        detail: (data.detail as string) || undefined,
+        categoryId: data.categoryId as string,
+      };
+
+      await updateResumeContent(token, resumeContentData);
+
+      // Redirect to resume contents list after successful update
+      throw requestEvent.redirect(302, "/admin/resume-contents");
     } catch (error) {
+      if (error instanceof Response) {
+        throw error; // Re-throw redirect responses
+      }
+
       console.error("Failed to update resume content:", error);
-      return { success: false, error: "Failed to update resume content" };
+      return {
+        success: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to update resume content",
+      };
     }
   },
+  zod$(updateResumeContentSchema),
 );
 
 export default component$(() => {
-  const resumeContentData = useAdminResumeContentLoader();
-  const updateResumeContentAction = useUpdateResumeContent();
+  const resumeContentData = useResumeContentData();
+  const categoriesData = useCategoriesData();
+  const updateAction = useUpdateResumeContent();
+
+  const title = useSignal("");
+  const description = useSignal("");
+  const detail = useSignal("");
+  const categoryId = useSignal("");
+
+  // Initialize form values when data loads
+  useTask$(({ track }) => {
+    track(() => resumeContentData.value.resumeContent);
+
+    const resumeContent = resumeContentData.value.resumeContent;
+    if (resumeContent) {
+      title.value = resumeContent.title;
+      description.value = resumeContent.description || "";
+      detail.value = resumeContent.detail || "";
+      categoryId.value = resumeContent.categoryId;
+    }
+  });
 
   if (resumeContentData.value.error) {
-    return <div class="alert alert-error">{resumeContentData.value.error}</div>;
+    return (
+      <div class="container mx-auto px-4 py-8">
+        <div class="alert alert-error">
+          <span>{resumeContentData.value.error}</span>
+        </div>
+        <Link href="/admin/resume-contents" class="btn btn-primary mt-4">
+          ← Back to Resume Contents
+        </Link>
+      </div>
+    );
+  }
+
+  if (!resumeContentData.value.resumeContent) {
+    return (
+      <div class="container mx-auto px-4 py-8">
+        <div class="alert alert-error">
+          <span>Resume content not found</span>
+        </div>
+        <Link href="/admin/resume-contents" class="btn btn-primary mt-4">
+          ← Back to Resume Contents
+        </Link>
+      </div>
+    );
   }
 
   const resumeContent = resumeContentData.value.resumeContent;
-  if (!resumeContent) {
-    return <div class="alert alert-error">Resume content not found</div>;
-  }
 
   return (
-    <div class="admin-edit-resume-content">
-      <h1 class="text-2xl font-bold mb-6">
-        Edit Resume Content: {resumeContent.title}
-      </h1>
+    <div class="container mx-auto px-4 py-8">
+      <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold">Edit Resume Content</h1>
+        <Link href="/admin/resume-contents" class="btn btn-ghost">
+          ← Back to Resume Contents
+        </Link>
+      </div>
 
-      <Form action={updateResumeContentAction} class="form-control">
-        <div class="mb-4">
-          <label class="label">Title</label>
-          <input
-            type="text"
-            name="title"
-            class="input input-bordered"
-            value={resumeContent.title}
-            required
-          />
-        </div>
+      <div class="max-w-4xl">
+        <Form action={updateAction} class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title mb-6">Edit: {resumeContent.title}</h2>
 
-        <div class="mb-4">
-          <label class="label">Description</label>
-          <textarea
-            name="description"
-            class="textarea textarea-bordered"
-            rows={3}
-          >
-            {resumeContent.description}
-          </textarea>
-        </div>
+            {/* Title Field */}
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-medium">Title *</span>
+              </label>
+              <input
+                type="text"
+                name="title"
+                placeholder="Enter resume content title"
+                class="input input-bordered w-full"
+                value={title.value}
+                onInput$={(e) => {
+                  title.value = (e.target as HTMLInputElement).value;
+                }}
+                required
+              />
+              <div class="label">
+                <span class="label-text-alt">
+                  Choose a descriptive title for this resume content
+                </span>
+              </div>
+            </div>
 
-        <div class="mb-4">
-          <label class="label">Detail</label>
-          <textarea name="detail" class="textarea textarea-bordered" rows={6}>
-            {resumeContent.detail}
-          </textarea>
-        </div>
+            {/* Category Field */}
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-medium">Category *</span>
+              </label>
+              {categoriesData.value.categories.length > 0 ? (
+                <select
+                  name="categoryId"
+                  class="select select-bordered w-full"
+                  value={categoryId.value}
+                  onChange$={(e) => {
+                    categoryId.value = (e.target as HTMLSelectElement).value;
+                  }}
+                  required
+                >
+                  <option value="">Select a category</option>
+                  {categoriesData.value.categories.map((category: Category) => (
+                    <option key={category.id} value={category.id}>
+                      {`${category.name}${category.description ? ` - ${category.description}` : ""}`}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <div class="alert alert-warning">
+                  <span>
+                    No categories available. Please create a category first.
+                  </span>
+                </div>
+              )}
+              <div class="label">
+                <span class="label-text-alt">
+                  Choose the category this resume content belongs to
+                </span>
+              </div>
+            </div>
 
-        <div class="mb-4">
-          <label class="label">Category ID</label>
-          <input
-            type="text"
-            name="categoryId"
-            class="input input-bordered"
-            value={resumeContent.categoryId}
-            required
-          />
-        </div>
+            {/* Description Field */}
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-medium">Description</span>
+                <span class="label-text-alt">
+                  {description.value.length}/1000
+                </span>
+              </label>
+              <textarea
+                name="description"
+                placeholder="Brief description of the resume content"
+                class="textarea textarea-bordered w-full h-20"
+                value={description.value}
+                onInput$={(e) => {
+                  description.value = (e.target as HTMLTextAreaElement).value;
+                }}
+                maxLength={1000}
+              />
+              <div class="label">
+                <span class="label-text-alt">
+                  Provide a brief summary (optional)
+                </span>
+              </div>
+            </div>
 
-        <button type="submit" class="btn btn-primary">
-          Update Resume Content
-        </button>
-      </Form>
+            {/* Detail Field */}
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-medium">Detail Content</span>
+              </label>
+              <textarea
+                name="detail"
+                placeholder="Detailed content for the resume item"
+                class="textarea textarea-bordered w-full h-32"
+                value={detail.value}
+                onInput$={(e) => {
+                  detail.value = (e.target as HTMLTextAreaElement).value;
+                }}
+              />
+              <div class="label">
+                <span class="label-text-alt">
+                  Provide detailed information about this resume content
+                </span>
+              </div>
+            </div>
+
+            {/* Error Display */}
+            {updateAction.value?.error && (
+              <div class="alert alert-error">
+                <span>{updateAction.value.error}</span>
+              </div>
+            )}
+
+            {/* Categories Loading Error */}
+            {categoriesData.value.error && (
+              <div class="alert alert-warning">
+                <span>Warning: {categoriesData.value.error}</span>
+              </div>
+            )}
+
+            {/* Actions */}
+            <div class="card-actions justify-end mt-6">
+              <Link href="/admin/resume-contents" class="btn btn-outline">
+                Cancel
+              </Link>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                disabled={
+                  updateAction.isRunning ||
+                  categoriesData.value.categories.length === 0
+                }
+              >
+                {updateAction.isRunning
+                  ? "Updating..."
+                  : "Update Resume Content"}
+              </button>
+            </div>
+          </div>
+        </Form>
+      </div>
     </div>
   );
 });

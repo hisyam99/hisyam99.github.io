@@ -1,12 +1,37 @@
-import { component$, useSignal } from "@builder.io/qwik";
-import { routeAction$, Form, z, zod$, Link } from "@builder.io/qwik-city";
+import { component$, useSignal, useTask$ } from "@builder.io/qwik";
+import {
+  routeLoader$,
+  routeAction$,
+  Form,
+  z,
+  zod$,
+  Link,
+} from "@builder.io/qwik-city";
 import { createResumeContent } from "~/services/admin-resume-contents";
+import { getAllCategories } from "~/services/admin-categories";
+import type { Category } from "~/services/admin-categories";
 
 const createResumeContentSchema = z.object({
   title: z.string().min(1, "Title is required").max(200, "Title too long"),
   description: z.string().max(1000, "Description too long").optional(),
   detail: z.string().optional(),
   categoryId: z.string().min(1, "Category is required"),
+});
+
+export const useCategoriesData = routeLoader$(async (requestEvent) => {
+  const token = requestEvent.cookie.get("accessToken")?.value;
+
+  if (!token) {
+    throw requestEvent.redirect(302, "/auth/login");
+  }
+
+  try {
+    const result = await getAllCategories(token);
+    return { categories: result.data, error: null };
+  } catch (error) {
+    console.error("Failed to load categories:", error);
+    return { categories: [], error: "Failed to load categories" };
+  }
 });
 
 export const useCreateResumeContent = routeAction$(
@@ -48,12 +73,22 @@ export const useCreateResumeContent = routeAction$(
 );
 
 export default component$(() => {
+  const categoriesData = useCategoriesData();
   const createAction = useCreateResumeContent();
 
   const title = useSignal("");
   const description = useSignal("");
   const detail = useSignal("");
   const categoryId = useSignal("");
+
+  // Set default category if available
+  useTask$(({ track }) => {
+    track(() => categoriesData.value.categories);
+
+    if (categoriesData.value.categories.length > 0 && !categoryId.value) {
+      categoryId.value = categoriesData.value.categories[0].id;
+    }
+  });
 
   return (
     <div class="container mx-auto px-4 py-8">
@@ -85,27 +120,45 @@ export default component$(() => {
                 }}
                 required
               />
-            </div>
-
-            {/* Category ID Field */}
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text font-medium">Category ID *</span>
-              </label>
-              <input
-                type="text"
-                name="categoryId"
-                placeholder="Enter category ID"
-                class="input input-bordered w-full"
-                value={categoryId.value}
-                onInput$={(e) => {
-                  categoryId.value = (e.target as HTMLInputElement).value;
-                }}
-                required
-              />
               <div class="label">
                 <span class="label-text-alt">
-                  Enter the ID of the category this resume content belongs to
+                  Choose a descriptive title for this resume content
+                </span>
+              </div>
+            </div>
+
+            {/* Category Field */}
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-medium">Category *</span>
+              </label>
+              {categoriesData.value.categories.length > 0 ? (
+                <select
+                  name="categoryId"
+                  class="select select-bordered w-full"
+                  value={categoryId.value}
+                  onChange$={(e) => {
+                    categoryId.value = (e.target as HTMLSelectElement).value;
+                  }}
+                  required
+                >
+                  <option value="">Select a category</option>
+                  {categoriesData.value.categories.map((category: Category) => (
+                    <option key={category.id} value={category.id}>
+                      {`${category.name}${category.description ? ` - ${category.description}` : ""}`}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <div class="alert alert-warning">
+                  <span>
+                    No categories available. Please create a category first.
+                  </span>
+                </div>
+              )}
+              <div class="label">
+                <span class="label-text-alt">
+                  Choose the category this resume content belongs to
                 </span>
               </div>
             </div>
@@ -128,6 +181,11 @@ export default component$(() => {
                 }}
                 maxLength={1000}
               />
+              <div class="label">
+                <span class="label-text-alt">
+                  Provide a brief summary (optional)
+                </span>
+              </div>
             </div>
 
             {/* Detail Field */}
@@ -158,6 +216,13 @@ export default component$(() => {
               </div>
             )}
 
+            {/* Categories Loading Error */}
+            {categoriesData.value.error && (
+              <div class="alert alert-warning">
+                <span>Warning: {categoriesData.value.error}</span>
+              </div>
+            )}
+
             {/* Actions */}
             <div class="card-actions justify-end mt-6">
               <Link href="/admin/resume-contents" class="btn btn-outline">
@@ -166,7 +231,10 @@ export default component$(() => {
               <button
                 type="submit"
                 class="btn btn-primary"
-                disabled={createAction.isRunning}
+                disabled={
+                  createAction.isRunning ||
+                  categoriesData.value.categories.length === 0
+                }
               >
                 {createAction.isRunning
                   ? "Creating..."
