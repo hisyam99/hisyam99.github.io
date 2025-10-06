@@ -113,9 +113,114 @@ section {
   animation: gradient 5s ease infinite;
 }
 
+/* Slow spin animation for orbiting elements */
+.animate-spin-slow {
+  animation: spin 20s linear infinite;
+}
+
+/* Reverse spin animation */
+.animate-spin-reverse {
+  animation: spin-reverse 15s linear infinite;
+}
+
+@keyframes spin-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
 /* Glass morphism effect */
 .glass {
   @apply bg-base-100/30 border-base-content/10 border backdrop-blur-lg;
+}
+
+/* Orbiting icons - Pentagon formation with responsive radius */
+.orbit-icon {
+  transform-origin: center;
+}
+
+/* Mobile: 160px radius (for h-72 w-72 photo = 288px) */
+.orbit-icon:nth-child(1) {
+  transform: translate(-50%, -50%) rotate(0deg) translateY(-160px) rotate(0deg) !important;
+}
+
+.orbit-icon:nth-child(2) {
+  transform: translate(-50%, -50%) rotate(72deg) translateY(-160px)
+    rotate(-72deg) !important;
+}
+
+.orbit-icon:nth-child(3) {
+  transform: translate(-50%, -50%) rotate(144deg) translateY(-160px)
+    rotate(-144deg) !important;
+}
+
+.orbit-icon:nth-child(4) {
+  transform: translate(-50%, -50%) rotate(216deg) translateY(-160px)
+    rotate(-216deg) !important;
+}
+
+.orbit-icon:nth-child(5) {
+  transform: translate(-50%, -50%) rotate(288deg) translateY(-160px)
+    rotate(-288deg) !important;
+}
+
+/* Tablet: 180px radius (for h-80 w-80 photo = 320px) */
+@media (min-width: 768px) {
+  .orbit-icon:nth-child(1) {
+    transform: translate(-50%, -50%) rotate(0deg) translateY(-180px)
+      rotate(0deg) !important;
+  }
+
+  .orbit-icon:nth-child(2) {
+    transform: translate(-50%, -50%) rotate(72deg) translateY(-180px)
+      rotate(-72deg) !important;
+  }
+
+  .orbit-icon:nth-child(3) {
+    transform: translate(-50%, -50%) rotate(144deg) translateY(-180px)
+      rotate(-144deg) !important;
+  }
+
+  .orbit-icon:nth-child(4) {
+    transform: translate(-50%, -50%) rotate(216deg) translateY(-180px)
+      rotate(-216deg) !important;
+  }
+
+  .orbit-icon:nth-child(5) {
+    transform: translate(-50%, -50%) rotate(288deg) translateY(-180px)
+      rotate(-288deg) !important;
+  }
+}
+
+/* Desktop: 220px radius (for h-96 w-96 photo = 384px) */
+@media (min-width: 1024px) {
+  .orbit-icon:nth-child(1) {
+    transform: translate(-50%, -50%) rotate(0deg) translateY(-220px)
+      rotate(0deg) !important;
+  }
+
+  .orbit-icon:nth-child(2) {
+    transform: translate(-50%, -50%) rotate(72deg) translateY(-220px)
+      rotate(-72deg) !important;
+  }
+
+  .orbit-icon:nth-child(3) {
+    transform: translate(-50%, -50%) rotate(144deg) translateY(-220px)
+      rotate(-144deg) !important;
+  }
+
+  .orbit-icon:nth-child(4) {
+    transform: translate(-50%, -50%) rotate(216deg) translateY(-220px)
+      rotate(-216deg) !important;
+  }
+
+  .orbit-icon:nth-child(5) {
+    transform: translate(-50%, -50%) rotate(288deg) translateY(-220px)
+      rotate(-288deg) !important;
+  }
 }
 
 /* Text gradient */

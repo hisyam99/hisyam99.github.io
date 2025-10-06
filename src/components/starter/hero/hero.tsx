@@ -22,23 +22,13 @@ import {
   QBunIcon,
   QMariaDBIcon,
 } from "~/integrations/react/tech-icons";
-import {
-  useScrollAnimation,
-  useStaggerAnimation,
-} from "~/hooks/useScrollAnimation";
 
 export default component$(() => {
-  const { ref: heroRef } = useScrollAnimation();
-  const skillsStaggerRef = useStaggerAnimation(150);
-
   return (
     <>
       {/* Hero Section */}
-      <section
-        ref={heroRef}
-        class="relative flex min-h-screen items-center justify-center overflow-hidden pt-20 md:pt-24"
-      >
-        {/* Animated background */}
+      <section class="relative flex min-h-screen items-center justify-center overflow-hidden pt-20 md:pt-24">
+        {/* Background gradients */}
         <div class="absolute inset-0 -z-10">
           <div class="from-primary/20 to-secondary/20 absolute inset-0 bg-gradient-to-br via-transparent"></div>
           <div class="bg-primary/30 absolute top-0 left-0 h-72 w-72 animate-pulse rounded-full blur-3xl"></div>
@@ -48,13 +38,10 @@ export default component$(() => {
         <div class="container mx-auto px-4 py-20">
           <div class="flex flex-col items-center justify-between gap-12 lg:flex-row">
             {/* Text Content */}
-            <div
-              class="animate-fadeInLeft flex-1 text-center lg:text-left"
-              style="animation-delay: 0.2s"
-            >
+            <div class="flex-1 text-center lg:text-left">
               <div class="space-y-6">
                 <div class="inline-block">
-                  <span class="badge badge-primary badge-lg animate-pulse">
+                  <span class="badge badge-primary badge-lg">
                     👋 Welcome to my portfolio
                   </span>
                 </div>
@@ -74,10 +61,7 @@ export default component$(() => {
                 </p>
 
                 <div class="flex flex-wrap justify-center gap-4 lg:justify-start">
-                  <Link
-                    href="/projects"
-                    class="btn btn-primary btn-lg group hover-scale magnetic"
-                  >
+                  <Link href="/projects" class="btn btn-primary btn-lg group">
                     View Projects
                     <svg
                       class="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1"
@@ -94,24 +78,15 @@ export default component$(() => {
                     </svg>
                   </Link>
 
-                  <Link
-                    href="/about"
-                    class="btn btn-secondary btn-lg hover-scale magnetic"
-                  >
+                  <Link href="/about" class="btn btn-secondary btn-lg">
                     About Me
                   </Link>
 
-                  <Link
-                    href="/resume"
-                    class="btn btn-outline btn-lg hover-scale magnetic"
-                  >
+                  <Link href="/resume" class="btn btn-outline btn-lg">
                     View Resume
                   </Link>
 
-                  <Link
-                    href="/contact"
-                    class="btn btn-accent btn-lg hover-scale magnetic"
-                  >
+                  <Link href="/contact" class="btn btn-accent btn-lg">
                     Get In Touch
                   </Link>
                 </div>
@@ -121,8 +96,7 @@ export default component$(() => {
                   <Link
                     href="https://github.com/hisyam99"
                     target="_blank"
-                    class="btn btn-ghost btn-circle hover:text-primary hover-scale animate-fadeInUp"
-                    style="animation-delay: 0.6s"
+                    class="btn btn-ghost btn-circle hover:text-primary transition-colors"
                     aria-label="Visit my GitHub profile"
                   >
                     <svg
@@ -142,8 +116,7 @@ export default component$(() => {
                   <Link
                     href="https://linkedin.com/in/hisyam99"
                     target="_blank"
-                    class="btn btn-ghost btn-circle hover:text-primary hover-scale animate-fadeInUp"
-                    style="animation-delay: 0.8s"
+                    class="btn btn-ghost btn-circle hover:text-primary transition-colors"
                     aria-label="Visit my LinkedIn profile"
                   >
                     <svg
@@ -158,8 +131,7 @@ export default component$(() => {
 
                   <Link
                     href="mailto:hisyam@kamil.my.id"
-                    class="btn btn-ghost btn-circle hover:text-primary hover-scale animate-fadeInUp"
-                    style="animation-delay: 1s"
+                    class="btn btn-ghost btn-circle hover:text-primary transition-colors"
                     aria-label="Send me an email"
                   >
                     <svg
@@ -182,10 +154,7 @@ export default component$(() => {
             </div>
 
             {/* Image */}
-            <div
-              class="animate-fadeInRight flex flex-1 justify-center lg:justify-end"
-              style="animation-delay: 0.4s"
-            >
+            <div class="flex flex-1 justify-center lg:justify-end">
               <div class="group relative">
                 {/* Animated geometric background */}
                 <div class="animate-spin-slow absolute inset-0">
@@ -203,7 +172,7 @@ export default component$(() => {
                     <div class="bg-accent absolute top-1/4 -right-4 h-2 w-2 animate-bounce rounded-full"></div>
                     <div class="bg-info absolute bottom-1/4 -left-4 h-2 w-2 animate-pulse rounded-full"></div>
 
-                    {/* Main photo with hexagonal clip */}
+                    {/* Main photo with effects */}
                     <div class="relative">
                       <div class="from-primary to-secondary animate-gradient absolute inset-0 rounded-full bg-gradient-to-br opacity-50"></div>
                       <ImgHisyam
@@ -223,30 +192,68 @@ export default component$(() => {
                   </div>
                 </div>
 
-                {/* Orbiting tech icons */}
-                <div class="animate-spin-slow absolute inset-0">
-                  <div class="absolute -top-8 left-1/2 -translate-x-1/2 transform">
-                    <div class="bg-base-100 border-primary/20 flex h-10 w-10 items-center justify-center rounded-full border shadow-lg">
+                {/* Orbiting tech icons - Pentagon Formation (5 icons, 72° apart) */}
+                <div
+                  class="animate-spin-slow absolute inset-0 pointer-events-none"
+                  style="--orbit-radius: 160px; --orbit-radius-md: 180px; --orbit-radius-lg: 220px;"
+                >
+                  {/* Linux - Top (0°) */}
+                  <div
+                    class="absolute left-1/2 top-1/2 orbit-icon"
+                    style="transform: translate(-50%, -50%) rotate(0deg) translateY(-160px) rotate(0deg);"
+                  >
+                    <div class="bg-base-100 border-primary/20 flex h-12 w-12 items-center justify-center rounded-full border shadow-lg hover:scale-110 transition-transform pointer-events-auto">
                       {/* eslint-disable-next-line qwik/no-react-props */}
-                      <QQwikIcon className="h-6 w-6" />
+                      <QLinuxIcon className="h-7 w-7" />
                     </div>
                   </div>
-                  <div class="absolute top-1/2 -right-8 -translate-y-1/2 transform">
-                    <div class="bg-base-100 border-secondary/20 flex h-10 w-10 items-center justify-center rounded-full border shadow-lg">
+
+                  {/* TypeScript - Top Right (72°) */}
+                  <div
+                    class="absolute left-1/2 top-1/2 orbit-icon"
+                    style="transform: translate(-50%, -50%) rotate(72deg) translateY(-160px) rotate(-72deg);"
+                  >
+                    <div class="bg-base-100 border-secondary/20 flex h-12 w-12 items-center justify-center rounded-full border shadow-lg hover:scale-110 transition-transform pointer-events-auto">
                       {/* eslint-disable-next-line qwik/no-react-props */}
-                      <QTypeScriptIcon className="h-6 w-6" />
+                      <QTypeScriptIcon className="h-7 w-7" />
                     </div>
                   </div>
-                  <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 transform">
-                    <div class="bg-base-100 border-accent/20 flex h-10 w-10 items-center justify-center rounded-full border shadow-lg">
+
+                  {/* Qwik - Bottom Right (144°) */}
+                  <div
+                    class="absolute left-1/2 top-1/2 orbit-icon"
+                    style="transform: translate(-50%, -50%) rotate(144deg) translateY(-160px) rotate(-144deg);"
+                  >
+                    <div class="bg-base-100 border-accent/20 flex h-12 w-12 items-center justify-center rounded-full border shadow-lg hover:scale-110 transition-transform pointer-events-auto">
                       {/* eslint-disable-next-line qwik/no-react-props */}
-                      <QLinuxIcon className="h-6 w-6" />
+                      <QQwikIcon className="h-7 w-7" />
                     </div>
                   </div>
-                  <div class="absolute top-1/2 -left-8 -translate-y-1/2 transform">
-                    <div class="bg-base-100 border-info/20 flex h-10 w-10 items-center justify-center rounded-full border shadow-lg">
+
+                  {/* Encore.dev - Bottom Left (216°) */}
+                  <div
+                    class="absolute left-1/2 top-1/2 orbit-icon"
+                    style="transform: translate(-50%, -50%) rotate(216deg) translateY(-160px) rotate(-216deg);"
+                  >
+                    <div class="bg-base-100 border-info/20 flex h-12 w-12 items-center justify-center rounded-full border shadow-lg hover:scale-110 transition-transform pointer-events-auto">
+                      <svg
+                        class="h-7 w-7 text-purple-600"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M12 2L2 7v10l10 5 10-5V7l-10-5zm0 2.18L19.82 8 12 11.82 4.18 8 12 4.18zM4 9.47l7 3.5v7.06l-7-3.5V9.47zm16 0v7.06l-7 3.5v-7.06l7-3.5z" />
+                      </svg>
+                    </div>
+                  </div>
+
+                  {/* Go - Top Left (288°) */}
+                  <div
+                    class="absolute left-1/2 top-1/2 orbit-icon"
+                    style="transform: translate(-50%, -50%) rotate(288deg) translateY(-160px) rotate(-288deg);"
+                  >
+                    <div class="bg-base-100 border-primary/20 flex h-12 w-12 items-center justify-center rounded-full border shadow-lg hover:scale-110 transition-transform pointer-events-auto">
                       {/* eslint-disable-next-line qwik/no-react-props */}
-                      <QDenoIcon className="h-6 w-6" />
+                      <QGoIcon className="h-7 w-7" />
                     </div>
                   </div>
                 </div>
@@ -263,147 +270,55 @@ export default component$(() => {
                     class="bg-info absolute right-20 bottom-12 h-0.5 w-0.5 animate-pulse rounded-full"
                     style="animation-delay: 2s"
                   ></div>
+                  <div
+                    class="bg-primary absolute top-32 right-24 h-0.5 w-0.5 animate-ping rounded-full"
+                    style="animation-delay: 1.5s"
+                  ></div>
+                  <div
+                    class="bg-secondary absolute bottom-24 left-32 h-1 w-1 animate-pulse rounded-full"
+                    style="animation-delay: 0.5s"
+                  ></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Scroll Indicator */}
-        <div
-          class="animate-bounce-slow absolute bottom-8 left-1/2 -translate-x-1/2"
-          style="animation-delay: 1s"
-        >
-          <svg
-            class="text-content-quaternary h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 14l-7 7m0 0l-7-7m7 7V3"
-            ></path>
-          </svg>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section id="about" class="bg-base-200 py-20 pt-32">
-        <div class="container mx-auto px-4">
-          <div class="animate-fadeInDown mb-12 text-center">
-            <h2 class="animate-textReveal mb-4 text-4xl font-bold">About Me</h2>
-            <div
-              class="bg-primary animate-scaleInCenter mx-auto h-1 w-20"
-              style="animation-delay: 0.5s"
-            ></div>
-          </div>
-
-          <div class="grid items-center gap-12 lg:grid-cols-2">
-            <div class="space-y-6">
-              <p class="text-lg leading-relaxed">
-                I'm a passionate Full Stack Developer based in Indonesia with a
-                strong interest in building innovative digital solutions. My
-                journey in tech started with curiosity and has grown into a
-                career focused on creating impactful applications.
-              </p>
-
-              <p class="text-lg leading-relaxed">
-                I specialize in modern web technologies and enjoy working with
-                both frontend and backend systems. From designing intuitive user
-                interfaces to architecting scalable server solutions, I love
-                every aspect of the development process.
-              </p>
-
-              <div class="grid grid-cols-2 gap-4 pt-4">
-                <div
-                  class="card bg-base-100 hover-lift animate-scaleInCenter shadow-xl"
-                  style="animation-delay: 0.8s"
-                >
-                  <div class="card-body">
-                    <h3 class="card-title text-primary animate-heartbeat">
-                      3+
-                    </h3>
-                    <p>Years of Experience</p>
-                  </div>
-                </div>
-                <div
-                  class="card bg-base-100 hover-lift animate-scaleInCenter shadow-xl"
-                  style="animation-delay: 1s"
-                >
-                  <div class="card-body">
-                    <h3 class="card-title text-primary animate-heartbeat">
-                      20+
-                    </h3>
-                    <p>Projects Completed</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-              <div class="space-y-4">
-                <div class="card bg-base-100 shadow-xl transition-shadow hover:shadow-2xl">
-                  <div class="card-body">
-                    <div class="text-primary mb-2 text-3xl">📍</div>
-                    <h3 class="font-semibold">Location</h3>
-                    <p class="text-sm">Indonesia</p>
-                  </div>
-                </div>
-                <div class="card bg-base-100 shadow-xl transition-shadow hover:shadow-2xl">
-                  <div class="card-body">
-                    <div class="text-primary mb-2 text-3xl">💼</div>
-                    <h3 class="font-semibold">Currently</h3>
-                    <p class="text-sm">Open for opportunities</p>
-                  </div>
-                </div>
-              </div>
-              <div class="mt-8 space-y-4">
-                <div class="card bg-base-100 shadow-xl transition-shadow hover:shadow-2xl">
-                  <div class="card-body">
-                    <div class="text-primary mb-2 text-3xl">🎓</div>
-                    <h3 class="font-semibold">Education</h3>
-                    <p class="text-sm">Computer Science</p>
-                  </div>
-                </div>
-                <div class="card bg-base-100 shadow-xl transition-shadow hover:shadow-2xl">
-                  <div class="card-body">
-                    <div class="text-primary mb-2 text-3xl">⚡</div>
-                    <h3 class="font-semibold">Tech Stack</h3>
-                    <p class="text-sm">Full Stack Development</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+        {/* Scroll indicator */}
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2">
+          <div class="flex flex-col items-center gap-2">
+            <span class="text-base-content/60 text-sm">Scroll to explore</span>
+            <svg
+              class="text-base-content/60 h-6 w-6 animate-bounce"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 14l-7 7m0 0l-7-7m7 7V3"
+              />
+            </svg>
           </div>
         </div>
       </section>
 
-      {/* Skills Section */}
-      <section id="skills" class="py-20 pt-32">
+      {/* About Me Section */}
+      <section class="bg-base-100 py-20">
         <div class="container mx-auto px-4">
-          <div class="animate-fadeInDown mb-12 text-center">
-            <h2 class="animate-textReveal mb-4 text-4xl font-bold">
-              Skills & Technologies
-            </h2>
-            <div
-              class="bg-primary animate-scaleInCenter mx-auto h-1 w-20"
-              style="animation-delay: 0.3s"
-            ></div>
+          <div class="mb-12 text-center">
+            <h2 class="mb-4 text-4xl font-bold">About Me</h2>
+            <div class="bg-primary mx-auto h-1 w-20"></div>
           </div>
 
-          <div
-            ref={skillsStaggerRef}
-            class="stagger-container grid gap-6 md:grid-cols-2 lg:grid-cols-4"
-          >
-            {/* Frontend */}
-            <div class="card bg-base-200 shadow-xl transition-all duration-300 hover:shadow-2xl">
-              <div class="card-body">
-                <h3 class="card-title card-title-contrast mb-4">
+          <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div class="card bg-base-100 shadow-xl transition-transform hover:scale-105">
+              <div class="card-body items-center text-center">
+                <div class="bg-primary/20 mb-4 rounded-full p-4">
                   <svg
-                    class="h-6 w-6"
+                    class="text-primary h-12 w-12"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -412,200 +327,187 @@ export default component$(() => {
                       stroke-linecap="round"
                       stroke-linejoin="round"
                       stroke-width="2"
-                      d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                    ></path>
+                      d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+                    />
                   </svg>
-                  Frontend
-                </h3>
-                <div class="space-y-3">
-                  <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
-                    {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QReactIcon className="h-6 w-6" />
-                    <span class="font-medium">React/Next.js</span>
+                </div>
+                <h3 class="card-title">Full Stack Developer</h3>
+                <p class="text-base-content/70">
+                  Building end-to-end solutions with modern web technologies and
+                  best practices.
+                </p>
+              </div>
+            </div>
+
+            <div class="card bg-base-100 shadow-xl transition-transform hover:scale-105">
+              <div class="card-body items-center text-center">
+                <div class="bg-secondary/20 mb-4 rounded-full p-4">
+                  <svg
+                    class="text-secondary h-12 w-12"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                    />
+                  </svg>
+                </div>
+                <h3 class="card-title">Problem Solver</h3>
+                <p class="text-base-content/70">
+                  Passionate about finding elegant solutions to complex
+                  technical challenges.
+                </p>
+              </div>
+            </div>
+
+            <div class="card bg-base-100 shadow-xl transition-transform hover:scale-105">
+              <div class="card-body items-center text-center">
+                <div class="bg-accent/20 mb-4 rounded-full p-4">
+                  <svg
+                    class="text-accent h-12 w-12"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
+                  </svg>
+                </div>
+                <h3 class="card-title">Fast Learner</h3>
+                <p class="text-base-content/70">
+                  Always exploring new technologies and staying up-to-date with
+                  industry trends.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-12 text-center">
+            <Link href="/about" class="btn btn-outline btn-lg">
+              Learn More About Me
+              <svg
+                class="ml-2 h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Skills & Technologies Section */}
+      <section class="bg-base-200 py-20">
+        <div class="container mx-auto px-4">
+          <div class="mb-12 text-center">
+            <h2 class="mb-4 text-4xl font-bold">Skills & Technologies</h2>
+            <div class="bg-primary mx-auto h-1 w-20"></div>
+          </div>
+
+          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {/* Frontend Technologies */}
+            <div class="card bg-base-100 shadow-lg transition-transform hover:scale-105">
+              <div class="card-body">
+                <h3 class="card-title text-lg">Frontend</h3>
+                <div class="flex flex-wrap gap-3">
+                  <div class="tooltip" data-tip="React">
+                    <QReactIcon size={32} />
                   </div>
-                  <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
-                    {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QVueIcon className="h-6 w-6" />
-                    <span class="font-medium">Vue.js</span>
+                  <div class="tooltip" data-tip="Vue.js">
+                    <QVueIcon size={32} />
                   </div>
-                  <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
-                    {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QQwikIcon className="h-6 w-6" />
-                    <span class="font-medium">Qwik</span>
+                  <div class="tooltip" data-tip="Qwik">
+                    <QQwikIcon size={32} />
                   </div>
-                  <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
-                    {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QTypeScriptIcon className="h-6 w-6" />
-                    <span class="font-medium">TypeScript</span>
+                  <div class="tooltip" data-tip="TypeScript">
+                    <QTypeScriptIcon size={32} />
                   </div>
-                  <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
-                    {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QTailwindIcon className="h-6 w-6" />
-                    <span class="font-medium">Tailwind CSS</span>
+                  <div class="tooltip" data-tip="Tailwind CSS">
+                    <QTailwindIcon size={32} />
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Backend */}
-            <div class="card bg-base-200 shadow-xl transition-all duration-300 hover:shadow-2xl">
+            {/* Backend Technologies */}
+            <div class="card bg-base-100 shadow-lg transition-transform hover:scale-105">
               <div class="card-body">
-                <h3 class="card-title card-title-contrast mb-4">
-                  <svg
-                    class="h-6 w-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"
-                    ></path>
-                  </svg>
-                  Backend
-                </h3>
-                <div class="space-y-3">
-                  <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
-                    {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QNodeIcon className="h-6 w-6" />
-                    <span class="font-medium">Node.js</span>
+                <h3 class="card-title text-lg">Backend</h3>
+                <div class="flex flex-wrap gap-3">
+                  <div class="tooltip" data-tip="Node.js">
+                    <QNodeIcon size={32} />
                   </div>
-                  <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
-                    {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QGoIcon className="h-6 w-6" />
-                    <span class="font-medium">Golang</span>
+                  <div class="tooltip" data-tip="Go">
+                    <QGoIcon size={32} />
                   </div>
-                  <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
-                    {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QPythonIcon className="h-6 w-6" />
-                    <span class="font-medium">Python</span>
+                  <div class="tooltip" data-tip="Python">
+                    <QPythonIcon size={32} />
                   </div>
-                  <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
-                    {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QDenoIcon className="h-6 w-6" />
-                    <span class="font-medium">Deno</span>
+                  <div class="tooltip" data-tip="Deno">
+                    <QDenoIcon size={32} />
                   </div>
-                  <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
-                    {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QExpressIcon className="h-6 w-6" />
-                    <span class="font-medium">Express.js</span>
+                  <div class="tooltip" data-tip="Bun">
+                    <QBunIcon size={32} />
+                  </div>
+                  <div class="tooltip" data-tip="Express">
+                    <QExpressIcon size={32} />
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Database */}
-            <div class="card bg-base-200 shadow-xl transition-all duration-300 hover:shadow-2xl">
+            {/* Database Technologies */}
+            <div class="card bg-base-100 shadow-lg transition-transform hover:scale-105">
               <div class="card-body">
-                <h3 class="card-title card-title-contrast mb-4">
-                  <svg
-                    class="h-6 w-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"
-                    ></path>
-                  </svg>
-                  Database
-                </h3>
-                <div class="space-y-3">
-                  <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
-                    {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QPostgreSQLIcon className="h-6 w-6" />
-                    <span class="font-medium">PostgreSQL</span>
+                <h3 class="card-title text-lg">Database</h3>
+                <div class="flex flex-wrap gap-3">
+                  <div class="tooltip" data-tip="PostgreSQL">
+                    <QPostgreSQLIcon size={32} />
                   </div>
-                  <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
-                    {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QMongoDBIcon className="h-6 w-6" />
-                    <span class="font-medium">MongoDB</span>
+                  <div class="tooltip" data-tip="MongoDB">
+                    <QMongoDBIcon size={32} />
                   </div>
-                  <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
-                    {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QRedisIcon className="h-6 w-6" />
-                    <span class="font-medium">Redis</span>
+                  <div class="tooltip" data-tip="MariaDB">
+                    <QMariaDBIcon size={32} />
                   </div>
-                  <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
-                    {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QMariaDBIcon className="h-6 w-6" />
-                    <span class="font-medium">MySQL</span>
+                  <div class="tooltip" data-tip="Redis">
+                    <QRedisIcon size={32} />
                   </div>
-                  <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
-                    {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QPrismaIcon className="h-6 w-6" />
-                    <span class="font-medium">Prisma</span>
+                  <div class="tooltip" data-tip="Prisma">
+                    <QPrismaIcon size={32} />
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Tools */}
-            <div class="card bg-base-200 shadow-xl transition-all duration-300 hover:shadow-2xl">
+            {/* DevOps & Tools */}
+            <div class="card bg-base-100 shadow-lg transition-transform hover:scale-105">
               <div class="card-body">
-                <h3 class="card-title card-title-contrast mb-4">
-                  <svg
-                    class="h-6 w-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                    ></path>
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                    ></path>
-                  </svg>
-                  Tools & Others
-                </h3>
-                <div class="space-y-3">
-                  <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
-                    {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QGitIcon className="h-6 w-6" />
-                    <span class="font-medium">Git/GitHub</span>
+                <h3 class="card-title text-lg">DevOps & Tools</h3>
+                <div class="flex flex-wrap gap-3">
+                  <div class="tooltip" data-tip="Docker">
+                    <QDockerIcon size={32} />
                   </div>
-                  <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
-                    {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QDockerIcon className="h-6 w-6" />
-                    <span class="font-medium">Docker</span>
+                  <div class="tooltip" data-tip="Git">
+                    <QGitIcon size={32} />
                   </div>
-                  <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
-                    <svg
-                      class="h-6 w-6"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                      ></path>
-                    </svg>
-                    <span class="font-medium">CI/CD</span>
-                  </div>
-                  <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
-                    {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QLinuxIcon className="h-6 w-6" />
-                    <span class="font-medium">Linux</span>
-                  </div>
-                  <div class="bg-base-100 hover:bg-primary/10 flex items-center gap-3 rounded-lg p-3 transition-colors">
-                    {/* eslint-disable-next-line qwik/no-react-props */}
-                    <QBunIcon className="h-6 w-6" />
-                    <span class="font-medium">Bun</span>
+                  <div class="tooltip" data-tip="Linux">
+                    <QLinuxIcon size={32} />
                   </div>
                 </div>
               </div>

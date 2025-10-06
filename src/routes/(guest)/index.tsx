@@ -3,11 +3,6 @@ import { routeLoader$ } from "@builder.io/qwik-city";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { Link } from "@builder.io/qwik-city";
 import Hero from "~/components/starter/hero/hero";
-import {
-  useScrollAnimation,
-  useStaggerAnimation,
-  useSmoothScroll,
-} from "~/hooks/useScrollAnimation";
 import { getPublishedBlogs } from "~/services/blog";
 import { getProjects } from "~/services/project";
 import { getCategories } from "~/services/category";
@@ -64,7 +59,6 @@ export const useHomepageDataLoader = routeLoader$(async () => {
     };
   } catch (error) {
     console.error("Failed to load homepage data:", error);
-    // Return empty data structure instead of throwing
     return {
       featuredBlogs: {
         data: [],
@@ -84,13 +78,6 @@ export const useHomepageDataLoader = routeLoader$(async () => {
 
 export default component$(() => {
   const homepageData = useHomepageDataLoader();
-  const projectsStaggerRef = useStaggerAnimation(200);
-  const blogsStaggerRef = useStaggerAnimation(300);
-  const { ref: contactRef } = useScrollAnimation();
-
-  // Enable smooth scroll with better control
-  useSmoothScroll();
-
   const { featuredBlogs, featuredProjects, categories } = homepageData.value;
 
   return (
@@ -98,32 +85,23 @@ export default component$(() => {
       <Hero />
 
       {/* Featured Projects Section */}
-      <section id="projects" class="bg-base-200 py-20 pt-32 scroll-mt-20">
+      <section id="projects" class="bg-base-200 py-20">
         <div class="container mx-auto px-4">
-          <div class="animate-fadeInDown mb-12 text-center">
-            <h2 class="animate-textReveal mb-4 text-4xl font-bold">
-              Featured Projects
-            </h2>
+          <div class="mb-12 text-center">
+            <h2 class="mb-4 text-4xl font-bold">Featured Projects</h2>
             <p class="text-base-content/70 mb-4">
               Check out some of my recent work and side projects
             </p>
-            <div
-              class="bg-primary animate-scaleInCenter mx-auto h-1 w-20"
-              style="animation-delay: 0.3s"
-            ></div>
+            <div class="bg-primary mx-auto h-1 w-20"></div>
           </div>
 
-          <div
-            ref={projectsStaggerRef}
-            class="stagger-container grid gap-8 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2"
-          >
+          <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
             {featuredProjects.data.length > 0 ? (
               featuredProjects.data.map((project, index) => (
                 <div
                   key={project.id}
-                  class="card bg-base-100 hover-lift hover-glow shadow-xl"
+                  class="card bg-base-100 shadow-xl transition-transform hover:scale-105"
                 >
-                  {/* No image field in schema, use gradient background */}
                   <figure class="from-primary to-secondary bg-gradient-to-br">
                     <div class="flex h-48 w-full items-center justify-center">
                       <svg
@@ -151,17 +129,12 @@ export default component$(() => {
                     <p class="text-sm text-base-content/70">
                       {project.description || "No description available"}
                     </p>
-                    {/* Technologies not available in current schema */}
                     <div class="mt-4 flex flex-wrap gap-2">
                       <div class="badge badge-outline">Technology</div>
                       <div class="badge badge-outline">Stack</div>
                     </div>
                     <div class="card-actions mt-4 justify-end">
-                      {/* URLs not available in current schema - show placeholder */}
-                      <button
-                        class="btn btn-primary btn-sm hover-scale"
-                        disabled
-                      >
+                      <button class="btn btn-primary btn-sm" disabled>
                         View Project
                       </button>
                     </div>
@@ -169,10 +142,9 @@ export default component$(() => {
                 </div>
               ))
             ) : (
-              // Fallback static projects when GraphQL data is not available
               <>
                 {/* Static Project 1 - Reparin */}
-                <div class="card bg-base-100 hover-lift hover-glow shadow-xl">
+                <div class="card bg-base-100 shadow-xl transition-transform hover:scale-105">
                   <figure class="from-primary to-secondary bg-gradient-to-br">
                     <div class="flex h-48 w-full items-center justify-center">
                       <svg
@@ -209,7 +181,7 @@ export default component$(() => {
                       <Link
                         href="https://reparin.my.id"
                         target="_blank"
-                        class="btn btn-primary btn-sm hover-scale"
+                        class="btn btn-primary btn-sm"
                       >
                         Live Demo
                       </Link>
@@ -228,7 +200,7 @@ export default component$(() => {
                 </div>
 
                 {/* Static Project 2 - URL Shortener */}
-                <div class="card bg-base-100 hover-lift hover-glow shadow-xl">
+                <div class="card bg-base-100 shadow-xl transition-transform hover:scale-105">
                   <figure class="from-accent to-info bg-gradient-to-br">
                     <div class="flex h-48 w-full items-center justify-center">
                       <svg
@@ -265,7 +237,7 @@ export default component$(() => {
                       <Link
                         href="https://mil.kamil.my.id"
                         target="_blank"
-                        class="btn btn-primary btn-sm hover-scale"
+                        class="btn btn-primary btn-sm"
                       >
                         Live Demo
                       </Link>
@@ -287,7 +259,7 @@ export default component$(() => {
           </div>
 
           <div class="mt-12 text-center">
-            <Link href="/projects" class="btn btn-outline btn-lg hover-scale">
+            <Link href="/projects" class="btn btn-outline btn-lg">
               View All Projects
               <svg
                 class="ml-2 h-5 w-5"
@@ -308,32 +280,23 @@ export default component$(() => {
       </section>
 
       {/* Latest Blog Posts Section */}
-      <section id="blog" class="bg-base-100 py-20 scroll-mt-20">
+      <section id="blog" class="bg-base-100 py-20">
         <div class="container mx-auto px-4">
-          <div class="animate-fadeInDown mb-12 text-center">
-            <h2 class="animate-textReveal mb-4 text-4xl font-bold">
-              Latest Blog Posts
-            </h2>
+          <div class="mb-12 text-center">
+            <h2 class="mb-4 text-4xl font-bold">Latest Blog Posts</h2>
             <p class="text-base-content/70 mb-4">
               Thoughts, tutorials, and insights about web development
             </p>
-            <div
-              class="bg-secondary animate-scaleInCenter mx-auto h-1 w-20"
-              style="animation-delay: 0.3s"
-            ></div>
+            <div class="bg-secondary mx-auto h-1 w-20"></div>
           </div>
 
-          <div
-            ref={blogsStaggerRef}
-            class="stagger-container grid gap-8 md:grid-cols-2 lg:grid-cols-3"
-          >
+          <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {featuredBlogs.data.length > 0 ? (
               featuredBlogs.data.map((blog) => (
                 <article
                   key={blog.id}
-                  class="card bg-base-100 hover-lift hover-glow shadow-xl"
+                  class="card bg-base-100 shadow-xl transition-transform hover:scale-105"
                 >
-                  {/* Featured image not available in current schema */}
                   <div class="card-body">
                     <h3 class="card-title text-lg">
                       <Link
@@ -358,7 +321,6 @@ export default component$(() => {
                             },
                           )}
                       </div>
-                      {/* Read time not available in current schema */}
                       <div class="badge badge-ghost badge-sm">
                         {Math.ceil((blog.content?.length || 0) / 1000)} min read
                       </div>
@@ -366,7 +328,7 @@ export default component$(() => {
                     <div class="card-actions mt-4 justify-end">
                       <Link
                         href={`/blog/${blog.slug}`}
-                        class="btn btn-primary btn-sm hover-scale"
+                        class="btn btn-primary btn-sm"
                       >
                         Read More
                       </Link>
@@ -375,7 +337,6 @@ export default component$(() => {
                 </article>
               ))
             ) : (
-              // Fallback message when no blogs are available
               <div class="col-span-full text-center py-12">
                 <h3 class="text-2xl font-semibold mb-4 text-base-content/70">
                   Blog posts coming soon!
@@ -389,7 +350,7 @@ export default component$(() => {
 
           {featuredBlogs.data.length > 0 && (
             <div class="mt-12 text-center">
-              <Link href="/blog" class="btn btn-outline btn-lg hover-scale">
+              <Link href="/blog" class="btn btn-outline btn-lg">
                 View All Posts
                 <svg
                   class="ml-2 h-5 w-5"
@@ -412,23 +373,18 @@ export default component$(() => {
 
       {/* Categories/Skills Section */}
       {categories.data.length > 0 && (
-        <section id="skills" class="bg-base-200 py-20 scroll-mt-20">
+        <section id="skills" class="bg-base-200 py-20">
           <div class="container mx-auto px-4">
-            <div class="animate-fadeInDown mb-12 text-center">
-              <h2 class="animate-textReveal mb-4 text-4xl font-bold">
-                Skills & Expertise
-              </h2>
-              <div
-                class="bg-primary animate-scaleInCenter mx-auto h-1 w-20"
-                style="animation-delay: 0.3s"
-              ></div>
+            <div class="mb-12 text-center">
+              <h2 class="mb-4 text-4xl font-bold">Skills & Expertise</h2>
+              <div class="bg-primary mx-auto h-1 w-20"></div>
             </div>
 
             <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {categories.data.map((category) => (
                 <div
                   key={category.id}
-                  class="card bg-base-100 hover-lift shadow-lg"
+                  class="card bg-base-100 shadow-lg transition-transform hover:scale-105"
                 >
                   <div class="card-body p-6 text-center">
                     <h3 class="card-title justify-center text-lg">
@@ -448,23 +404,14 @@ export default component$(() => {
       )}
 
       {/* Contact Section */}
-      <section
-        id="contact"
-        ref={contactRef}
-        class="bg-base-200 py-20 scroll-mt-20"
-      >
+      <section id="contact" class="bg-base-200 py-20">
         <div class="container mx-auto px-4">
-          <div class="animate-fadeInDown mb-12 text-center">
-            <h2 class="animate-textReveal mb-4 text-4xl font-bold">
-              Get In Touch
-            </h2>
+          <div class="mb-12 text-center">
+            <h2 class="mb-4 text-4xl font-bold">Get In Touch</h2>
             <p class="text-base-content/70 mb-4">
               Have a project in mind? Let's work together to bring it to life
             </p>
-            <div
-              class="bg-accent animate-scaleInCenter mx-auto h-1 w-20"
-              style="animation-delay: 0.3s"
-            ></div>
+            <div class="bg-accent mx-auto h-1 w-20"></div>
           </div>
 
           <div class="mx-auto max-w-4xl">
@@ -577,7 +524,7 @@ export default component$(() => {
                       ></textarea>
                     </div>
                     <div class="card-actions justify-end">
-                      <button type="submit" class="btn btn-primary hover-scale">
+                      <button type="submit" class="btn btn-primary">
                         Send Message
                         <svg
                           class="ml-2 h-4 w-4"
@@ -600,12 +547,8 @@ export default component$(() => {
             </div>
           </div>
 
-          {/* Go to Contact Page Button */}
           <div class="mt-12 text-center">
-            <Link
-              href="/contact"
-              class="btn btn-accent btn-lg hover-scale gap-2"
-            >
+            <Link href="/contact" class="btn btn-accent btn-lg gap-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-5 w-5"
