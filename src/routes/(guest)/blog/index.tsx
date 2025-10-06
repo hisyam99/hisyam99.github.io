@@ -4,6 +4,7 @@ import type { DocumentHead } from "@builder.io/qwik-city";
 import { Link } from "@builder.io/qwik-city";
 import { getPublishedBlogs } from "~/services/blog";
 import { Breadcrumbs, useBreadcrumbs } from "~/components/Breadcrumbs";
+import { Pagination } from "~/components/Pagination";
 
 /**
  * Blog listing page loader
@@ -186,79 +187,19 @@ export default component$(() => {
               </div>
 
               {/* Pagination */}
-              {pagination.totalPages > 1 && (
-                <div class="mt-12 text-center">
-                  <div class="join">
-                    {pagination.page > 1 && (
-                      <Link
-                        href={`/blog?page=${pagination.page - 1}`}
-                        class="join-item btn btn-outline"
-                      >
-                        <svg
-                          class="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M15 19l-7-7 7-7"
-                          />
-                        </svg>
-                        Previous
-                      </Link>
-                    )}
-
-                    {/* Page numbers */}
-                    {Array.from(
-                      { length: Math.min(5, pagination.totalPages) },
-                      (_, i) => {
-                        const pageNum = Math.max(1, pagination.page - 2) + i;
-                        if (pageNum > pagination.totalPages) return null;
-
-                        return (
-                          <Link
-                            key={pageNum}
-                            href={`/blog?page=${pageNum}`}
-                            class={`join-item btn ${pageNum === pagination.page ? "btn-active" : "btn-outline"}`}
-                          >
-                            {pageNum}
-                          </Link>
-                        );
-                      },
-                    )}
-
-                    {pagination.page < pagination.totalPages && (
-                      <Link
-                        href={`/blog?page=${pagination.page + 1}`}
-                        class="join-item btn btn-outline"
-                      >
-                        Next
-                        <svg
-                          class="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M9 5l7 7-7 7"
-                          />
-                        </svg>
-                      </Link>
-                    )}
-                  </div>
-
-                  <p class="mt-4 text-sm text-base-content/60">
-                    Showing page {pagination.page} of {pagination.totalPages}(
-                    {pagination.total} total posts)
-                  </p>
-                </div>
-              )}
+              <div class="mt-12">
+                <Pagination
+                  pagination={pagination}
+                  baseUrl="/blog"
+                  size="md"
+                  variant="outline"
+                  showPageNumbers={true}
+                  maxPageButtons={5}
+                  showFirstLast={false}
+                  showPageInfo={true}
+                  align="center"
+                />
+              </div>
             </>
           ) : (
             /* Empty state */
