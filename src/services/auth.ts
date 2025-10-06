@@ -3,6 +3,7 @@ import {
   createGraphQLClient,
   createAuthenticatedClient,
 } from "../lib/graphql/graffle";
+import { isAuthError, getErrorMessage } from "~/utils/token-refresh";
 
 /**
  * Authentication Types
@@ -112,25 +113,9 @@ export const loginUser = server$(
     } catch (error) {
       console.error("Login error:", error);
 
-      // Handle Graffle ContextualAggregateError
-      if (
-        error &&
-        typeof error === "object" &&
-        "errors" in error &&
-        Array.isArray(error.errors)
-      ) {
-        const contextualError = error as ContextualAggregateError;
-        if (contextualError.errors.length > 0) {
-          return {
-            success: false,
-            error: contextualError.errors[0].message || "Login failed",
-          };
-        }
-      }
-
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Login failed",
+        error: getErrorMessage(error),
       };
     }
   },
@@ -189,9 +174,7 @@ export const registerUser = server$(
       return registerData;
     } catch (error) {
       console.error("Registration error:", error);
-      throw new Error(
-        error instanceof Error ? error.message : "Registration failed",
-      );
+      throw new Error(getErrorMessage(error));
     }
   },
 );
@@ -234,9 +217,7 @@ export const refreshAuthToken = server$(
       return tokenData;
     } catch (error) {
       console.error("Token refresh error:", error);
-      throw new Error(
-        error instanceof Error ? error.message : "Token refresh failed",
-      );
+      throw new Error(getErrorMessage(error));
     }
   },
 );
@@ -271,7 +252,14 @@ export const getCurrentUser = server$(
       );
 
       if (result?.errors?.length) {
-        console.error("Get current user error:", result.errors[0].message);
+        const errorMsg = result.errors[0].message;
+        console.error("Get current user error:", errorMsg);
+
+        // If it's an auth error, throw it so it can be caught and handled
+        if (isAuthError(errorMsg)) {
+          throw new Error(errorMsg);
+        }
+
         return null;
       }
 
@@ -279,6 +267,12 @@ export const getCurrentUser = server$(
       return userData || null;
     } catch (error) {
       console.error("Get current user error:", error);
+
+      // Re-throw auth errors so they can be handled by refresh logic
+      if (isAuthError(error)) {
+        throw error;
+      }
+
       return null;
     }
   },
@@ -316,9 +310,7 @@ export const changePassword = server$(
       return changeResult || false;
     } catch (error) {
       console.error("Password change error:", error);
-      throw new Error(
-        error instanceof Error ? error.message : "Password change failed",
-      );
+      throw new Error(getErrorMessage(error));
     }
   },
 );
@@ -340,6 +332,10 @@ export const logoutUser = () => {
     document.cookie =
       "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+      "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+      "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   }
 };
 
