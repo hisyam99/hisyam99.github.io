@@ -306,6 +306,20 @@ section {
   }
 }
 
+/* Page transition animation - faster and smoother for route changes */
+@keyframes pageTransition {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0px);
+  }
+}
+
 @keyframes textReveal {
   from {
     opacity: 0;
@@ -411,6 +425,24 @@ section {
 
 .animate-slideInBlur {
   animation: slideInBlur 1s ease-out forwards;
+}
+
+/* Page transition - optimized for route changes */
+.animate-pageTransition {
+  animation: pageTransition 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Smooth page transitions for all pages */
+.page-content-wrapper.animate-slideInBlur,
+.admin-content-wrapper.animate-slideInBlur {
+  animation: pageTransition 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  will-change: opacity, transform, filter;
+}
+
+/* Prevent flash of unstyled content during page transition */
+.page-content-wrapper:not(.animate-slideInBlur),
+.admin-content-wrapper:not(.animate-slideInBlur) {
+  animation: none;
 }
 
 .animate-textReveal {

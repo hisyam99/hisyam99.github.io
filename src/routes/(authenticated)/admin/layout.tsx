@@ -1,5 +1,9 @@
-import { component$, Slot } from "@builder.io/qwik";
-import { routeLoader$, RequestHandler } from "@builder.io/qwik-city";
+import { component$, Slot, useVisibleTask$ } from "@builder.io/qwik";
+import {
+  routeLoader$,
+  RequestHandler,
+  useLocation,
+} from "@builder.io/qwik-city";
 import AdminLayout from "~/components/admin/AdminLayout";
 import { getCurrentUser } from "~/services/auth";
 
@@ -45,10 +49,34 @@ export const useAuthData = routeLoader$(async (requestEvent) => {
 
 export default component$(() => {
   const authData = useAuthData();
+  const location = useLocation();
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track }) => {
+    // Track location changes to re-trigger animation
+    track(() => location.url.pathname);
+
+    // Get main content element
+    const contentElement = document.querySelector(
+      ".admin-content-wrapper",
+    ) as HTMLElement;
+    if (!contentElement) return;
+
+    // Remove animation class first (for route changes)
+    contentElement.classList.remove("animate-slideInBlur");
+
+    // Force reflow to restart animation
+    void contentElement.offsetWidth;
+
+    // Add animation class
+    contentElement.classList.add("animate-slideInBlur");
+  });
 
   return (
     <AdminLayout authData={authData.value}>
-      <Slot />
+      <div class="admin-content-wrapper animate-slideInBlur">
+        <Slot />
+      </div>
     </AdminLayout>
   );
 });
