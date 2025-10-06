@@ -40,18 +40,18 @@ import { checkAuth } from "~/utils/auth-middleware";
 export const useUserLoader = routeLoader$(async (requestEvent) => {
   // ✨ Auto-refresh happens here if token is expired
   const auth = await checkAuth();
-  
+
   if (!auth.authenticated) {
     throw requestEvent.redirect(302, "/auth/login");
   }
-  
+
   // Your user is authenticated and token is fresh!
   return { user: auth.user };
 });
 
 export default component$(() => {
   const user = useUserLoader();
-  
+
   return <div>Welcome, {user.value.user?.name}!</div>;
 });
 ```
@@ -142,12 +142,12 @@ Open console and run:
 ```javascript
 // Make 5 simultaneous requests with expired token
 Promise.all([
-  fetch('/api/data1'),
-  fetch('/api/data2'),
-  fetch('/api/data3'),
-  fetch('/api/data4'),
-  fetch('/api/data5'),
-]).then(() => console.log('All succeeded!'));
+  fetch("/api/data1"),
+  fetch("/api/data2"),
+  fetch("/api/data3"),
+  fetch("/api/data4"),
+  fetch("/api/data5"),
+]).then(() => console.log("All succeeded!"));
 ```
 
 ✅ **Expected**: Only ONE refresh request, all 5 succeed
@@ -184,8 +184,9 @@ console.log(document.cookie); // Should see refreshToken
 
 ```javascript
 // Run in console:
-document.cookie.split(";").forEach(c => {
-  document.cookie = c.trim().split("=")[0] + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/';
+document.cookie.split(";").forEach((c) => {
+  document.cookie =
+    c.trim().split("=")[0] + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
 });
 localStorage.clear();
 ```
@@ -193,6 +194,7 @@ localStorage.clear();
 #### ❌ "ContextualError: invalid or expired token" still appearing?
 
 **Check**:
+
 1. Backend GraphQL mutation is working: `mutation { refreshToken(refreshToken: "...") }`
 2. Error pattern matches in `isAuthError()` function
 3. Console logs show refresh attempt
@@ -251,15 +253,19 @@ const client = createAuthenticatedClient(token, {
 let refreshCount = 0;
 let refreshFailures = 0;
 
-export const refreshTokenServer = server$(async function (refreshToken: string) {
+export const refreshTokenServer = server$(async function (
+  refreshToken: string,
+) {
   refreshCount++;
-  
+
   try {
     // ... existing code
     console.log(`✅ Refresh #${refreshCount} succeeded`);
   } catch (error) {
     refreshFailures++;
-    console.error(`❌ Refresh #${refreshCount} failed (${refreshFailures} total failures)`);
+    console.error(
+      `❌ Refresh #${refreshCount} failed (${refreshFailures} total failures)`,
+    );
     throw error;
   }
 });
@@ -270,10 +276,10 @@ export const refreshTokenServer = server$(async function (refreshToken: string) 
 ```typescript
 // Optional: Send to analytics
 onTokenRefresh: (newToken) => {
-  analytics.track('token_refreshed', {
+  analytics.track("token_refreshed", {
     timestamp: new Date().toISOString(),
   });
-}
+};
 ```
 
 ---
@@ -313,7 +319,8 @@ Before deploying to production:
 const tokenExpiry = parseJWT(accessToken).exp;
 const timeUntilExpiry = tokenExpiry * 1000 - Date.now();
 
-if (timeUntilExpiry < 60000) { // Less than 1 minute
+if (timeUntilExpiry < 60000) {
+  // Less than 1 minute
   await refreshTokenClient(refreshToken);
 }
 ```
@@ -322,7 +329,7 @@ if (timeUntilExpiry < 60000) { // Less than 1 minute
 
 ```typescript
 // Refresh silently without blocking UI
-refreshTokenClient(refreshToken).catch(err => {
+refreshTokenClient(refreshToken).catch((err) => {
   console.error("Silent refresh failed:", err);
 });
 ```
@@ -333,7 +340,7 @@ refreshTokenClient(refreshToken).catch(err => {
 try {
   await apiCall();
 } catch (error) {
-  if (error.message.includes('network')) {
+  if (error.message.includes("network")) {
     // Handle network error separately
     showOfflineMessage();
   } else if (isAuthError(error)) {
@@ -349,6 +356,7 @@ try {
 ### Quick Checks:
 
 1. ✅ Backend refresh mutation working?
+
    ```graphql
    mutation {
      refreshToken(refreshToken: "YOUR_TOKEN") {
@@ -394,13 +402,13 @@ Your application now has:
 
 **Quick Reference Card**
 
-| What | How |
-|------|-----|
-| Protected Route | `const auth = await checkAuth();` |
-| Manual Refresh | `await refreshTokenClient(token);` |
-| Check Auth Error | `isAuthError(error)` |
-| Get Error Message | `getErrorMessage(error)` |
-| Enhanced Client | `createAuthenticatedClient(token)` |
+| What              | How                                |
+| ----------------- | ---------------------------------- |
+| Protected Route   | `const auth = await checkAuth();`  |
+| Manual Refresh    | `await refreshTokenClient(token);` |
+| Check Auth Error  | `isAuthError(error)`               |
+| Get Error Message | `getErrorMessage(error)`           |
+| Enhanced Client   | `createAuthenticatedClient(token)` |
 
 ---
 

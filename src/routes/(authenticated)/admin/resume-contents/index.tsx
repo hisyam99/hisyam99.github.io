@@ -5,13 +5,17 @@ import {
   deleteResumeContent,
 } from "~/services/admin-resume-contents";
 import type { ResumeContent } from "~/services/admin-resume-contents";
+import { checkAuth } from "~/utils/auth-middleware";
 
 export const useResumeContentsData = routeLoader$(async (requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
-  if (!token) {
-    throw requestEvent.redirect(302, "/auth/login");
+  if (!auth.authenticated) {
+    throw requestEvent.redirect(302, auth.redirectTo || "/auth/login");
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const result = await getAllResumeContents(token);
@@ -24,11 +28,14 @@ export const useResumeContentsData = routeLoader$(async (requestEvent) => {
 
 export const useDeleteResumeContent = routeAction$(
   async (data, requestEvent) => {
-    const token = requestEvent.cookie.get("accessToken")?.value;
+    const auth = await checkAuth();
 
-    if (!token) {
+    if (!auth.authenticated) {
       return { success: false, error: "Not authenticated" };
     }
+
+    const token = requestEvent.cookie.get("accessToken")?.value;
+    if (!token) return { success: false, error: "Not authenticated" };
 
     try {
       const resumeContentId = data.id as string;
@@ -61,7 +68,7 @@ export default component$(() => {
     track(() => categoryFilter.value);
     track(() => resumeContentsData.value.resumeContents);
 
-    const resumeContents = resumeContentsData.value.resumeContents;
+    const resumeContents = resumeContentsData.value.resumeContents || [];
     let filtered = resumeContents;
 
     // Apply search filter
@@ -96,7 +103,7 @@ export default component$(() => {
   // Get unique categories for filter dropdown
   const categories = Array.from(
     new Set(
-      resumeContentsData.value.resumeContents.map(
+      (resumeContentsData.value.resumeContents || []).map(
         (content) => content.category,
       ),
     ),
@@ -215,7 +222,8 @@ export default component$(() => {
           {/* Results Count */}
           <div class="text-sm text-base-content/70 mt-2">
             Showing {filteredResumeContents.value.length} of{" "}
-            {resumeContentsData.value.resumeContents.length} resume contents
+            {resumeContentsData.value.resumeContents?.length || 0} resume
+            contents
           </div>
         </div>
       </div>

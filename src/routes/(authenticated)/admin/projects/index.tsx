@@ -2,13 +2,17 @@ import { component$, useSignal, useTask$ } from "@builder.io/qwik";
 import { routeLoader$, routeAction$, Form, Link } from "@builder.io/qwik-city";
 import { getAllProjects, deleteProject } from "~/services/admin-projects";
 import type { Project } from "~/services/admin-projects";
+import { checkAuth } from "~/utils/auth-middleware";
 
 export const useProjectsData = routeLoader$(async (requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
-  if (!token) {
-    throw requestEvent.redirect(302, "/auth/login");
+  if (!auth.authenticated) {
+    throw requestEvent.redirect(302, auth.redirectTo || "/auth/login");
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const result = await getAllProjects(token);
@@ -20,11 +24,14 @@ export const useProjectsData = routeLoader$(async (requestEvent) => {
 });
 
 export const useDeleteProject = routeAction$(async (data, requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
-  if (!token) {
+  if (!auth.authenticated) {
     return { success: false, error: "Not authenticated" };
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const projectId = data.id as string;
@@ -54,7 +61,7 @@ export default component$(() => {
     track(() => userFilter.value);
     track(() => projectsData.value.projects);
 
-    const projects = projectsData.value.projects;
+    const projects = projectsData.value.projects || [];
     let filtered = projects;
 
     // Apply search filter
@@ -89,7 +96,7 @@ export default component$(() => {
   // Get unique users for filter dropdown
   const users = Array.from(
     new Set(
-      projectsData.value.projects
+      (projectsData.value.projects || [])
         .filter((project) => project.user)
         .map((project) => project.user!),
     ),
@@ -208,7 +215,7 @@ export default component$(() => {
           {/* Results Count */}
           <div class="text-sm text-base-content/70 mt-2">
             Showing {filteredProjects.value.length} of{" "}
-            {projectsData.value.projects.length} projects
+            {projectsData.value.projects?.length || 0} projects
           </div>
         </div>
       </div>

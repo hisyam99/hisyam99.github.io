@@ -7,13 +7,17 @@ import {
   deactivateUser,
 } from "~/services/admin-users";
 import type { User } from "~/services/admin-users";
+import { checkAuth } from "~/utils/auth-middleware";
 
 export const useUsersData = routeLoader$(async (requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
-  if (!token) {
-    throw requestEvent.redirect(302, "/auth/login");
+  if (!auth.authenticated) {
+    throw requestEvent.redirect(302, auth.redirectTo || "/auth/login");
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const result = await getAllUsers(token);
@@ -25,11 +29,14 @@ export const useUsersData = routeLoader$(async (requestEvent) => {
 });
 
 export const useDeleteUser = routeAction$(async (data, requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
-  if (!token) {
+  if (!auth.authenticated) {
     return { success: false, error: "Not authenticated" };
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const userId = data.id as string;
@@ -45,11 +52,14 @@ export const useDeleteUser = routeAction$(async (data, requestEvent) => {
 });
 
 export const useUpdateRole = routeAction$(async (data, requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
-  if (!token) {
+  if (!auth.authenticated) {
     return { success: false, error: "Not authenticated" };
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const userId = data.userId as string;
@@ -66,11 +76,14 @@ export const useUpdateRole = routeAction$(async (data, requestEvent) => {
 });
 
 export const useToggleStatus = routeAction$(async (data, requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
-  if (!token) {
+  if (!auth.authenticated) {
     return { success: false, error: "Not authenticated" };
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const userId = data.userId as string;
@@ -111,7 +124,7 @@ export default component$(() => {
     track(() => statusFilter.value);
     track(() => usersData.value.users);
 
-    const users = usersData.value.users;
+    const users = usersData.value.users || [];
     let filtered = users;
 
     // Apply search filter

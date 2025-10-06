@@ -1,6 +1,7 @@
 import { component$, useSignal } from "@builder.io/qwik";
 import { routeAction$, Form, z, zod$, Link } from "@builder.io/qwik-city";
 import { createUser } from "~/services/admin-users";
+import { checkAuth } from "~/utils/auth-middleware";
 
 const createUserSchema = z.object({
   name: z.string().min(1, "Name is required").max(100, "Name too long"),
@@ -9,11 +10,14 @@ const createUserSchema = z.object({
 });
 
 export const useCreateUser = routeAction$(async (data, requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
-  if (!token) {
+  if (!auth.authenticated) {
     return { success: false, error: "Not authenticated" };
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const userData = {

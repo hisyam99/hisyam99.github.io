@@ -76,15 +76,17 @@ import { checkAuth } from "~/utils/auth-middleware";
 export const useProtectedLoader = routeLoader$(async (requestEvent) => {
   // This automatically handles token refresh if needed
   const auth = await checkAuth();
-  
+
   if (!auth.authenticated) {
     throw requestEvent.redirect(302, auth.redirectTo || "/auth/login");
   }
-  
+
   // Your protected route logic here
   return {
     user: auth.user,
-    data: await fetchProtectedData(requestEvent.cookie.get("accessToken")?.value),
+    data: await fetchProtectedData(
+      requestEvent.cookie.get("accessToken")?.value,
+    ),
   };
 });
 ```
@@ -183,10 +185,10 @@ Tokens are stored in HTTP-only cookies to prevent XSS attacks:
 
 ```typescript
 cookie.set("accessToken", token, {
-  httpOnly: true,      // Prevents JavaScript access
-  secure: true,        // HTTPS only
-  sameSite: "strict",  // CSRF protection
-  maxAge: expiresIn,   // Auto-expiry
+  httpOnly: true, // Prevents JavaScript access
+  secure: true, // HTTPS only
+  sameSite: "strict", // CSRF protection
+  maxAge: expiresIn, // Auto-expiry
   path: "/",
 });
 ```
@@ -299,17 +301,17 @@ Request 3 → Retries with new token → Success
 // Test automatic refresh
 const testAutoRefresh = async () => {
   // 1. Login to get tokens
-  const loginResult = await loginUser({ 
-    email: "test@example.com", 
-    password: "password123" 
+  const loginResult = await loginUser({
+    email: "test@example.com",
+    password: "password123",
   });
-  
+
   // 2. Manually expire access token (or wait for expiry)
   // In real scenario, tokens expire naturally
-  
+
   // 3. Make a protected API call
   const data = await getProtectedData();
-  
+
   // 4. Should succeed without error (token auto-refreshed)
   expect(data).toBeDefined();
   console.log("✅ Auto-refresh test passed!");
@@ -337,11 +339,13 @@ curl http://localhost:5173/api/protected \
 
 ### Issue: Tokens not refreshing
 
-**Symptoms**: 
+**Symptoms**:
+
 - User gets logged out despite valid refresh token
 - Auth errors not triggering refresh
 
 **Solutions**:
+
 1. Check that refresh token is stored in cookies
 2. Verify `refreshTokenServer` function is accessible
 3. Confirm GraphQL endpoint is correct
@@ -356,11 +360,13 @@ console.log("🔍 Is auth error:", isAuthError(error));
 
 ### Issue: Infinite redirect loop
 
-**Symptoms**: 
+**Symptoms**:
+
 - User keeps getting redirected to login page
 - Login succeeds but immediately redirects back
 
 **Solutions**:
+
 1. Ensure refresh token is valid and not expired
 2. Clear all cookies and localStorage
 3. Login again to get fresh tokens
@@ -368,18 +374,22 @@ console.log("🔍 Is auth error:", isAuthError(error));
 
 ```typescript
 // Clear all auth data
-document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+document.cookie =
+  "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+document.cookie =
+  "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 localStorage.clear();
 ```
 
 ### Issue: "ContextualError" not detected
 
-**Symptoms**: 
+**Symptoms**:
+
 - Auth errors not triggering refresh
 - Error format doesn't match patterns
 
 **Solutions**:
+
 1. Check actual error message in console
 2. Update error patterns in `isAuthError` function
 3. Add custom error pattern for your backend
@@ -395,11 +405,13 @@ const authErrorPatterns = [
 
 ### Issue: Race condition with multiple requests
 
-**Symptoms**: 
+**Symptoms**:
+
 - Multiple refresh requests being made
 - Tokens getting refreshed multiple times
 
 **Solutions**:
+
 1. Verify `isRefreshing` flag is working
 2. Check that `refreshPromise` is being reused
 3. Ensure state is shared across requests
@@ -479,21 +491,25 @@ If you're adding refresh for the first time:
 ### Optimization Tips
 
 1. **Proactive Refresh**: Refresh token before it expires
+
 ```typescript
 // Check token expiry and refresh proactively
 const tokenExpiresIn = getTokenExpiry(accessToken);
-if (tokenExpiresIn < 60) { // Less than 60 seconds
+if (tokenExpiresIn < 60) {
+  // Less than 60 seconds
   await refreshTokenClient(refreshToken);
 }
 ```
 
 2. **Cache Token Validation**: Don't validate on every request
+
 ```typescript
 // Cache validation result for a short time
 const validationCache = new Map();
 ```
 
 3. **Use Server-Side Rendering**: Less client-side token handling
+
 ```typescript
 // SSR automatically handles tokens via cookies
 export const useServerData = routeLoader$(async (requestEvent) => {
@@ -532,9 +548,11 @@ export const useServerData = routeLoader$(async (requestEvent) => {
 Server-side function to refresh tokens via GraphQL mutation.
 
 **Parameters:**
+
 - `refreshToken`: The refresh token string
 
 **Returns:**
+
 ```typescript
 {
   success: boolean;
@@ -544,6 +562,7 @@ Server-side function to refresh tokens via GraphQL mutation.
 ```
 
 **Example:**
+
 ```typescript
 const result = await refreshTokenServer(refreshToken);
 if (result.success) {
@@ -556,14 +575,17 @@ if (result.success) {
 Client-side function with race condition prevention.
 
 **Parameters:**
+
 - `refreshToken`: The refresh token string
 
 **Returns:**
+
 ```typescript
-Promise<TokenPair | null>
+Promise<TokenPair | null>;
 ```
 
 **Example:**
+
 ```typescript
 const tokens = await refreshTokenClient(refreshToken);
 if (tokens) {
@@ -576,14 +598,17 @@ if (tokens) {
 Checks if error is an authentication error.
 
 **Parameters:**
+
 - `error`: Any error object
 
 **Returns:**
+
 ```typescript
-boolean
+boolean;
 ```
 
 **Example:**
+
 ```typescript
 if (isAuthError(error)) {
   // Handle auth error
@@ -595,14 +620,17 @@ if (isAuthError(error)) {
 Extracts error message from various error types.
 
 **Parameters:**
+
 - `error`: Any error object
 
 **Returns:**
+
 ```typescript
-string
+string;
 ```
 
 **Example:**
+
 ```typescript
 const message = getErrorMessage(error);
 console.error("Error:", message);
@@ -613,8 +641,9 @@ console.error("Error:", message);
 Server-side authentication check with automatic refresh.
 
 **Returns:**
+
 ```typescript
-Promise<AuthResult>
+Promise<AuthResult>;
 
 interface AuthResult {
   authenticated: boolean;
@@ -624,6 +653,7 @@ interface AuthResult {
 ```
 
 **Example:**
+
 ```typescript
 export const useLoader = routeLoader$(async () => {
   const auth = await checkAuth();
@@ -644,12 +674,12 @@ For issues or questions:
 
 ### Common Error Messages
 
-| Error | Cause | Solution |
-|-------|-------|----------|
-| "Token refresh failed" | Invalid refresh token | Clear cookies and re-login |
-| "No refresh token available" | Token not in cookies | Check cookie settings |
+| Error                                       | Cause                   | Solution                         |
+| ------------------------------------------- | ----------------------- | -------------------------------- |
+| "Token refresh failed"                      | Invalid refresh token   | Clear cookies and re-login       |
+| "No refresh token available"                | Token not in cookies    | Check cookie settings            |
 | "ContextualError: invalid or expired token" | Token expired naturally | Should auto-refresh (check logs) |
-| "Authentication required" | No tokens found | Redirect to login |
+| "Authentication required"                   | No tokens found         | Redirect to login                |
 
 ### Debug Mode
 
@@ -669,6 +699,7 @@ if (DEBUG) {
 ## Changelog
 
 ### Version 1.0.0 (2025-01-27)
+
 - ✅ Initial implementation
 - ✅ Automatic token refresh on auth errors
 - ✅ Race condition prevention

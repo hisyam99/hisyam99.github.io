@@ -1,5 +1,5 @@
 import { server$ } from "@builder.io/qwik-city";
-import { createAuthenticatedClient } from "../lib/graphql/graffle";
+import { createAuthenticatedClient } from "../lib/graphql/graffle-with-refresh";
 
 /**
  * Admin Resume Content Management Types

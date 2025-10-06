@@ -8,7 +8,7 @@ import {
   Link,
 } from "@builder.io/qwik-city";
 import { getBlogById, updateBlog } from "~/services/admin-blog";
-
+import { checkAuth } from "~/utils/auth-middleware";
 import RichTextEditor from "~/components/admin/RichTextEditor";
 
 const blogSchema = z.object({
@@ -36,15 +36,18 @@ const blogSchema = z.object({
 
 export const useBlogData = routeLoader$(async (requestEvent) => {
   const blogId = requestEvent.params.id;
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
-  if (!token) {
-    throw requestEvent.redirect(302, "/auth/login");
+  if (!auth.authenticated) {
+    throw requestEvent.redirect(302, auth.redirectTo || "/auth/login");
   }
 
   if (!blogId) {
     throw requestEvent.redirect(302, "/admin/blogs");
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const blog = await getBlogById(token, blogId);
@@ -56,15 +59,18 @@ export const useBlogData = routeLoader$(async (requestEvent) => {
 });
 
 export const useUpdateBlog = routeAction$(async (data, requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
   const blogId = requestEvent.params.id;
 
-  if (!token) {
+  if (!auth.authenticated) {
     return {
       success: false,
       error: "Not authenticated",
     };
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   if (!blogId) {
     return {

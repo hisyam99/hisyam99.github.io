@@ -6,13 +6,17 @@ import {
   bulkUpdateBlogStatus,
 } from "~/services/admin-blog";
 import type { Blog } from "~/services/admin-blog";
+import { checkAuth } from "~/utils/auth-middleware";
 
 export const useBlogsData = routeLoader$(async (requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
-  if (!token) {
-    throw requestEvent.redirect(302, "/auth/login");
+  if (!auth.authenticated) {
+    throw requestEvent.redirect(302, auth.redirectTo || "/auth/login");
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const result = await getAllBlogs(token);
@@ -24,14 +28,17 @@ export const useBlogsData = routeLoader$(async (requestEvent) => {
 });
 
 export const useDeleteBlog = routeAction$(async (data, requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
-  if (!token) {
+  if (!auth.authenticated) {
     return {
       success: false,
       error: "Not authenticated",
     };
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const blogId = data.id as string;
@@ -47,14 +54,17 @@ export const useDeleteBlog = routeAction$(async (data, requestEvent) => {
 });
 
 export const useBulkAction = routeAction$(async (data, requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
-  if (!token) {
+  if (!auth.authenticated) {
     return {
       success: false,
       error: "Not authenticated",
     };
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const blogIds = JSON.parse(data.blogIds as string) as string[];
@@ -91,7 +101,7 @@ export default component$(() => {
     track(() => statusFilter.value);
     track(() => blogsData.value.blogs);
 
-    const blogs = blogsData.value.blogs;
+    const blogs = blogsData.value.blogs || [];
     let filtered = blogs;
 
     // Apply search filter
@@ -291,7 +301,7 @@ export default component$(() => {
           {/* Results Count */}
           <div class="text-sm text-base-content/70 mt-2">
             Showing {filteredBlogs.value.length} of{" "}
-            {blogsData.value.blogs.length} blogs
+            {blogsData.value.blogs?.length || 0} blogs
           </div>
         </div>
       </div>

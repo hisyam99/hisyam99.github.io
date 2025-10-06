@@ -142,7 +142,10 @@ export const getErrorMessage = (error: unknown): string => {
       return String((error as { message: unknown }).message);
     }
 
-    if ("errors" in error && Array.isArray((error as { errors: unknown[] }).errors)) {
+    if (
+      "errors" in error &&
+      Array.isArray((error as { errors: unknown[] }).errors)
+    ) {
       const errors = (error as { errors: Array<{ message?: string }> }).errors;
       if (errors.length > 0 && errors[0].message) {
         return errors[0].message;

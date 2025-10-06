@@ -24,11 +24,11 @@ import { checkAuth } from "~/utils/auth-middleware";
 export const useDataLoader = routeLoader$(async (requestEvent) => {
   // ✨ Auto-refresh happens here
   const auth = await checkAuth();
-  
+
   if (!auth.authenticated) {
     throw requestEvent.redirect(302, "/auth/login");
   }
-  
+
   return { user: auth.user };
 });
 ```
@@ -42,13 +42,13 @@ import { createAuthenticatedClient } from "~/lib/graphql/graffle-with-refresh";
 export const getData = server$(async (token: string) => {
   // ✨ This client auto-retries on auth errors
   const client = createAuthenticatedClient(token);
-  
+
   const result = await client.gql`
     query GetData {
       myData { id name }
     }
   `.send();
-  
+
   return result.data;
 });
 ```
@@ -113,25 +113,35 @@ frontend/src/
 ## API Reference
 
 ### `checkAuth()`
+
 Check authentication with automatic token refresh.
+
 ```typescript
 const auth = await checkAuth();
 ```
 
 ### `refreshTokenServer(token)`
+
 Manually refresh token (server-side).
+
 ```typescript
 const result = await refreshTokenServer(refreshToken);
 ```
 
 ### `isAuthError(error)`
+
 Check if error is authentication-related.
+
 ```typescript
-if (isAuthError(error)) { /* handle */ }
+if (isAuthError(error)) {
+  /* handle */
+}
 ```
 
 ### `getErrorMessage(error)`
+
 Extract error message from any error type.
+
 ```typescript
 const message = getErrorMessage(error);
 ```
@@ -157,6 +167,7 @@ cookie.set("refreshToken", token, {
 ### GraphQL Endpoint
 
 Set in `.env`:
+
 ```env
 PUBLIC_GRAPHQL_ENDPOINT=http://localhost:4001/graphql
 ```
@@ -175,6 +186,7 @@ The system automatically detects these authentication errors:
 - `ContextualError: invalid or expired token`
 
 **Need a custom pattern?** Edit `src/utils/token-refresh.ts`:
+
 ```typescript
 const authErrorPatterns = [
   /invalid.*token/i,
@@ -187,6 +199,7 @@ const authErrorPatterns = [
 ### Issue: Not Refreshing
 
 **Check**: Do you have a refresh token in cookies?
+
 ```javascript
 // Browser console
 console.log(document.cookie);
@@ -197,11 +210,12 @@ console.log(document.cookie);
 ### Issue: Infinite Redirect Loop
 
 **Solution**: Clear all tokens and login again
+
 ```javascript
 // Browser console
-document.cookie.split(";").forEach(c => {
-  document.cookie = c.trim().split("=")[0] + 
-    '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/';
+document.cookie.split(";").forEach((c) => {
+  document.cookie =
+    c.trim().split("=")[0] + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
 });
 localStorage.clear();
 ```

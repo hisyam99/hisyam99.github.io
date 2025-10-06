@@ -10,6 +10,7 @@ import {
 import { createResumeContent } from "~/services/admin-resume-contents";
 import { getAllCategories } from "~/services/admin-categories";
 import type { Category } from "~/services/admin-categories";
+import { checkAuth } from "~/utils/auth-middleware";
 
 const createResumeContentSchema = z.object({
   title: z.string().min(1, "Title is required").max(200, "Title too long"),
@@ -19,11 +20,14 @@ const createResumeContentSchema = z.object({
 });
 
 export const useCategoriesData = routeLoader$(async (requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
-  if (!token) {
-    throw requestEvent.redirect(302, "/auth/login");
+  if (!auth.authenticated) {
+    throw requestEvent.redirect(302, auth.redirectTo || "/auth/login");
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const result = await getAllCategories(token);
@@ -36,11 +40,14 @@ export const useCategoriesData = routeLoader$(async (requestEvent) => {
 
 export const useCreateResumeContent = routeAction$(
   async (data, requestEvent) => {
-    const token = requestEvent.cookie.get("accessToken")?.value;
+    const auth = await checkAuth();
 
-    if (!token) {
+    if (!auth.authenticated) {
       return { success: false, error: "Not authenticated" };
     }
+
+    const token = requestEvent.cookie.get("accessToken")?.value;
+    if (!token) return { success: false, error: "Not authenticated" };
 
     try {
       const resumeContentData = {
@@ -85,7 +92,11 @@ export default component$(() => {
   useTask$(({ track }) => {
     track(() => categoriesData.value.categories);
 
-    if (categoriesData.value.categories.length > 0 && !categoryId.value) {
+    if (
+      categoriesData.value.categories &&
+      categoriesData.value.categories.length > 0 &&
+      !categoryId.value
+    ) {
       categoryId.value = categoriesData.value.categories[0].id;
     }
   });
@@ -132,7 +143,8 @@ export default component$(() => {
               <label class="label">
                 <span class="label-text font-medium">Category *</span>
               </label>
-              {categoriesData.value.categories.length > 0 ? (
+              {categoriesData.value.categories &&
+              categoriesData.value.categories.length > 0 ? (
                 <select
                   name="categoryId"
                   class="select select-bordered w-full"
@@ -143,11 +155,13 @@ export default component$(() => {
                   required
                 >
                   <option value="">Select a category</option>
-                  {categoriesData.value.categories.map((category: Category) => (
-                    <option key={category.id} value={category.id}>
-                      {`${category.name}${category.description ? ` - ${category.description}` : ""}`}
-                    </option>
-                  ))}
+                  {categoriesData.value.categories?.map(
+                    (category: Category) => (
+                      <option key={category.id} value={category.id}>
+                        {`${category.name}${category.description ? ` - ${category.description}` : ""}`}
+                      </option>
+                    ),
+                  )}
                 </select>
               ) : (
                 <div class="alert alert-warning">
@@ -233,6 +247,7 @@ export default component$(() => {
                 class="btn btn-primary"
                 disabled={
                   createAction.isRunning ||
+                  !categoriesData.value.categories ||
                   categoriesData.value.categories.length === 0
                 }
               >

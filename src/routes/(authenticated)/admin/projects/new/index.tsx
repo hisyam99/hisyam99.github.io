@@ -9,6 +9,7 @@ import {
 } from "@builder.io/qwik-city";
 import { createProject } from "~/services/admin-projects";
 import { getAllUsers } from "~/services/admin-users";
+import { checkAuth } from "~/utils/auth-middleware";
 import type { User } from "~/services/admin-users";
 
 const createProjectSchema = z.object({
@@ -18,11 +19,14 @@ const createProjectSchema = z.object({
 });
 
 export const useUsersData = routeLoader$(async (requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
-  if (!token) {
-    throw requestEvent.redirect(302, "/auth/login");
+  if (!auth.authenticated) {
+    throw requestEvent.redirect(302, auth.redirectTo || "/auth/login");
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const result = await getAllUsers(token);
@@ -34,11 +38,14 @@ export const useUsersData = routeLoader$(async (requestEvent) => {
 });
 
 export const useCreateProject = routeAction$(async (data, requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
-  if (!token) {
+  if (!auth.authenticated) {
     return { success: false, error: "Not authenticated" };
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const projectData = {
@@ -121,7 +128,7 @@ export default component$(() => {
               <label class="label">
                 <span class="label-text font-medium">Owner</span>
               </label>
-              {usersData.value.users.length > 0 ? (
+              {usersData.value.users && usersData.value.users.length > 0 ? (
                 <select
                   name="userId"
                   class="select select-bordered w-full"
@@ -131,7 +138,7 @@ export default component$(() => {
                   }}
                 >
                   <option value="">No owner (unassigned)</option>
-                  {usersData.value.users.map((user: User) => (
+                  {usersData.value.users?.map((user: User) => (
                     <option key={user.id} value={user.id}>
                       {`${user.name} (${user.email})`}
                     </option>

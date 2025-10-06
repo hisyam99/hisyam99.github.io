@@ -7,10 +7,10 @@ import {
   zod$,
   Link,
 } from "@builder.io/qwik-city";
-import { getProjectById } from "~/services/admin-projects";
+import { getProjectById, updateProject } from "~/services/admin-projects";
 import { getAllUsers } from "~/services/admin-users";
-import { updateProject } from "~/services/admin-projects";
 import type { User } from "~/services/admin-users";
+import { checkAuth } from "~/utils/auth-middleware";
 
 const updateProjectSchema = z.object({
   title: z.string().min(1, "Title is required").max(200, "Title too long"),
@@ -19,16 +19,19 @@ const updateProjectSchema = z.object({
 });
 
 export const useProjectData = routeLoader$(async (requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
   const projectId = requestEvent.params.id;
 
-  if (!token) {
-    throw requestEvent.redirect(302, "/auth/login");
+  if (!auth.authenticated) {
+    throw requestEvent.redirect(302, auth.redirectTo || "/auth/login");
   }
 
   if (!projectId) {
     throw new Error("Project ID is required");
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const project = await getProjectById(token, projectId);
@@ -40,11 +43,14 @@ export const useProjectData = routeLoader$(async (requestEvent) => {
 });
 
 export const useUsersData = routeLoader$(async (requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
-  if (!token) {
-    throw requestEvent.redirect(302, "/auth/login");
+  if (!auth.authenticated) {
+    throw requestEvent.redirect(302, auth.redirectTo || "/auth/login");
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const result = await getAllUsers(token);
@@ -56,16 +62,19 @@ export const useUsersData = routeLoader$(async (requestEvent) => {
 });
 
 export const useUpdateProject = routeAction$(async (data, requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
   const projectId = requestEvent.params.id;
 
-  if (!token) {
+  if (!auth.authenticated) {
     return { success: false, error: "Not authenticated" };
   }
 
   if (!projectId) {
     return { success: false, error: "Project ID is required" };
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const projectData = {
@@ -184,7 +193,7 @@ export default component$(() => {
               <label class="label">
                 <span class="label-text font-medium">Owner</span>
               </label>
-              {usersData.value.users.length > 0 ? (
+              {usersData.value.users && usersData.value.users.length > 0 ? (
                 <select
                   name="userId"
                   class="select select-bordered w-full"
@@ -194,7 +203,7 @@ export default component$(() => {
                   }}
                 >
                   <option value="">No owner (unassigned)</option>
-                  {usersData.value.users.map((user: User) => (
+                  {usersData.value.users?.map((user: User) => (
                     <option key={user.id} value={user.id}>
                       {`${user.name} (${user.email})`}
                     </option>

@@ -1,6 +1,7 @@
 import { component$, useSignal } from "@builder.io/qwik";
-import { routeAction$, Form, z, zod$, Link } from "@builder.io/qwik-city";
+import { routeAction$, Form, Link, z, zod$ } from "@builder.io/qwik-city";
 import { createCategory } from "~/services/admin-categories";
+import { checkAuth } from "~/utils/auth-middleware";
 
 const createCategorySchema = z.object({
   name: z.string().min(1, "Name is required").max(100, "Name too long"),
@@ -8,11 +9,14 @@ const createCategorySchema = z.object({
 });
 
 export const useCreateCategory = routeAction$(async (data, requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
-  if (!token) {
+  if (!auth.authenticated) {
     return { success: false, error: "Not authenticated" };
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const categoryData = {

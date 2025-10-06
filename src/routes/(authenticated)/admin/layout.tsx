@@ -5,45 +5,28 @@ import {
   useLocation,
 } from "@builder.io/qwik-city";
 import AdminLayout from "~/components/admin/AdminLayout";
-import { getCurrentUser } from "~/services/auth";
+import { checkAuth } from "~/utils/auth-middleware";
 
 export const onGet: RequestHandler = async (requestEvent) => {
-  // Get token from cookie
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
-  if (!token) {
-    throw requestEvent.redirect(302, "/auth/login");
-  }
-
-  // Check authentication
-  const user = await getCurrentUser(token);
-
-  if (!user) {
-    throw requestEvent.redirect(302, "/auth/login");
+  if (!auth.authenticated) {
+    throw requestEvent.redirect(302, auth.redirectTo || "/auth/login");
   }
 
   // Check admin role
-  if (user.role !== "ADMIN" && user.role !== "EDITOR") {
+  if (auth.user?.role !== "ADMIN" && auth.user?.role !== "EDITOR") {
     throw requestEvent.redirect(302, "/");
   }
 };
 
-export const useAuthData = routeLoader$(async (requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+export const useAuthData = routeLoader$(async () => {
+  const auth = await checkAuth();
 
-  if (!token) {
-    return {
-      user: null,
-      isAuthenticated: false,
-      isAdmin: false,
-    };
-  }
-
-  const user = await getCurrentUser(token);
   return {
-    user,
-    isAuthenticated: !!user,
-    isAdmin: user?.role === "ADMIN" || user?.role === "EDITOR",
+    user: auth.user,
+    isAuthenticated: auth.authenticated,
+    isAdmin: auth.user?.role === "ADMIN" || auth.user?.role === "EDITOR",
   };
 });
 

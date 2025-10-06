@@ -1,10 +1,10 @@
 import { server$ } from "@builder.io/qwik-city";
 import {
   createGraphQLClient,
-  createAuthenticatedClient,
   type PaginationInput,
   type PaginatedResponse,
 } from "../lib/graphql/graffle";
+import { createAuthenticatedClient } from "../lib/graphql/graffle-with-refresh";
 
 /**
  * Blog Types

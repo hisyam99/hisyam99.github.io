@@ -1,20 +1,22 @@
 import { component$ } from "@builder.io/qwik";
 import { routeLoader$, Link } from "@builder.io/qwik-city";
 import { getAllBlogs } from "~/services/admin-blog";
-import { getCurrentUser } from "~/services/auth";
+import { checkAuth } from "~/utils/auth-middleware";
 
 export const useDashboardData = routeLoader$(async (requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
+  if (!auth.authenticated) {
+    throw requestEvent.redirect(302, auth.redirectTo || "/auth/login");
+  }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
   if (!token) {
     throw requestEvent.redirect(302, "/auth/login");
   }
 
   try {
-    const [user, blogsResult] = await Promise.all([
-      getCurrentUser(token),
-      getAllBlogs(token, { pageSize: 5 }),
-    ]);
+    const blogsResult = await getAllBlogs(token, { pageSize: 5 });
 
     const blogs = blogsResult.data;
 
@@ -31,7 +33,7 @@ export const useDashboardData = routeLoader$(async (requestEvent) => {
     };
 
     return {
-      user,
+      user: auth.user,
       stats,
       recentBlogs: blogs,
       error: null,

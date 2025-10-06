@@ -9,9 +9,11 @@ Your Qwik application now has a **fully functional, production-ready automatic t
 ## 📦 What Was Implemented
 
 ### 1. Core Token Refresh Utility
+
 **File**: `src/utils/token-refresh.ts`
 
 **Features**:
+
 - ✅ Server-side refresh function with cookie management
 - ✅ Client-side refresh with race condition prevention
 - ✅ Smart auth error detection (8 error patterns)
@@ -19,6 +21,7 @@ Your Qwik application now has a **fully functional, production-ready automatic t
 - ✅ Automatic token storage in HTTP-only cookies
 
 **Key Functions**:
+
 ```typescript
 refreshTokenServer(refreshToken: string)  // Server-side refresh
 refreshTokenClient(refreshToken: string)  // Client-side refresh
@@ -27,41 +30,49 @@ getErrorMessage(error: unknown)           // Extract error messages
 ```
 
 ### 2. Enhanced Authentication Middleware
+
 **File**: `src/utils/auth-middleware.ts`
 
 **Features**:
+
 - ✅ Automatic token refresh on expired tokens
 - ✅ Multi-level fallback (access token → refresh → redirect)
 - ✅ Smart error recovery
 - ✅ Role-based access control (admin, auth, guest)
 
 **Key Functions**:
+
 ```typescript
-checkAuth()      // Auto-refresh + auth check
-requireAuth()    // Protected routes
-requireAdmin()   // Admin-only routes
-requireGuest()   // Guest-only routes
+checkAuth(); // Auto-refresh + auth check
+requireAuth(); // Protected routes
+requireAdmin(); // Admin-only routes
+requireGuest(); // Guest-only routes
 ```
 
 ### 3. Enhanced GraphQL Client (Optional)
+
 **File**: `src/lib/graphql/graffle-with-refresh.ts`
 
 **Features**:
+
 - ✅ Automatic retry on auth errors
 - ✅ Token refresh integration
 - ✅ Request/response logging (dev mode)
 - ✅ Callback support for token refresh events
 
 **Key Functions**:
+
 ```typescript
 createGraphQLClient(options?)                    // Public client
 createAuthenticatedClient(token, options?)       // Auth client with auto-retry
 ```
 
 ### 4. Improved Auth Service
+
 **File**: `src/services/auth.ts`
 
 **Changes**:
+
 - ✅ Better error handling with `getErrorMessage()`
 - ✅ Auth error detection with `isAuthError()`
 - ✅ Improved logout (clears all token variants)
@@ -72,7 +83,9 @@ createAuthenticatedClient(token, options?)       // Auth client with auto-retry
 ## 📚 Documentation Created
 
 ### 1. **REFRESH_TOKEN_IMPLEMENTATION.md** (Full Documentation)
+
 Comprehensive guide covering:
+
 - Architecture and flow diagrams
 - Complete API reference
 - Security features
@@ -83,7 +96,9 @@ Comprehensive guide covering:
 - Performance considerations
 
 ### 2. **REFRESH_TOKEN_QUICKSTART.md** (Quick Start Guide)
+
 Get started in 5 minutes:
+
 - Installation verification
 - Quick examples
 - Testing steps
@@ -92,7 +107,9 @@ Get started in 5 minutes:
 - Production checklist
 
 ### 3. **REFRESH_TOKEN_EXAMPLES.md** (Practical Examples)
+
 Real-world code examples:
+
 - Protected routes
 - Admin dashboards
 - API services
@@ -104,7 +121,9 @@ Real-world code examples:
 - Testing examples
 
 ### 4. **REFRESH_TOKEN_FLOW.md** (Visual Flow Diagrams)
+
 Visual representation of:
+
 - Complete request flow
 - Race condition prevention
 - Code execution paths
@@ -112,6 +131,7 @@ Visual representation of:
 - Sequence diagrams
 
 ### 5. **REFRESH_TOKEN_SUMMARY.md** (This File)
+
 Implementation summary and next steps
 
 ---
@@ -119,6 +139,7 @@ Implementation summary and next steps
 ## 🎯 How It Works (Simple Explanation)
 
 ### Before (Manual Handling)
+
 ```typescript
 try {
   const data = await fetchData(token);
@@ -132,6 +153,7 @@ try {
 ```
 
 ### After (Automatic)
+
 ```typescript
 const data = await fetchData(token);
 // That's it! Refresh happens automatically if needed ✨
@@ -166,34 +188,37 @@ const data = await fetchData(token);
 ## 🚀 Usage Examples
 
 ### Example 1: Protected Route (Most Common)
+
 ```typescript
 // Any protected route - refresh happens automatically
 export const useDataLoader = routeLoader$(async () => {
   const auth = await checkAuth(); // ✨ Auto-refresh here
-  
+
   if (!auth.authenticated) {
     throw redirect(302, "/auth/login");
   }
-  
+
   return { user: auth.user };
 });
 ```
 
 ### Example 2: API Service Call
+
 ```typescript
 // GraphQL client with auto-retry
 export const getData = server$(async (token: string) => {
   const client = createAuthenticatedClient(token);
-  
+
   const result = await client.gql`
     query GetData { data { id name } }
   `.send();
-  
+
   return result.data; // ✨ Auto-refresh + retry if needed
 });
 ```
 
 ### Example 3: Error Detection
+
 ```typescript
 try {
   await apiCall();
@@ -209,17 +234,19 @@ try {
 ## 🔐 Security Features
 
 ### 1. HTTP-Only Cookies
+
 ```typescript
 cookie.set("accessToken", token, {
-  httpOnly: true,      // ✅ Prevents XSS attacks
-  secure: true,        // ✅ HTTPS only
-  sameSite: "strict",  // ✅ CSRF protection
-  maxAge: 900,         // ✅ Auto-expiry (15 min)
+  httpOnly: true, // ✅ Prevents XSS attacks
+  secure: true, // ✅ HTTPS only
+  sameSite: "strict", // ✅ CSRF protection
+  maxAge: 900, // ✅ Auto-expiry (15 min)
   path: "/",
 });
 ```
 
 ### 2. Race Condition Prevention
+
 ```typescript
 // Multiple simultaneous requests share one refresh
 let isRefreshing = false;
@@ -231,6 +258,7 @@ if (isRefreshing && refreshPromise) {
 ```
 
 ### 3. Automatic Cleanup
+
 ```typescript
 // Failed refresh clears everything
 this.cookie.delete("accessToken");
@@ -245,6 +273,7 @@ this.cookie.delete("user");
 ### Quick Test Steps
 
 #### 1. Test Normal Flow
+
 ```bash
 # Login
 curl -X POST http://localhost:5173/auth/login \
@@ -253,9 +282,11 @@ curl -X POST http://localhost:5173/auth/login \
 # Access protected route
 curl http://localhost:5173/dashboard
 ```
+
 ✅ Should work normally
 
 #### 2. Test Auto-Refresh (Manual)
+
 1. Login to your app
 2. Open DevTools → Application → Cookies
 3. Change `accessToken` to invalid value
@@ -266,6 +297,7 @@ curl http://localhost:5173/dashboard
 ✅ Page/request should succeed without error
 
 #### 3. Test Invalid Refresh Token
+
 1. Login to your app
 2. Open DevTools → Application → Cookies
 3. Delete `refreshToken` cookie
@@ -275,17 +307,20 @@ curl http://localhost:5173/dashboard
 ✅ Should redirect to login page
 
 #### 4. Test Concurrent Requests
+
 Open browser console and run:
+
 ```javascript
 // Make 5 simultaneous requests
 Promise.all([
-  fetch('/api/data1'),
-  fetch('/api/data2'),
-  fetch('/api/data3'),
-  fetch('/api/data4'),
-  fetch('/api/data5'),
-]).then(() => console.log('✅ All succeeded!'));
+  fetch("/api/data1"),
+  fetch("/api/data2"),
+  fetch("/api/data3"),
+  fetch("/api/data4"),
+  fetch("/api/data5"),
+]).then(() => console.log("✅ All succeeded!"));
 ```
+
 ✅ Only ONE refresh request, all 5 succeed
 
 ---
@@ -306,9 +341,11 @@ Look for these emoji indicators:
 ### Common Issues & Solutions
 
 #### Issue 1: Not Refreshing
+
 **Symptoms**: User gets logged out despite valid refresh token
 
 **Debug**:
+
 ```javascript
 // In browser console
 console.log(document.cookie); // Check for refreshToken
@@ -317,23 +354,27 @@ console.log(document.cookie); // Check for refreshToken
 **Solution**: Verify refresh token is stored in cookies (check login/register actions)
 
 #### Issue 2: Infinite Redirect Loop
+
 **Symptoms**: Login succeeds but immediately redirects back
 
 **Solution**:
+
 ```javascript
 // Clear everything and start fresh
-document.cookie.split(";").forEach(c => {
-  document.cookie = c.trim().split("=")[0] + 
-    '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/';
+document.cookie.split(";").forEach((c) => {
+  document.cookie =
+    c.trim().split("=")[0] + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
 });
 localStorage.clear();
 // Now login again
 ```
 
 #### Issue 3: Error Not Detected
+
 **Symptoms**: "ContextualError: invalid or expired token" not triggering refresh
 
 **Solution**: Check error patterns in `isAuthError()` function
+
 ```typescript
 const authErrorPatterns = [
   /invalid.*token/i,
@@ -393,6 +434,7 @@ const client = createAuthenticatedClient(token, {
 ## 📊 Performance Impact
 
 ### Overhead
+
 - **First Request (with refresh)**: +100-200ms (refresh + retry)
 - **Subsequent Requests**: 0ms (token cached in cookies)
 - **Concurrent Requests**: 0ms extra (single refresh handles all)
@@ -400,14 +442,17 @@ const client = createAuthenticatedClient(token, {
 ### Optimization Tips
 
 1. **Proactive Refresh**: Refresh before expiry
+
 ```typescript
 const timeUntilExpiry = getTokenExpiry(token) - Date.now();
-if (timeUntilExpiry < 60000) { // Less than 1 minute
+if (timeUntilExpiry < 60000) {
+  // Less than 1 minute
   await refreshTokenClient(refreshToken);
 }
 ```
 
 2. **Server-Side Rendering**: Leverage SSR
+
 ```typescript
 // Tokens handled server-side via cookies
 export const useLoader = routeLoader$(async () => {
@@ -455,6 +500,7 @@ Before deploying to production:
 ### Optional Enhancements
 
 1. **Add Monitoring**
+
 ```typescript
 // Track refresh events
 let refreshCount = 0;
@@ -463,46 +509,52 @@ let refreshFailures = 0;
 export const getRefreshStats = () => ({
   totalRefreshes: refreshCount,
   failedRefreshes: refreshFailures,
-  successRate: (refreshCount - refreshFailures) / refreshCount * 100,
+  successRate: ((refreshCount - refreshFailures) / refreshCount) * 100,
 });
 ```
 
 2. **Implement Token Rotation**
+
 ```typescript
 // Backend returns new refresh token on each refresh
 // Invalidate old refresh token
 ```
 
 3. **Add Proactive Refresh**
+
 ```typescript
 // Refresh token before it expires (sliding window)
 useVisibleTask$(() => {
-  const interval = setInterval(() => {
-    checkAndRefreshIfNeeded();
-  }, 5 * 60 * 1000); // Check every 5 minutes
+  const interval = setInterval(
+    () => {
+      checkAndRefreshIfNeeded();
+    },
+    5 * 60 * 1000,
+  ); // Check every 5 minutes
 });
 ```
 
 4. **Add Analytics**
+
 ```typescript
 onTokenRefresh: (newToken) => {
-  analytics.track('token_refreshed', {
+  analytics.track("token_refreshed", {
     timestamp: new Date().toISOString(),
   });
-}
+};
 ```
 
 ---
 
 ## 📖 Documentation Reference
 
-| Document | Purpose | When to Read |
-|----------|---------|--------------|
-| `REFRESH_TOKEN_QUICKSTART.md` | Get started quickly | First time setup |
-| `REFRESH_TOKEN_IMPLEMENTATION.md` | Full documentation | Deep dive into features |
-| `REFRESH_TOKEN_EXAMPLES.md` | Code examples | Building features |
-| `REFRESH_TOKEN_FLOW.md` | Visual diagrams | Understanding flow |
-| `REFRESH_TOKEN_SUMMARY.md` | This file | Overview & next steps |
+| Document                          | Purpose             | When to Read            |
+| --------------------------------- | ------------------- | ----------------------- |
+| `REFRESH_TOKEN_QUICKSTART.md`     | Get started quickly | First time setup        |
+| `REFRESH_TOKEN_IMPLEMENTATION.md` | Full documentation  | Deep dive into features |
+| `REFRESH_TOKEN_EXAMPLES.md`       | Code examples       | Building features       |
+| `REFRESH_TOKEN_FLOW.md`           | Visual diagrams     | Understanding flow      |
+| `REFRESH_TOKEN_SUMMARY.md`        | This file           | Overview & next steps   |
 
 ---
 
@@ -517,6 +569,7 @@ onTokenRefresh: (newToken) => {
 2. **Test Backend**
    - Use GraphQL Playground
    - Test `refreshToken` mutation directly
+
    ```graphql
    mutation {
      refreshToken(refreshToken: "YOUR_TOKEN") {

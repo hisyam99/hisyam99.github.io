@@ -3,6 +3,7 @@ import { routeAction$, Form } from "@builder.io/qwik-city";
 import { useAdminCategoryLoader } from "~/hooks/data-loaders";
 import { updateCategory } from "~/services/admin-categories";
 import { z } from "zod";
+import { checkAuth } from "~/utils/auth-middleware";
 
 export { useAdminCategoryLoader };
 
@@ -12,12 +13,15 @@ const updateCategorySchema = z.object({
 });
 
 export const useUpdateCategory = routeAction$(async (data, requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
   const categoryId = requestEvent.params.id;
 
-  if (!token) {
+  if (!auth.authenticated) {
     return { success: false, error: "Unauthorized" };
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   const validation = updateCategorySchema.safeParse(data);
   if (!validation.success) {

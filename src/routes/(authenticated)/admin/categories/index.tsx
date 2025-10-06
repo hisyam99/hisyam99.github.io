@@ -2,13 +2,17 @@ import { component$, useSignal, useTask$ } from "@builder.io/qwik";
 import { routeLoader$, routeAction$, Form, Link } from "@builder.io/qwik-city";
 import { getAllCategories, deleteCategory } from "~/services/admin-categories";
 import type { Category } from "~/services/admin-categories";
+import { checkAuth } from "~/utils/auth-middleware";
 
 export const useCategoriesData = routeLoader$(async (requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
-  if (!token) {
-    throw requestEvent.redirect(302, "/auth/login");
+  if (!auth.authenticated) {
+    throw requestEvent.redirect(302, auth.redirectTo || "/auth/login");
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const result = await getAllCategories(token);
@@ -20,11 +24,14 @@ export const useCategoriesData = routeLoader$(async (requestEvent) => {
 });
 
 export const useDeleteCategory = routeAction$(async (data, requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
-  if (!token) {
+  if (!auth.authenticated) {
     return { success: false, error: "Not authenticated" };
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const categoryId = data.id as string;
@@ -52,7 +59,7 @@ export default component$(() => {
     track(() => searchTerm.value);
     track(() => categoriesData.value.categories);
 
-    const categories = categoriesData.value.categories;
+    const categories = categoriesData.value.categories || [];
     let filtered = categories;
 
     // Apply search filter
@@ -166,7 +173,7 @@ export default component$(() => {
           {/* Results Count */}
           <div class="text-sm text-base-content/70 mt-2">
             Showing {filteredCategories.value.length} of{" "}
-            {categoriesData.value.categories.length} categories
+            {categoriesData.value.categories?.length || 0} categories
           </div>
         </div>
       </div>

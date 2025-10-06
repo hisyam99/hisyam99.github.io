@@ -1,8 +1,6 @@
 import { server$ } from "@builder.io/qwik-city";
-import {
-  createGraphQLClient,
-  createAuthenticatedClient,
-} from "../lib/graphql/graffle";
+import { createGraphQLClient } from "../lib/graphql/graffle";
+import { createAuthenticatedClient } from "../lib/graphql/graffle-with-refresh";
 import { isAuthError, getErrorMessage } from "~/utils/token-refresh";
 
 /**

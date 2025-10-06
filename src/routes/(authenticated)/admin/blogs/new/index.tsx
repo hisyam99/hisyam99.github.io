@@ -2,6 +2,7 @@ import { component$, useSignal, $ } from "@builder.io/qwik";
 import { routeAction$, Form, z, zod$, Link } from "@builder.io/qwik-city";
 import { createBlog } from "~/services/admin-blog";
 import RichTextEditor from "~/components/admin/RichTextEditor";
+import { checkAuth } from "~/utils/auth-middleware";
 
 const blogSchema = z.object({
   title: z.string().min(1, "Title is required").max(200, "Title too long"),
@@ -27,14 +28,17 @@ const blogSchema = z.object({
 });
 
 export const useCreateBlog = routeAction$(async (data, requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
-  if (!token) {
+  if (!auth.authenticated) {
     return {
       success: false,
       error: "Not authenticated",
     };
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   try {
     const tagsArray = (data.tags as string)

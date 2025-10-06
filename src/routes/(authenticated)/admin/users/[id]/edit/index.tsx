@@ -1,8 +1,9 @@
 import { component$ } from "@builder.io/qwik";
 import { routeAction$, Form } from "@builder.io/qwik-city";
 import { useAdminUserLoader } from "~/hooks/data-loaders";
-import { updateUser } from "~/services/user";
+import { updateUser } from "~/services/admin-users";
 import { z } from "zod";
+import { checkAuth } from "~/utils/auth-middleware";
 
 const updateUserSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -12,12 +13,15 @@ const updateUserSchema = z.object({
 });
 
 export const useUpdateUser = routeAction$(async (data, requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
   const userId = requestEvent.params.id;
 
-  if (!token) {
+  if (!auth.authenticated) {
     return { success: false, error: "Unauthorized" };
   }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
+  if (!token) return { success: false, error: "Not authenticated" };
 
   const validation = updateUserSchema.safeParse(data);
   if (!validation.success) {
@@ -25,7 +29,7 @@ export const useUpdateUser = routeAction$(async (data, requestEvent) => {
   }
 
   try {
-    await updateUser(token, userId, validation.data);
+    await updateUser(token, { ...validation.data, id: userId });
     return { success: true };
   } catch (error) {
     console.error("Failed to update user:", error);

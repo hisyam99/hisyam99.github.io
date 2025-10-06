@@ -13,9 +13,9 @@ import {
   getResumeContentById,
 } from "../services/category";
 import { getCategoryById as getAdminCategoryById } from "../services/admin-categories";
-import { getCurrentUser } from "../services/auth";
 import { getUsers, getUserById } from "../services/user";
 import type { PaginationInput } from "../lib/graphql/graffle";
+import { checkAuth } from "../utils/auth-middleware";
 
 /**
  * Blog Data Loaders
@@ -303,28 +303,14 @@ export const useResumeContentsByCategoryLoader = routeLoader$(
  * Used in protected routes and for displaying user info
  */
 // eslint-disable-next-line qwik/loader-location
-export const useCurrentUserLoader = routeLoader$(async (requestEvent) => {
-  // Get token from cookies or headers
-  const authHeader = requestEvent.request.headers.get("authorization");
-  const tokenFromHeader = authHeader?.replace("Bearer ", "");
+export const useCurrentUserLoader = routeLoader$(async () => {
+  const auth = await checkAuth();
 
-  // Try to get token from cookies as fallback
-  const tokenFromCookie = requestEvent.cookie.get("access_token")?.value;
-
-  const token = tokenFromHeader || tokenFromCookie;
-
-  if (!token) {
-    // No token found, user is not authenticated
+  if (!auth.authenticated) {
     return null;
   }
 
-  try {
-    return await getCurrentUser(token);
-  } catch (error) {
-    console.error("Failed to load current user:", error);
-    // Don't throw error, just return null for unauthenticated state
-    return null;
-  }
+  return auth.user;
 });
 
 /**
@@ -465,8 +451,13 @@ export const useResumePageDataLoader = routeLoader$(async () => {
  */
 // eslint-disable-next-line qwik/loader-location
 export const useAdminUsersLoader = routeLoader$(async (requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
+  if (!auth.authenticated) {
+    throw requestEvent.redirect(302, auth.redirectTo || "/auth/login");
+  }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
   if (!token) {
     throw requestEvent.redirect(302, "/auth/login");
   }
@@ -500,9 +491,14 @@ export const useAdminUsersLoader = routeLoader$(async (requestEvent) => {
  */
 // eslint-disable-next-line qwik/loader-location
 export const useAdminUserLoader = routeLoader$(async (requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
   const userId = requestEvent.params.id;
 
+  if (!auth.authenticated) {
+    throw requestEvent.redirect(302, auth.redirectTo || "/auth/login");
+  }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
   if (!token) {
     throw requestEvent.redirect(302, "/auth/login");
   }
@@ -525,8 +521,13 @@ export const useAdminUserLoader = routeLoader$(async (requestEvent) => {
  */
 // eslint-disable-next-line qwik/loader-location
 export const useAdminCategoriesLoader = routeLoader$(async (requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
 
+  if (!auth.authenticated) {
+    throw requestEvent.redirect(302, auth.redirectTo || "/auth/login");
+  }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
   if (!token) {
     throw requestEvent.redirect(302, "/auth/login");
   }
@@ -559,9 +560,14 @@ export const useAdminCategoriesLoader = routeLoader$(async (requestEvent) => {
  */
 // eslint-disable-next-line qwik/loader-location
 export const useAdminCategoryLoader = routeLoader$(async (requestEvent) => {
-  const token = requestEvent.cookie.get("accessToken")?.value;
+  const auth = await checkAuth();
   const categoryId = requestEvent.params.id;
 
+  if (!auth.authenticated) {
+    throw requestEvent.redirect(302, auth.redirectTo || "/auth/login");
+  }
+
+  const token = requestEvent.cookie.get("accessToken")?.value;
   if (!token) {
     throw requestEvent.redirect(302, "/auth/login");
   }
