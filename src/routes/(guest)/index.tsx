@@ -6,6 +6,7 @@ import Hero from "~/components/starter/hero/hero";
 import {
   useScrollAnimation,
   useStaggerAnimation,
+  useSmoothScroll,
 } from "~/hooks/useScrollAnimation";
 import { getPublishedBlogs } from "~/services/blog";
 import { getProjects } from "~/services/project";
@@ -87,6 +88,9 @@ export default component$(() => {
   const blogsStaggerRef = useStaggerAnimation(300);
   const { ref: contactRef } = useScrollAnimation();
 
+  // Enable smooth scroll with better control
+  useSmoothScroll();
+
   const { featuredBlogs, featuredProjects, categories } = homepageData.value;
 
   return (
@@ -94,7 +98,7 @@ export default component$(() => {
       <Hero />
 
       {/* Featured Projects Section */}
-      <section id="projects" class="bg-base-200 py-20 pt-32">
+      <section id="projects" class="bg-base-200 py-20 pt-32 scroll-mt-20">
         <div class="container mx-auto px-4">
           <div class="animate-fadeInDown mb-12 text-center">
             <h2 class="animate-textReveal mb-4 text-4xl font-bold">
@@ -304,7 +308,7 @@ export default component$(() => {
       </section>
 
       {/* Latest Blog Posts Section */}
-      <section id="blog" class="bg-base-100 py-20">
+      <section id="blog" class="bg-base-100 py-20 scroll-mt-20">
         <div class="container mx-auto px-4">
           <div class="animate-fadeInDown mb-12 text-center">
             <h2 class="animate-textReveal mb-4 text-4xl font-bold">
@@ -408,7 +412,7 @@ export default component$(() => {
 
       {/* Categories/Skills Section */}
       {categories.data.length > 0 && (
-        <section id="skills" class="bg-base-200 py-20">
+        <section id="skills" class="bg-base-200 py-20 scroll-mt-20">
           <div class="container mx-auto px-4">
             <div class="animate-fadeInDown mb-12 text-center">
               <h2 class="animate-textReveal mb-4 text-4xl font-bold">
@@ -444,7 +448,11 @@ export default component$(() => {
       )}
 
       {/* Contact Section */}
-      <section id="contact" ref={contactRef} class="bg-base-200 py-20">
+      <section
+        id="contact"
+        ref={contactRef}
+        class="bg-base-200 py-20 scroll-mt-20"
+      >
         <div class="container mx-auto px-4">
           <div class="animate-fadeInDown mb-12 text-center">
             <h2 class="animate-textReveal mb-4 text-4xl font-bold">

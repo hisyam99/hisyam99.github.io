@@ -54,7 +54,31 @@
 
 /* Smooth scrolling */
 html {
-  scroll-behavior: smooth;
+  /* Removed scroll-behavior: smooth to prevent scroll jump issues */
+  /* Smooth scrolling will be handled by JavaScript with better control */
+  overflow-x: hidden;
+}
+
+/* Scroll margin utilities for sections with fixed header */
+.scroll-mt-16 {
+  scroll-margin-top: 4rem;
+}
+
+.scroll-mt-20 {
+  scroll-margin-top: 5rem;
+}
+
+.scroll-mt-24 {
+  scroll-margin-top: 6rem;
+}
+
+.scroll-mt-32 {
+  scroll-margin-top: 8rem;
+}
+
+/* Prevent layout shift during animations */
+section {
+  contain: layout;
 }
 
 /* Custom animations */

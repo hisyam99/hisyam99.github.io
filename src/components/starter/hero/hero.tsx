@@ -114,13 +114,6 @@ export default component$(() => {
                   >
                     Get In Touch
                   </Link>
-
-                  <Link
-                    href="#contact"
-                    class="btn btn-outline btn-lg hover-scale magnetic"
-                  >
-                    Get In Touch
-                  </Link>
                 </div>
 
                 {/* Social Links */}
