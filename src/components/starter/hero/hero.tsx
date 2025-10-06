@@ -1,4 +1,4 @@
-import { component$, useSignal, $ } from "@builder.io/qwik";
+import { component$ } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 import ImgHisyam from "~/media/hisyam.jpg?jsx";
 import {
@@ -28,13 +28,8 @@ import {
 } from "~/hooks/useScrollAnimation";
 
 export default component$(() => {
-  const nextSectionRef = useSignal<Element | undefined>(undefined);
   const { ref: heroRef } = useScrollAnimation();
   const skillsStaggerRef = useStaggerAnimation(150);
-
-  const scrollToNextSection = $(() => {
-    nextSectionRef.value?.scrollIntoView({ behavior: "smooth" });
-  });
 
   return (
     <>
@@ -79,13 +74,13 @@ export default component$(() => {
                 </p>
 
                 <div class="flex flex-wrap justify-center gap-4 lg:justify-start">
-                  <button
+                  <Link
+                    href="/projects"
                     class="btn btn-primary btn-lg group hover-scale magnetic"
-                    onClick$={scrollToNextSection}
                   >
-                    Explore My Work
+                    View Projects
                     <svg
-                      class="ml-2 h-5 w-5 transition-transform group-hover:translate-y-1"
+                      class="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -94,10 +89,31 @@ export default component$(() => {
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         stroke-width="2"
-                        d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"
                       ></path>
                     </svg>
-                  </button>
+                  </Link>
+
+                  <Link
+                    href="/about"
+                    class="btn btn-secondary btn-lg hover-scale magnetic"
+                  >
+                    About Me
+                  </Link>
+
+                  <Link
+                    href="/resume"
+                    class="btn btn-outline btn-lg hover-scale magnetic"
+                  >
+                    View Resume
+                  </Link>
+
+                  <Link
+                    href="/contact"
+                    class="btn btn-accent btn-lg hover-scale magnetic"
+                  >
+                    Get In Touch
+                  </Link>
 
                   <Link
                     href="#contact"
@@ -282,7 +298,7 @@ export default component$(() => {
       </section>
 
       {/* About Section */}
-      <section ref={nextSectionRef} id="about" class="bg-base-200 py-20 pt-32">
+      <section id="about" class="bg-base-200 py-20 pt-32">
         <div class="container mx-auto px-4">
           <div class="animate-fadeInDown mb-12 text-center">
             <h2 class="animate-textReveal mb-4 text-4xl font-bold">About Me</h2>

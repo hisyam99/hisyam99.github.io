@@ -100,6 +100,9 @@ export default component$(() => {
             <h2 class="animate-textReveal mb-4 text-4xl font-bold">
               Featured Projects
             </h2>
+            <p class="text-base-content/70 mb-4">
+              Check out some of my recent work and side projects
+            </p>
             <div
               class="bg-primary animate-scaleInCenter mx-auto h-1 w-20"
               style="animation-delay: 0.3s"
@@ -300,15 +303,18 @@ export default component$(() => {
         </div>
       </section>
 
-      {/* Featured Blog Posts Section */}
-      <section id="blog" class="py-20">
+      {/* Latest Blog Posts Section */}
+      <section id="blog" class="bg-base-100 py-20">
         <div class="container mx-auto px-4">
           <div class="animate-fadeInDown mb-12 text-center">
             <h2 class="animate-textReveal mb-4 text-4xl font-bold">
               Latest Blog Posts
             </h2>
+            <p class="text-base-content/70 mb-4">
+              Thoughts, tutorials, and insights about web development
+            </p>
             <div
-              class="bg-primary animate-scaleInCenter mx-auto h-1 w-20"
+              class="bg-secondary animate-scaleInCenter mx-auto h-1 w-20"
               style="animation-delay: 0.3s"
             ></div>
           </div>
@@ -438,19 +444,19 @@ export default component$(() => {
       )}
 
       {/* Contact Section */}
-      <section id="contact" ref={contactRef} class="animate-fadeInUp py-20">
+      <section id="contact" ref={contactRef} class="bg-base-200 py-20">
         <div class="container mx-auto px-4">
           <div class="animate-fadeInDown mb-12 text-center">
             <h2 class="animate-textReveal mb-4 text-4xl font-bold">
               Get In Touch
             </h2>
+            <p class="text-base-content/70 mb-4">
+              Have a project in mind? Let's work together to bring it to life
+            </p>
             <div
-              class="bg-primary animate-scaleInCenter mx-auto h-1 w-20"
+              class="bg-accent animate-scaleInCenter mx-auto h-1 w-20"
               style="animation-delay: 0.3s"
             ></div>
-            <p class="mt-4 text-lg text-base-content/70">
-              Have a project in mind? Let's work together!
-            </p>
           </div>
 
           <div class="mx-auto max-w-4xl">
@@ -584,6 +590,30 @@ export default component$(() => {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Go to Contact Page Button */}
+          <div class="mt-12 text-center">
+            <Link
+              href="/contact"
+              class="btn btn-accent btn-lg hover-scale gap-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                />
+              </svg>
+              Go to Full Contact Page
+            </Link>
           </div>
         </div>
       </section>

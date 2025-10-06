@@ -75,7 +75,15 @@ export default component$(() => {
             <ul class="space-y-2">
               <li>
                 <Link
-                  href="/#about"
+                  href="/"
+                  class="link link-hover text-content-secondary hover:text-primary"
+                >
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/about"
                   class="link link-hover text-content-secondary hover:text-primary"
                 >
                   About
@@ -83,18 +91,18 @@ export default component$(() => {
               </li>
               <li>
                 <Link
-                  href="/#skills"
+                  href="/projects"
                   class="link link-hover text-content-secondary hover:text-primary"
                 >
-                  Skills
+                  Projects
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/#projects"
+                  href="/resume"
                   class="link link-hover text-content-secondary hover:text-primary"
                 >
-                  Projects
+                  Resume
                 </Link>
               </li>
               <li>
@@ -103,6 +111,22 @@ export default component$(() => {
                   class="link link-hover text-content-secondary hover:text-primary"
                 >
                   Blog
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/schedule"
+                  class="link link-hover text-content-secondary hover:text-primary"
+                >
+                  Schedule
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/contact"
+                  class="link link-hover text-content-secondary hover:text-primary"
+                >
+                  Contact
                 </Link>
               </li>
             </ul>
