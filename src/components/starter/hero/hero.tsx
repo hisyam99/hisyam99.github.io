@@ -1,6 +1,6 @@
 import { component$, useSignal, $ } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
-import ImgHisyam from "~/media/hisyam.jpg?jsx";
+import ImgHisyam from "~/media/hisyam.png?jsx";
 import {
   QReactIcon,
   QVueIcon,

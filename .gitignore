@@ -9,6 +9,12 @@ node_modules
 .env
 *.local
 
+# SSL Certificates
+certs/
+*.pem
+*.key
+*.crt
+
 # Cache
 .cache
 .mf
